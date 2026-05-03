@@ -54,11 +54,25 @@ Original benchmark from Weaviate:
 Download `weaviate-gorilla.json` and place at `data/weaviate-gorilla.json`.
 
 ### BIRD-to-Weaviate Collections
-This is the adapted schema format we use. The file `bird-collections.json` was generated
-by converting BIRD CREATE TABLE definitions into Weaviate-style property descriptions.
+This is the adapted schema format our pipeline consumes. Each BIRD SQL table becomes a
+Weaviate-style collection with PascalCase naming (e.g., `schools` in `california_schools`
+DB becomes `CaliforniaSchoolsSchools`). Column names are expanded into natural-language
+descriptions using the `dev_tables.json` metadata.
 
-If you need to regenerate it from scratch, see the conversion logic in the research notes
-(ask the authors).
+We provide a converter script that generates `bird-collections.json` from the raw BIRD
+release. It uses only `dev_tables.json` (schema metadata) — no SQLite execution needed.
+
+```bash
+# After placing BIRD at data/bird-benchmark/dev_20240627/, run:
+python scripts/convert_bird_to_weaviate.py
+
+# Output: data/bird-benchmark/bird-collections.json
+```
+
+The converter uses two enrichment strategies:
+1. **Column-name synthesis** — expands `avg_sci_s` → "average science score"
+2. **Question-driven vocabulary** — extracts domain terms from `dev.json` questions
+   relevant to each table, improving embedding retrieval accuracy.
 
 ## Verification
 
