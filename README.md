@@ -106,6 +106,11 @@ python eval/scripts/blind_llm_baseline.py \
 # Score BIRD execution accuracy on pipeline results
 python eval/scripts/bird_ex_v2.py <result_json>
 python eval/scripts/bird_ex_v2.py <result_json> --gold-guided  # With translator fixes
+
+# Export discovery-only results to CSV (no LLM calls, ~0.1s/query)
+# Use this to feed our top-K predictions into text-to-SQL systems (DAIL-SQL, CHESS, etc.)
+# as a fair substitute for the ground-truth db_id they normally receive.
+python scripts/run_discovery_only.py --bird-only --out discovery_test.csv
 ```
 
 Results are saved to `eval/results/` or a directory you specify with `--output-dir`.

@@ -31,7 +31,7 @@ class MCPServer:
     - validate_aggregation: Check if an aggregation is valid
     
     Example:
-        >>> server = MCPServer.from_queries_file("data/weaviate-gorilla.json")
+        >>> server = MCPServer.from_multiple_sources("data/weaviate-gorilla.json")
         >>> server.search_collections("restaurant", detail_level="name")
         ['Restaurants', 'Menus', 'Reservations']
     """
@@ -58,38 +58,6 @@ class MCPServer:
             self._compute_embeddings()
     
     @classmethod
-    def from_queries_file(cls, queries_file: str) -> "MCPServer":
-        """
-        Create MCPServer by loading schemas from a queries JSON file.
-        
-        Args:
-            queries_file: Path to weaviate-gorilla.json or similar
-        """
-        from src.utils.load_queries import load_queries
-        
-        queries = load_queries(queries_file)
-        registry = {}
-        
-        for query in queries:
-            for coll in query.database_schema.weaviate_collections:
-                if coll.name not in registry:
-                    registry[coll.name] = {
-                        "description": getattr(coll, 'envisioned_use_case_overview', 'No description'),
-                        "properties": {}
-                    }
-                    for prop in coll.properties:
-                        # Handle data_type which can be a list
-                        dtype = prop.data_type
-                        if isinstance(dtype, list):
-                            dtype = dtype[0] if dtype else "unknown"
-                        
-                        registry[coll.name]["properties"][prop.name] = {
-                            "type": dtype,
-                            "description": getattr(prop, 'description', 'No description')
-                        }
-        
-        return cls(registry)
-    
     @classmethod
     def from_multiple_sources(cls, *sources: str) -> "MCPServer":
         """Merge schemas from Weaviate Gorilla, BIRD, and extra JSON files into one registry.
@@ -125,10 +93,26 @@ class MCPServer:
                                 for p in coll['properties']
                             }
                         }
-                else:
-                    # Queries file - use existing loader
-                    temp_server = cls.from_queries_file(source)
-                    combined_registry.update(temp_server.schemas)
+                elif isinstance(data, list) and data and "weaviate_schemas" in data[0]:
+                    # Weaviate Gorilla format: list of queries, each carrying its schemas
+                    for query in data:
+                        for coll in query.get("weaviate_schemas", []):
+                            name = coll.get("name")
+                            if not name or name in combined_registry:
+                                continue
+                            props = {}
+                            for p in coll.get("properties", []):
+                                dtype = p.get("data_type", "unknown")
+                                if isinstance(dtype, list):
+                                    dtype = dtype[0] if dtype else "unknown"
+                                props[p["name"]] = {
+                                    "type": dtype,
+                                    "description": p.get("description", ""),
+                                }
+                            combined_registry[name] = {
+                                "description": coll.get("envisioned_use_case_overview", ""),
+                                "properties": props,
+                            }
         
         return cls(combined_registry)
     

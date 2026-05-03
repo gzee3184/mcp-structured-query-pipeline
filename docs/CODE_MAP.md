@@ -10,6 +10,8 @@ Quick reference for navigating the codebase. 17 Python files total.
 | `eval/scripts/blind_llm_baseline.py` | Blind baseline (all schemas, no discovery) | `python eval/scripts/blind_llm_baseline.py --n 50 --split test --provider bedrock --model anthropic.claude-sonnet-4-6` |
 | `eval/scripts/bird_ex_v2.py` | BIRD execution accuracy scorer | `python eval/scripts/bird_ex_v2.py <result.json> [--gold-guided]` |
 | `eval/paper_comparison/analyze.py` | Cross-system comparison report | `python eval/paper_comparison/analyze.py` |
+| `scripts/run_discovery_only.py` | Discovery-only → CSV export (no LLM, for SOTA comparison) | `python scripts/run_discovery_only.py --bird-only --out discovery_test.csv` |
+| `scripts/convert_bird_to_weaviate.py` | Convert BIRD schemas → Weaviate format | `python scripts/convert_bird_to_weaviate.py` |
 
 ## Pipeline Core (src/)
 
@@ -63,6 +65,19 @@ eval/
 │   └── RESULTS_EXPLAINED.md       ← Outsider-friendly results guide
 ├── eai/                           ← EAI/MongoDB evaluation (direct MQL generation)
 └── configs/                       ← Model registry + experiment matrix
+```
+
+## Utility Scripts (scripts/)
+
+```
+scripts/
+├── run_discovery_only.py          ← Run Phase 1 only → CSV export
+│                                     No LLM calls, fast (~0.1s/query)
+│                                     Purpose: feed discovery output to SOTA text-to-SQL
+│                                     as a fair replacement for their gold db_id
+└── convert_bird_to_weaviate.py    ← Generate bird-collections.json from BIRD's
+                                      dev_tables.json (schema metadata only,
+                                      no SQLite execution needed)
 ```
 
 ## Data Dependencies
