@@ -1,0 +1,114 @@
+{
+  "provider": "bedrock",
+  "model": "anthropic.claude-sonnet-4-6",
+  "oracle_collection": true,
+  "n": 5,
+  "n_scored": 5,
+  "metrics": {
+    "se": 1.0,
+    "cof": 0.8,
+    "neo": 1.0,
+    "ro": 1.0,
+    "ops": 0.8800000000000001
+  },
+  "strict_accuracy": 1.0,
+  "discovery_rate": 1.0,
+  "elapsed_seconds": 18.33612036705017,
+  "results": [
+    {
+      "question": "Show me the 5 accounts with the most transactions from 2014 to 2016.",
+      "expected_collection": "sample_analytics.transactions",
+      "chosen_collection": "sample_analytics.transactions",
+      "strict_match": true,
+      "discovery_hit": true,
+      "complexity": "moderate",
+      "db_name": "sample_analytics",
+      "pred_mql": "db.transactions.aggregate([\n  { $unwind: \"$transactions\" },\n  {\n    $match: {\n      \"transactions.date\": {\n        $gte: ISODate(\"2014-01-01\"),\n        $lte: ISODate(\"2016-12-31\")\n      }\n    }\n  },\n  {\n    $group: {\n      _id: \"$account_id\",\n      total_transactions: { $sum: 1 }\n    }\n  },\n  { $sort: { total_transactions: -1 } },\n  { $limit: 5 },\n  {\n    $project: {\n      _id: 0,\n      account_id: \"$_id\",\n      total_transactions: 1\n    }\n  }\n])",
+      "expected_mql": "db.transactions.aggregate([\n  { $unwind: \"$transactions\" },\n  { $match: {\n      \"transactions.date\": { $gte: new Date(\"2014-01-01\"), $lte: new Date(\"2016-12-31\") }\n  }},\n  { $group: {\n      _id: \"$account_id\",\n      transaction_count: { $sum: 1 }\n  }},\n  { $sort: { transaction_count: -1 } },\n  { $limit: 5 },\n  { $project: {\n      _id: 0,\n      account_id: \"$_id\",\n      transaction_count: 1\n  }}\n])",
+      "pred_error": null,
+      "metrics": {
+        "se": 1.0,
+        "cof": 0.0,
+        "neo": 1.0,
+        "ro": 1.0,
+        "ops": 0.4
+      }
+    },
+    {
+      "question": "Please list 6 top-rated listings with a review score of at least 9.7 and over 100 reviews.",
+      "expected_collection": "sample_airbnb.listingsAndReviews",
+      "chosen_collection": "sample_airbnb.listingsAndReviews",
+      "strict_match": true,
+      "discovery_hit": true,
+      "complexity": "moderate",
+      "db_name": "sample_airbnb",
+      "pred_mql": "db.listingsAndReviews.find(\n  {\n    \"review_scores.review_scores_rating\": { $gte: 97 },\n    \"number_of_reviews\": { $gt: 100 }\n  },\n  {\n    \"name\": 1,\n    \"review_scores.review_scores_rating\": 1,\n    \"number_of_reviews\": 1,\n    \"property_type\": 1,\n    \"room_type\": 1,\n    \"price\": 1,\n    \"address.market\": 1,\n    \"address.country\": 1\n  }\n).sort({ \"review_scores.review_scores_rating\": -1 }).limit(6)",
+      "expected_mql": "db.listingsAndReviews.find({ \"review_scores.review_scores_rating\": { $gte: 9.7 }, \"number_of_reviews\": { $gt: 100 } }, { _id: 1, name: 1, \"review_scores.review_scores_rating\": 1, number_of_reviews: 1 }).sort({ \"review_scores.review_scores_rating\": -1 }).limit(6)",
+      "pred_error": null,
+      "metrics": {
+        "se": 1.0,
+        "cof": 1.0,
+        "neo": 1.0,
+        "ro": 1.0,
+        "ops": 1.0
+      }
+    },
+    {
+      "question": "What were the customer satisfaction ratings for online purchases at the Austin store in September 2017?",
+      "expected_collection": "sample_supplies.sales",
+      "chosen_collection": "sample_supplies.sales",
+      "strict_match": true,
+      "discovery_hit": true,
+      "complexity": "simple",
+      "db_name": "sample_supplies",
+      "pred_mql": "db.sales.find(\n  {\n    storeLocation: \"Austin\",\n    purchaseMethod: \"Online\",\n    saleDate: {\n      $gte: ISODate(\"2017-09-01\"),\n      $lt: ISODate(\"2017-10-01\")\n    }\n  },\n  {\n    _id: 0,\n    saleDate: 1,\n    \"customer.satisfaction\": 1,\n    storeLocation: 1,\n    purchaseMethod: 1\n  }\n)",
+      "expected_mql": "db.sales.find({\n  purchaseMethod: 'Online',\n  storeLocation: 'Austin',\n  saleDate: {\n    $gte: new Date('2017-09-01T00:00:00Z'),\n    $lt: new Date('2017-10-01T00:00:00Z')\n  }\n}, {\n  'customer.satisfaction': 1,\n  _id: 0\n})",
+      "pred_error": null,
+      "metrics": {
+        "se": 1.0,
+        "cof": 1.0,
+        "neo": 1.0,
+        "ro": 1.0,
+        "ops": 1.0
+      }
+    },
+    {
+      "question": "List 5 Airbnb listings with exact coordinates in New York City.",
+      "expected_collection": "sample_airbnb.listingsAndReviews",
+      "chosen_collection": "sample_airbnb.listingsAndReviews",
+      "strict_match": true,
+      "discovery_hit": true,
+      "complexity": "moderate",
+      "db_name": "sample_airbnb",
+      "pred_mql": "db.listingsAndReviews.find(\n  {\n    \"address.market\": \"New York\",\n    \"address.location.is_location_exact\": true\n  },\n  {\n    \"_id\": 1,\n    \"name\": 1,\n    \"address.street\": 1,\n    \"address.market\": 1,\n    \"address.location.coordinates\": 1,\n    \"address.location.is_location_exact\": 1\n  }\n).limit(5)",
+      "expected_mql": "db.listingsAndReviews.find({\"address.location.is_location_exact\": true, \"address.country\": \"United States\", \"address.market\": \"New York\"}, {\"name\": 1, \"address.location.coordinates\": 1, \"address.location.is_location_exact\": 1}).limit(5)",
+      "pred_error": null,
+      "metrics": {
+        "se": 1.0,
+        "cof": 1.0,
+        "neo": 1.0,
+        "ro": 1.0,
+        "ops": 1.0
+      }
+    },
+    {
+      "question": "What was the average customer satisfaction at the Denver store from January to March 2017?",
+      "expected_collection": "sample_supplies.sales",
+      "chosen_collection": "sample_supplies.sales",
+      "strict_match": true,
+      "discovery_hit": true,
+      "complexity": "moderate",
+      "db_name": "sample_supplies",
+      "pred_mql": "db.sales.aggregate([\n  {\n    $match: {\n      storeLocation: \"Denver\",\n      saleDate: {\n        $gte: ISODate(\"2017-01-01\"),\n        $lt: ISODate(\"2017-04-01\")\n      }\n    }\n  },\n  {\n    $group: {\n      _id: null,\n      averageSatisfaction: { $avg: \"$customer.satisfaction\" }\n    }\n  },\n  {\n    $project: {\n      _id: 0,\n      averageSatisfaction: 1\n    }\n  }\n])",
+      "expected_mql": "db.sales.aggregate([\n  {\n    $match: {\n      storeLocation: 'Denver',\n      saleDate: {\n        $gte: new Date('2017-01-01T00:00:00Z'),\n        $lte: new Date('2017-03-31T23:59:59Z')\n      }\n    }\n  },\n  {\n    $group: {\n      _id: null,\n      averageSatisfaction: { $avg: '$customer.satisfaction' }\n    }\n  },\n  {\n    $project: {\n      _id: 0,\n      averageSatisfaction: 1\n    }\n  }\n])",
+      "pred_error": null,
+      "metrics": {
+        "se": 1.0,
+        "cof": 1.0,
+        "neo": 1.0,
+        "ro": 1.0,
+        "ops": 1.0
+      }
+    }
+  ]
+}

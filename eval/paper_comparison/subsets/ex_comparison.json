@@ -1,0 +1,21 @@
+{
+  "expressible": {
+    "pipeline_sonnet_standard": 366,
+    "pipeline_sonnet_guided": 458,
+    "pipeline_sonnet_lenient": 458,
+    "pipeline_sonnet_n": 840,
+    "dail_sonnet": 539,
+    "dail_sonnet_n": 840,
+    "din_sonnet": 194,
+    "din_sonnet_n": 348,
+    "chess_sonnet": 215,
+    "chess_sonnet_n": 348
+  },
+  "all_bird": {
+    "pipeline_standard": 468,
+    "pipeline_guided": 596,
+    "n": 1315,
+    "dail": 816,
+    "dail_n": 1315
+  }
+}

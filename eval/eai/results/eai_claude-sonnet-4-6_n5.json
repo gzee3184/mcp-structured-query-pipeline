@@ -1,0 +1,329 @@
+{
+  "provider": "bedrock",
+  "model": "anthropic.claude-sonnet-4-6",
+  "n": 5,
+  "n_scored": 5,
+  "metrics": {
+    "se": 1.0,
+    "cof": 0.0,
+    "neo": 0.6,
+    "ro": 0.4,
+    "ops": 0.30000000000000004
+  },
+  "strict_accuracy": 1.0,
+  "discovery_rate": 1.0,
+  "elapsed_seconds": 40.475051403045654,
+  "results": [
+    {
+      "question": "Show me the 5 accounts with the most transactions from 2014 to 2016.",
+      "expected_collection": "sample_analytics.transactions",
+      "got_collection": "sample_analytics.transactions",
+      "strict_match": true,
+      "discovery_hit": true,
+      "candidates": [
+        "sample_analytics.transactions",
+        "sample_analytics.customers",
+        "sample_analytics.accounts",
+        "sample_supplies.sales",
+        "sample_training.companies"
+      ],
+      "query_args": {
+        "collection_name": "sample_analytics.transactions",
+        "output_properties": [
+          {
+            "property_name": "account_id"
+          },
+          {
+            "property_name": "transaction_count",
+            "aggregation": "SUM"
+          }
+        ],
+        "filters": [
+          {
+            "property_name": "bucket_start_date",
+            "operator": ">=",
+            "value": "2014-01-01",
+            "property_type": "date"
+          },
+          {
+            "property_name": "bucket_end_date",
+            "operator": "<=",
+            "value": "2016-12-31",
+            "property_type": "date"
+          }
+        ],
+        "group_by_properties": [
+          "account_id"
+        ],
+        "order_by": [
+          {
+            "property_name": "transaction_count",
+            "aggregation": "SUM",
+            "direction": "DESC"
+          }
+        ],
+        "limit": 5
+      },
+      "pred_mql": "db.transactions.aggregate([{\"$match\": {\"$and\": [{\"bucket_start_date\": {\"$gte\": \"2014-01-01\"}}, {\"bucket_end_date\": {\"$lte\": \"2016-12-31\"}}]}}, {\"$group\": {\"_id\": \"$account_id\", \"transaction_count_sum\": {\"$sum\": \"$transaction_count\"}, \"account_id\": {\"$first\": \"$account_id\"}}}, {\"$project\": {\"_id\": 0, \"account_id\": \"$_id\", \"transaction_count\": \"$transaction_count_sum\"}}, {\"$sort\": {\"transaction_count\": -1}}, {\"$limit\": 5}])",
+      "pred_error": null,
+      "metrics": {
+        "se": 1.0,
+        "cof": 0.0,
+        "neo": 0.0,
+        "ro": 0.0,
+        "ops": 0.2
+      },
+      "complexity": "moderate",
+      "db_name": "sample_analytics"
+    },
+    {
+      "question": "Please list 6 top-rated listings with a review score of at least 9.7 and over 100 reviews.",
+      "expected_collection": "sample_airbnb.listingsAndReviews",
+      "got_collection": "sample_airbnb.listingsAndReviews",
+      "strict_match": true,
+      "discovery_hit": true,
+      "candidates": [
+        "sample_airbnb.listingsAndReviews",
+        "sample_mflix.movies",
+        "sample_restaurants.neighborhoods",
+        "sample_restaurants.restaurants",
+        "sample_geospatial.shipwrecks"
+      ],
+      "query_args": {
+        "collection_name": "sample_airbnb.listingsAndReviews",
+        "output_properties": [
+          {
+            "property_name": "name"
+          },
+          {
+            "property_name": "review_scores"
+          },
+          {
+            "property_name": "address"
+          },
+          {
+            "property_name": "bedrooms"
+          },
+          {
+            "property_name": "beds"
+          },
+          {
+            "property_name": "accommodates"
+          },
+          {
+            "property_name": "price"
+          }
+        ],
+        "filters": [
+          {
+            "property_name": "review_scores.review_scores_rating",
+            "operator": ">=",
+            "value": 97,
+            "property_type": "integer"
+          },
+          {
+            "property_name": "number_of_reviews",
+            "operator": ">",
+            "value": 100,
+            "property_type": "integer"
+          }
+        ],
+        "order_by": [
+          {
+            "property_name": "review_scores.review_scores_rating",
+            "direction": "DESC"
+          }
+        ],
+        "limit": 6
+      },
+      "pred_mql": "db.listingsAndReviews.aggregate([{\"$match\": {\"$and\": [{\"review_scores.review_scores_rating\": {\"$gte\": 97}}, {\"number_of_reviews\": {\"$gt\": 100}}]}}, {\"$project\": {\"_id\": 0, \"name\": 1, \"review_scores\": 1, \"address\": 1, \"bedrooms\": 1, \"beds\": 1, \"accommodates\": 1, \"price\": 1}}, {\"$sort\": {\"review_scores.review_scores_rating\": -1}}, {\"$limit\": 6}])",
+      "pred_error": null,
+      "metrics": {
+        "se": 1.0,
+        "cof": 0.0,
+        "neo": 1.0,
+        "ro": 1.0,
+        "ops": 0.4
+      },
+      "complexity": "moderate",
+      "db_name": "sample_airbnb"
+    },
+    {
+      "question": "What were the customer satisfaction ratings for online purchases at the Austin store in September 2017?",
+      "expected_collection": "sample_supplies.sales",
+      "got_collection": "sample_supplies.sales",
+      "strict_match": true,
+      "discovery_hit": true,
+      "candidates": [
+        "sample_supplies.sales",
+        "sample_restaurants.temp_neighborhood_counts",
+        "sample_mflix.theaters",
+        "sample_restaurants.restaurants",
+        "sample_mflix.comments"
+      ],
+      "query_args": {
+        "collection_name": "sample_supplies.sales",
+        "output_properties": [
+          {
+            "property_name": "customer.satisfaction"
+          },
+          {
+            "property_name": "saleDate"
+          },
+          {
+            "property_name": "purchaseMethod"
+          },
+          {
+            "property_name": "storeLocation"
+          }
+        ],
+        "filters": [
+          {
+            "property_name": "storeLocation",
+            "operator": "=",
+            "value": "Austin",
+            "property_type": "text"
+          },
+          {
+            "property_name": "purchaseMethod",
+            "operator": "=",
+            "value": "Online",
+            "property_type": "text"
+          },
+          {
+            "property_name": "saleDate",
+            "operator": "BETWEEN",
+            "value": [
+              "2017-09-01",
+              "2017-09-30"
+            ],
+            "property_type": "date"
+          }
+        ],
+        "filter_boolean_op": "AND"
+      },
+      "pred_mql": "db.sales.aggregate([{\"$match\": {\"$and\": [{\"storeLocation\": \"Austin\"}, {\"purchaseMethod\": \"Online\"}, {\"saleDate\": {\"$gte\": \"2017-09-01\", \"$lte\": \"2017-09-30\"}}]}}, {\"$project\": {\"_id\": 0, \"customer.satisfaction\": 1, \"saleDate\": 1, \"purchaseMethod\": 1, \"storeLocation\": 1}}])",
+      "pred_error": null,
+      "metrics": {
+        "se": 1.0,
+        "cof": 0.0,
+        "neo": 0.0,
+        "ro": 0.0,
+        "ops": 0.2
+      },
+      "complexity": "simple",
+      "db_name": "sample_supplies"
+    },
+    {
+      "question": "List 5 Airbnb listings with exact coordinates in New York City.",
+      "expected_collection": "sample_airbnb.listingsAndReviews",
+      "got_collection": "sample_airbnb.listingsAndReviews",
+      "strict_match": true,
+      "discovery_hit": true,
+      "candidates": [
+        "sample_airbnb.listingsAndReviews",
+        "sample_restaurants.restaurants",
+        "sample_restaurants.neighborhoods",
+        "sample_mflix.theaters",
+        "sample_restaurants.temp_neighborhood_counts"
+      ],
+      "query_args": {
+        "collection_name": "sample_airbnb.listingsAndReviews",
+        "output_properties": [
+          {
+            "property_name": "_id"
+          },
+          {
+            "property_name": "address.street"
+          },
+          {
+            "property_name": "address.location.coordinates"
+          },
+          {
+            "property_name": "address.location.is_location_exact"
+          },
+          {
+            "property_name": "address.market"
+          }
+        ],
+        "filters": [
+          {
+            "property_name": "address.location.is_location_exact",
+            "operator": "=",
+            "value": true,
+            "property_type": "boolean"
+          },
+          {
+            "property_name": "address.market",
+            "operator": "=",
+            "value": "New York",
+            "property_type": "text"
+          }
+        ],
+        "limit": 5
+      },
+      "pred_mql": "db.listingsAndReviews.aggregate([{\"$match\": {\"$and\": [{\"address.location.is_location_exact\": true}, {\"address.market\": \"New York\"}]}}, {\"$project\": {\"_id\": 1, \"address.street\": 1, \"address.location.coordinates\": 1, \"address.location.is_location_exact\": 1, \"address.market\": 1}}, {\"$limit\": 5}])",
+      "pred_error": null,
+      "metrics": {
+        "se": 1.0,
+        "cof": 0.0,
+        "neo": 1.0,
+        "ro": 1.0,
+        "ops": 0.4
+      },
+      "complexity": "moderate",
+      "db_name": "sample_airbnb"
+    },
+    {
+      "question": "What was the average customer satisfaction at the Denver store from January to March 2017?",
+      "expected_collection": "sample_supplies.sales",
+      "got_collection": "sample_supplies.sales",
+      "strict_match": true,
+      "discovery_hit": true,
+      "candidates": [
+        "sample_supplies.sales",
+        "sample_restaurants.restaurants",
+        "sample_mflix.theaters",
+        "sample_restaurants.temp_neighborhood_counts",
+        "sample_restaurants.neighborhoods"
+      ],
+      "query_args": {
+        "collection_name": "sample_supplies.sales",
+        "output_properties": [
+          {
+            "property_name": "customer.satisfaction",
+            "aggregation": "MEAN"
+          }
+        ],
+        "filters": [
+          {
+            "property_name": "storeLocation",
+            "operator": "=",
+            "value": "Denver",
+            "property_type": "text"
+          },
+          {
+            "property_name": "saleDate",
+            "operator": "BETWEEN",
+            "value": [
+              "2017-01-01",
+              "2017-03-31"
+            ],
+            "property_type": "date"
+          }
+        ]
+      },
+      "pred_mql": "db.sales.aggregate([{\"$match\": {\"$and\": [{\"storeLocation\": \"Denver\"}, {\"saleDate\": {\"$gte\": \"2017-01-01\", \"$lte\": \"2017-03-31\"}}]}}, {\"$group\": {\"_id\": null, \"customer_satisfaction_mean\": {\"$avg\": \"$customer.satisfaction\"}}}, {\"$project\": {\"_id\": 0, \"customer.satisfaction\": \"$customer_satisfaction_mean\"}}])",
+      "pred_error": null,
+      "metrics": {
+        "se": 1.0,
+        "cof": 0.0,
+        "neo": 1.0,
+        "ro": 0.0,
+        "ops": 0.30000000000000004
+      },
+      "complexity": "moderate",
+      "db_name": "sample_supplies"
+    }
+  ]
+}

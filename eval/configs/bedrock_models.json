@@ -1,0 +1,32 @@
+{
+  "models": [
+    {
+      "model_id": "anthropic.claude-sonnet-4-6",
+      "short_name": "claude_sonnet_46",
+      "provider": "bedrock",
+      "family": "anthropic",
+      "description": "Claude Sonnet 4.6"
+    },
+    {
+      "model_id": "anthropic.claude-opus-4-6-v1",
+      "short_name": "claude_opus_46",
+      "provider": "bedrock",
+      "family": "anthropic",
+      "description": "Claude Opus 4.6"
+    },
+    {
+      "model_id": "qwen.qwen3-next-80b-a3b",
+      "short_name": "qwen3_80b",
+      "provider": "bedrock",
+      "family": "qwen",
+      "description": "Qwen 3 Next 80B"
+    },
+    {
+      "model_id": "meta.llama4-maverick-17b-instruct-v1:0",
+      "short_name": "llama4_maverick",
+      "provider": "bedrock",
+      "family": "meta",
+      "description": "Llama 4 Maverick 17B"
+    }
+  ]
+}

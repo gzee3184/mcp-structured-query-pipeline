@@ -1,0 +1,40 @@
+# Secrets — NEVER commit these
+.env
+.env.*
+*.key
+*.pem
+credentials*
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+venv/
+.venv/
+*.egg-info/
+
+# Data (large, downloaded separately)
+data/
+
+# Caches
+.cache_enhanced/
+.schema_cache/
+.learning_cache/
+*.cache
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Results (large JSONs, reproduce via scripts)
+results/enhanced_pipeline/
+eval/results/
+
+# Logs
+*.log

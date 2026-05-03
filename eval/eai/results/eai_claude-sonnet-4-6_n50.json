@@ -1,0 +1,2773 @@
+{
+  "provider": "bedrock",
+  "model": "anthropic.claude-sonnet-4-6",
+  "n": 50,
+  "n_scored": 50,
+  "metrics": {
+    "se": 0.9,
+    "cof": 0.32,
+    "neo": 0.74,
+    "ro": 0.64,
+    "ops": 0.51
+  },
+  "strict_accuracy": 0.9,
+  "discovery_rate": 0.92,
+  "elapsed_seconds": 242.3494954109192,
+  "results": [
+    {
+      "question": "Show me the 5 accounts with the most transactions from 2014 to 2016.",
+      "expected_collection": "sample_analytics.transactions",
+      "got_collection": "sample_analytics.transactions",
+      "strict_match": true,
+      "discovery_hit": true,
+      "candidates": [
+        "sample_analytics.transactions",
+        "sample_analytics.customers",
+        "sample_analytics.accounts",
+        "sample_supplies.sales",
+        "sample_training.companies"
+      ],
+      "query_args": {
+        "collection_name": "sample_analytics.transactions",
+        "output_properties": [
+          {
+            "property_name": "account_id"
+          },
+          {
+            "property_name": "transaction_count",
+            "aggregation": "SUM"
+          }
+        ],
+        "filters": [
+          {
+            "property_name": "bucket_start_date",
+            "operator": ">=",
+            "value": "2014-01-01",
+            "property_type": "date"
+          },
+          {
+            "property_name": "bucket_end_date",
+            "operator": "<=",
+            "value": "2016-12-31",
+            "property_type": "date"
+          }
+        ],
+        "group_by_properties": [
+          "account_id"
+        ],
+        "order_by": [
+          {
+            "property_name": "transaction_count",
+            "aggregation": "SUM",
+            "direction": "DESC"
+          }
+        ],
+        "limit": 5
+      },
+      "pred_mql": "db.transactions.aggregate([{\"$match\": {\"$and\": [{\"bucket_start_date\": {\"$gte\": ISODate(\"2014-01-01\")}}, {\"bucket_end_date\": {\"$lte\": ISODate(\"2016-12-31\")}}]}}, {\"$group\": {\"_id\": \"$account_id\", \"transaction_count_sum\": {\"$sum\": \"$transaction_count\"}, \"account_id\": {\"$first\": \"$account_id\"}}}, {\"$project\": {\"_id\": 0, \"account_id\": \"$_id\", \"transaction_count\": \"$transaction_count_sum\"}}, {\"$sort\": {\"transaction_count\": -1}}, {\"$limit\": 5}])",
+      "pred_error": null,
+      "metrics": {
+        "se": 1.0,
+        "cof": 0.0,
+        "neo": 1.0,
+        "ro": 1.0,
+        "ops": 0.4
+      },
+      "complexity": "moderate",
+      "db_name": "sample_analytics"
+    },
+    {
+      "question": "Please list 6 top-rated listings with a review score of at least 9.7 and over 100 reviews.",
+      "expected_collection": "sample_airbnb.listingsAndReviews",
+      "got_collection": "sample_airbnb.listingsAndReviews",
+      "strict_match": true,
+      "discovery_hit": true,
+      "candidates": [
+        "sample_airbnb.listingsAndReviews",
+        "sample_mflix.movies",
+        "sample_restaurants.neighborhoods",
+        "sample_restaurants.restaurants",
+        "sample_geospatial.shipwrecks"
+      ],
+      "query_args": {
+        "collection_name": "sample_airbnb.listingsAndReviews",
+        "output_properties": [
+          {
+            "property_name": "name"
+          },
+          {
+            "property_name": "review_scores"
+          },
+          {
+            "property_name": "address"
+          },
+          {
+            "property_name": "accommodates"
+          },
+          {
+            "property_name": "bedrooms"
+          },
+          {
+            "property_name": "price"
+          }
+        ],
+        "filters": [
+          {
+            "property_name": "review_scores.review_scores_rating",
+            "operator": ">=",
+            "value": 97,
+            "property_type": "integer"
+          },
+          {
+            "property_name": "number_of_reviews",
+            "operator": ">",
+            "value": 100,
+            "property_type": "integer"
+          }
+        ],
+        "order_by": [
+          {
+            "property_name": "review_scores.review_scores_rating",
+            "direction": "DESC"
+          }
+        ],
+        "limit": 6
+      },
+      "pred_mql": "db.listingsAndReviews.aggregate([{\"$match\": {\"$and\": [{\"review_scores.review_scores_rating\": {\"$gte\": 97}}, {\"number_of_reviews\": {\"$gt\": 100}}]}}, {\"$project\": {\"_id\": 0, \"name\": 1, \"review_scores\": 1, \"address\": 1, \"accommodates\": 1, \"bedrooms\": 1, \"price\": 1}}, {\"$sort\": {\"review_scores.review_scores_rating\": -1}}, {\"$limit\": 6}])",
+      "pred_error": null,
+      "metrics": {
+        "se": 1.0,
+        "cof": 0.0,
+        "neo": 1.0,
+        "ro": 1.0,
+        "ops": 0.4
+      },
+      "complexity": "moderate",
+      "db_name": "sample_airbnb"
+    },
+    {
+      "question": "What were the customer satisfaction ratings for online purchases at the Austin store in September 2017?",
+      "expected_collection": "sample_supplies.sales",
+      "got_collection": "sample_supplies.sales",
+      "strict_match": true,
+      "discovery_hit": true,
+      "candidates": [
+        "sample_supplies.sales",
+        "sample_restaurants.temp_neighborhood_counts",
+        "sample_mflix.theaters",
+        "sample_restaurants.restaurants",
+        "sample_mflix.comments"
+      ],
+      "query_args": {
+        "collection_name": "sample_supplies.sales",
+        "output_properties": [
+          {
+            "property_name": "customer.satisfaction"
+          },
+          {
+            "property_name": "saleDate"
+          },
+          {
+            "property_name": "purchaseMethod"
+          },
+          {
+            "property_name": "storeLocation"
+          }
+        ],
+        "filters": [
+          {
+            "property_name": "storeLocation",
+            "operator": "=",
+            "value": "Austin",
+            "property_type": "text"
+          },
+          {
+            "property_name": "purchaseMethod",
+            "operator": "=",
+            "value": "Online",
+            "property_type": "text"
+          },
+          {
+            "property_name": "saleDate",
+            "operator": "BETWEEN",
+            "value": [
+              "2017-09-01",
+              "2017-09-30"
+            ],
+            "property_type": "date"
+          }
+        ],
+        "filter_boolean_op": "AND"
+      },
+      "pred_mql": "db.sales.aggregate([{\"$match\": {\"$and\": [{\"storeLocation\": \"Austin\"}, {\"purchaseMethod\": \"Online\"}, {\"saleDate\": {\"$gte\": ISODate(\"2017-09-01\"), \"$lte\": ISODate(\"2017-09-30\")}}]}}, {\"$project\": {\"_id\": 0, \"customer.satisfaction\": 1, \"saleDate\": 1, \"purchaseMethod\": 1, \"storeLocation\": 1}}])",
+      "pred_error": null,
+      "metrics": {
+        "se": 1.0,
+        "cof": 1.0,
+        "neo": 1.0,
+        "ro": 1.0,
+        "ops": 1.0
+      },
+      "complexity": "simple",
+      "db_name": "sample_supplies"
+    },
+    {
+      "question": "List 5 Airbnb listings with exact coordinates in New York City.",
+      "expected_collection": "sample_airbnb.listingsAndReviews",
+      "got_collection": "sample_airbnb.listingsAndReviews",
+      "strict_match": true,
+      "discovery_hit": true,
+      "candidates": [
+        "sample_airbnb.listingsAndReviews",
+        "sample_restaurants.restaurants",
+        "sample_restaurants.neighborhoods",
+        "sample_mflix.theaters",
+        "sample_restaurants.temp_neighborhood_counts"
+      ],
+      "query_args": {
+        "collection_name": "sample_airbnb.listingsAndReviews",
+        "output_properties": [
+          {
+            "property_name": "_id"
+          },
+          {
+            "property_name": "address.street"
+          },
+          {
+            "property_name": "address.location.coordinates"
+          },
+          {
+            "property_name": "address.location.is_location_exact"
+          },
+          {
+            "property_name": "address.market"
+          }
+        ],
+        "filters": [
+          {
+            "property_name": "address.location.is_location_exact",
+            "operator": "=",
+            "value": true,
+            "property_type": "boolean"
+          },
+          {
+            "property_name": "address.market",
+            "operator": "=",
+            "value": "New York",
+            "property_type": "text"
+          }
+        ],
+        "limit": 5
+      },
+      "pred_mql": "db.listingsAndReviews.aggregate([{\"$match\": {\"$and\": [{\"address.location.is_location_exact\": true}, {\"address.market\": \"New York\"}]}}, {\"$project\": {\"_id\": 1, \"address.street\": 1, \"address.location.coordinates\": 1, \"address.location.is_location_exact\": 1, \"address.market\": 1}}, {\"$limit\": 5}])",
+      "pred_error": null,
+      "metrics": {
+        "se": 1.0,
+        "cof": 0.0,
+        "neo": 1.0,
+        "ro": 1.0,
+        "ops": 0.4
+      },
+      "complexity": "moderate",
+      "db_name": "sample_airbnb"
+    },
+    {
+      "question": "What was the average customer satisfaction at the Denver store from January to March 2017?",
+      "expected_collection": "sample_supplies.sales",
+      "got_collection": "sample_supplies.sales",
+      "strict_match": true,
+      "discovery_hit": true,
+      "candidates": [
+        "sample_supplies.sales",
+        "sample_restaurants.restaurants",
+        "sample_mflix.theaters",
+        "sample_restaurants.temp_neighborhood_counts",
+        "sample_restaurants.neighborhoods"
+      ],
+      "query_args": {
+        "collection_name": "sample_supplies.sales",
+        "output_properties": [
+          {
+            "property_name": "customer.satisfaction",
+            "aggregation": "MEAN"
+          }
+        ],
+        "filters": [
+          {
+            "property_name": "storeLocation",
+            "operator": "=",
+            "value": "Denver",
+            "property_type": "text"
+          },
+          {
+            "property_name": "saleDate",
+            "operator": "BETWEEN",
+            "value": [
+              "2017-01-01",
+              "2017-03-31"
+            ],
+            "property_type": "date"
+          }
+        ]
+      },
+      "pred_mql": "db.sales.aggregate([{\"$match\": {\"$and\": [{\"storeLocation\": \"Denver\"}, {\"saleDate\": {\"$gte\": ISODate(\"2017-01-01\"), \"$lte\": ISODate(\"2017-03-31\")}}]}}, {\"$group\": {\"_id\": null, \"customer_satisfaction_mean\": {\"$avg\": \"$customer.satisfaction\"}}}, {\"$project\": {\"_id\": 0, \"customer.satisfaction\": \"$customer_satisfaction_mean\"}}])",
+      "pred_error": null,
+      "metrics": {
+        "se": 1.0,
+        "cof": 0.0,
+        "neo": 1.0,
+        "ro": 1.0,
+        "ops": 0.4
+      },
+      "complexity": "moderate",
+      "db_name": "sample_supplies"
+    },
+    {
+      "question": "What are the top 10 items sold in the store location with the highest sales in December 2017?",
+      "expected_collection": "sample_supplies.sales",
+      "got_collection": "sample_supplies.sales",
+      "strict_match": true,
+      "discovery_hit": true,
+      "candidates": [
+        "sample_supplies.sales",
+        "sample_restaurants.temp_neighborhood_counts",
+        "sample_training.companies",
+        "sample_mflix.theaters",
+        "sample_restaurants.neighborhoods"
+      ],
+      "query_args": {
+        "collection_name": "sample_supplies.sales",
+        "output_properties": [
+          {
+            "property_name": "storeLocation"
+          },
+          {
+            "property_name": "_id",
+            "aggregation": "COUNT"
+          }
+        ],
+        "filters": [
+          {
+            "property_name": "saleDate",
+            "operator": "BETWEEN",
+            "value": [
+              "2017-12-01",
+              "2017-12-31"
+            ],
+            "property_type": "date"
+          }
+        ],
+        "group_by_properties": [
+          "storeLocation"
+        ],
+        "order_by": [
+          {
+            "property_name": "_id",
+            "aggregation": "COUNT",
+            "direction": "DESC"
+          }
+        ],
+        "limit": 1
+      },
+      "pred_mql": "db.sales.aggregate([{\"$match\": {\"saleDate\": {\"$gte\": ISODate(\"2017-12-01\"), \"$lte\": ISODate(\"2017-12-31\")}}}, {\"$group\": {\"_id\": \"$storeLocation\", \"_id_count\": {\"$sum\": 1}, \"storeLocation\": {\"$first\": \"$storeLocation\"}}}, {\"$project\": {\"_id\": \"$_id_count\", \"storeLocation\": \"$_id\"}}, {\"$sort\": {\"_id\": -1}}, {\"$limit\": 1}])",
+      "pred_error": null,
+      "metrics": {
+        "se": 1.0,
+        "cof": 0.0,
+        "neo": 1.0,
+        "ro": 1.0,
+        "ops": 0.4
+      },
+      "complexity": "complex",
+      "db_name": "sample_supplies"
+    },
+    {
+      "question": "Which customers in New York and San Francisco have made purchases of items priced over $900 in December 2017?",
+      "expected_collection": "sample_supplies.sales",
+      "got_collection": "sample_supplies.sales",
+      "strict_match": true,
+      "discovery_hit": true,
+      "candidates": [
+        "sample_supplies.sales",
+        "sample_restaurants.temp_neighborhood_counts",
+        "sample_restaurants.restaurants",
+        "sample_restaurants.neighborhoods",
+        "sample_training.companies"
+      ],
+      "query_args": {
+        "collection_name": "sample_supplies.sales",
+        "output_properties": [
+          {
+            "property_name": "customer"
+          },
+          {
+            "property_name": "storeLocation"
+          },
+          {
+            "property_name": "saleDate"
+          },
+          {
+            "property_name": "items"
+          }
+        ],
+        "filters": [
+          {
+            "property_name": "storeLocation",
+            "operator": "IN",
+            "value": [
+              "New York",
+              "San Francisco"
+            ],
+            "property_type": "text"
+          },
+          {
+            "property_name": "saleDate",
+            "operator": "BETWEEN",
+            "value": [
+              "2017-12-01",
+              "2017-12-31"
+            ],
+            "property_type": "date"
+          },
+          {
+            "property_name": "items.price",
+            "operator": ">",
+            "value": 900,
+            "property_type": "integer"
+          }
+        ],
+        "filter_boolean_op": "AND"
+      },
+      "pred_mql": "db.sales.aggregate([{\"$match\": {\"$and\": [{\"storeLocation\": {\"$in\": [\"New York\", \"San Francisco\"]}}, {\"saleDate\": {\"$gte\": ISODate(\"2017-12-01\"), \"$lte\": ISODate(\"2017-12-31\")}}, {\"items.price\": {\"$gt\": 900}}]}}, {\"$project\": {\"_id\": 0, \"customer\": 1, \"storeLocation\": 1, \"saleDate\": 1, \"items\": 1}}])",
+      "pred_error": "Mongomock does not know how to sort '5.68' of type '<class 'bson.decimal128.Decimal128'>'",
+      "metrics": {
+        "se": 0.0,
+        "cof": 0.0,
+        "neo": 0.0,
+        "ro": 0.0,
+        "ops": 0.0
+      },
+      "complexity": "complex",
+      "db_name": "sample_supplies"
+    },
+    {
+      "question": "What is the average customer satisfaction rating for online purchases compared to in-store purchases in Austin during November 2017?",
+      "expected_collection": "sample_supplies.sales",
+      "got_collection": "sample_supplies.sales",
+      "strict_match": true,
+      "discovery_hit": true,
+      "candidates": [
+        "sample_supplies.sales",
+        "sample_restaurants.temp_neighborhood_counts",
+        "sample_analytics.transactions",
+        "sample_mflix.theaters",
+        "sample_mflix.comments"
+      ],
+      "query_args": {
+        "collection_name": "sample_supplies.sales",
+        "output_properties": [
+          {
+            "property_name": "purchaseMethod"
+          },
+          {
+            "property_name": "customer.satisfaction",
+            "aggregation": "MEAN"
+          }
+        ],
+        "filters": [
+          {
+            "property_name": "storeLocation",
+            "operator": "=",
+            "value": "Austin",
+            "property_type": "text"
+          },
+          {
+            "property_name": "saleDate",
+            "operator": "BETWEEN",
+            "value": [
+              "2017-11-01",
+              "2017-11-30"
+            ],
+            "property_type": "date"
+          },
+          {
+            "property_name": "purchaseMethod",
+            "operator": "IN",
+            "value": [
+              "Online",
+              "In store"
+            ],
+            "property_type": "text"
+          }
+        ],
+        "group_by_properties": [
+          "purchaseMethod"
+        ]
+      },
+      "pred_mql": "db.sales.aggregate([{\"$match\": {\"$and\": [{\"storeLocation\": \"Austin\"}, {\"saleDate\": {\"$gte\": ISODate(\"2017-11-01\"), \"$lte\": ISODate(\"2017-11-30\")}}, {\"purchaseMethod\": {\"$in\": [\"Online\", \"In store\"]}}]}}, {\"$group\": {\"_id\": \"$purchaseMethod\", \"customer_satisfaction_mean\": {\"$avg\": \"$customer.satisfaction\"}, \"purchaseMethod\": {\"$first\": \"$purchaseMethod\"}}}, {\"$project\": {\"_id\": 0, \"purchaseMethod\": \"$_id\", \"customer.satisfaction\": \"$customer_satisfaction_mean\"}}])",
+      "pred_error": null,
+      "metrics": {
+        "se": 1.0,
+        "cof": 0.0,
+        "neo": 1.0,
+        "ro": 1.0,
+        "ops": 0.4
+      },
+      "complexity": "complex",
+      "db_name": "sample_supplies"
+    },
+    {
+      "question": "What was the average customer satisfaction for online purchases made during the last quarter of 2017?",
+      "expected_collection": "sample_supplies.sales",
+      "got_collection": "sample_supplies.sales",
+      "strict_match": true,
+      "discovery_hit": true,
+      "candidates": [
+        "sample_supplies.sales",
+        "sample_analytics.transactions",
+        "sample_analytics.customers",
+        "sample_training.companies",
+        "sample_analytics.temp_results"
+      ],
+      "query_args": {
+        "collection_name": "sample_supplies.sales",
+        "filters": [
+          {
+            "property_name": "purchaseMethod",
+            "operator": "=",
+            "value": "Online",
+            "property_type": "text"
+          },
+          {
+            "property_name": "saleDate",
+            "operator": "BETWEEN",
+            "value": [
+              "2017-10-01",
+              "2017-12-31"
+            ],
+            "property_type": "date"
+          }
+        ],
+        "output_properties": [
+          {
+            "property_name": "customer.satisfaction",
+            "aggregation": "MEAN"
+          }
+        ],
+        "filter_boolean_op": "AND"
+      },
+      "pred_mql": "db.sales.aggregate([{\"$match\": {\"$and\": [{\"purchaseMethod\": \"Online\"}, {\"saleDate\": {\"$gte\": ISODate(\"2017-10-01\"), \"$lte\": ISODate(\"2017-12-31\")}}]}}, {\"$group\": {\"_id\": null, \"customer_satisfaction_mean\": {\"$avg\": \"$customer.satisfaction\"}}}, {\"$project\": {\"_id\": 0, \"customer.satisfaction\": \"$customer_satisfaction_mean\"}}])",
+      "pred_error": null,
+      "metrics": {
+        "se": 1.0,
+        "cof": 0.0,
+        "neo": 1.0,
+        "ro": 1.0,
+        "ops": 0.4
+      },
+      "complexity": "moderate",
+      "db_name": "sample_supplies"
+    },
+    {
+      "question": "Show me the top 5 highest customer satisfaction ratings for sales at the Austin store in August 2017.",
+      "expected_collection": "sample_supplies.sales",
+      "got_collection": "sample_supplies.sales",
+      "strict_match": true,
+      "discovery_hit": true,
+      "candidates": [
+        "sample_supplies.sales",
+        "sample_mflix.theaters",
+        "sample_analytics.customers",
+        "sample_mflix.movies",
+        "sample_restaurants.temp_neighborhood_counts"
+      ],
+      "query_args": {
+        "collection_name": "sample_supplies.sales",
+        "output_properties": [
+          {
+            "property_name": "customer.satisfaction"
+          },
+          {
+            "property_name": "customer.email"
+          },
+          {
+            "property_name": "saleDate"
+          },
+          {
+            "property_name": "purchaseMethod"
+          }
+        ],
+        "filters": [
+          {
+            "property_name": "storeLocation",
+            "operator": "=",
+            "value": "Austin",
+            "property_type": "text"
+          },
+          {
+            "property_name": "saleDate",
+            "operator": "BETWEEN",
+            "value": [
+              "2017-08-01",
+              "2017-08-31"
+            ],
+            "property_type": "date"
+          }
+        ],
+        "order_by": [
+          {
+            "property_name": "customer.satisfaction",
+            "direction": "DESC"
+          }
+        ],
+        "limit": 5
+      },
+      "pred_mql": "db.sales.aggregate([{\"$match\": {\"$and\": [{\"storeLocation\": \"Austin\"}, {\"saleDate\": {\"$gte\": ISODate(\"2017-08-01\"), \"$lte\": ISODate(\"2017-08-31\")}}]}}, {\"$project\": {\"_id\": 0, \"customer.satisfaction\": 1, \"customer.email\": 1, \"saleDate\": 1, \"purchaseMethod\": 1}}, {\"$sort\": {\"customer.satisfaction\": -1}}, {\"$limit\": 5}])",
+      "pred_error": null,
+      "metrics": {
+        "se": 1.0,
+        "cof": 1.0,
+        "neo": 1.0,
+        "ro": 1.0,
+        "ops": 1.0
+      },
+      "complexity": "moderate",
+      "db_name": "sample_supplies"
+    },
+    {
+      "question": "Which top 3 store locations have the highest average satisfaction ratings for purchases that included school supplies?",
+      "expected_collection": "sample_supplies.sales",
+      "got_collection": "sample_supplies.sales",
+      "strict_match": true,
+      "discovery_hit": true,
+      "candidates": [
+        "sample_supplies.sales",
+        "sample_restaurants.restaurants",
+        "sample_mflix.theaters",
+        "sample_restaurants.neighborhoods",
+        "sample_restaurants.temp_neighborhood_counts"
+      ],
+      "query_args": {
+        "collection_name": "sample_supplies.sales",
+        "filters": [
+          {
+            "property_name": "items.tags",
+            "operator": "=",
+            "value": "school supplies",
+            "property_type": "text"
+          }
+        ],
+        "output_properties": [
+          {
+            "property_name": "storeLocation"
+          },
+          {
+            "property_name": "customer.satisfaction",
+            "aggregation": "MEAN"
+          }
+        ],
+        "group_by_properties": [
+          "storeLocation"
+        ],
+        "order_by": [
+          {
+            "property_name": "customer.satisfaction",
+            "aggregation": "MEAN",
+            "direction": "DESC"
+          }
+        ],
+        "limit": 3
+      },
+      "pred_mql": "db.sales.aggregate([{\"$match\": {\"items.tags\": \"school supplies\"}}, {\"$group\": {\"_id\": \"$storeLocation\", \"customer_satisfaction_mean\": {\"$avg\": \"$customer.satisfaction\"}, \"storeLocation\": {\"$first\": \"$storeLocation\"}}}, {\"$project\": {\"_id\": 0, \"storeLocation\": \"$_id\", \"customer.satisfaction\": \"$customer_satisfaction_mean\"}}, {\"$sort\": {\"customer.satisfaction\": -1}}, {\"$limit\": 3}])",
+      "pred_error": null,
+      "metrics": {
+        "se": 1.0,
+        "cof": 0.0,
+        "neo": 0.0,
+        "ro": 0.0,
+        "ops": 0.2
+      },
+      "complexity": "complex",
+      "db_name": "sample_supplies"
+    },
+    {
+      "question": "What's the average customer satisfaction rating for sales at the Denver store throughout 2017?",
+      "expected_collection": "sample_supplies.sales",
+      "got_collection": "sample_supplies.sales",
+      "strict_match": true,
+      "discovery_hit": true,
+      "candidates": [
+        "sample_supplies.sales",
+        "sample_restaurants.restaurants",
+        "sample_mflix.theaters",
+        "sample_restaurants.temp_neighborhood_counts",
+        "sample_training.companies"
+      ],
+      "query_args": {
+        "collection_name": "sample_supplies.sales",
+        "output_properties": [
+          {
+            "property_name": "customer.satisfaction",
+            "aggregation": "MEAN"
+          }
+        ],
+        "filters": [
+          {
+            "property_name": "storeLocation",
+            "operator": "=",
+            "value": "Denver",
+            "property_type": "text"
+          },
+          {
+            "property_name": "saleDate",
+            "operator": "BETWEEN",
+            "value": [
+              "2017-01-01",
+              "2017-12-31"
+            ],
+            "property_type": "date"
+          }
+        ],
+        "filter_boolean_op": "AND"
+      },
+      "pred_mql": "db.sales.aggregate([{\"$match\": {\"$and\": [{\"storeLocation\": \"Denver\"}, {\"saleDate\": {\"$gte\": ISODate(\"2017-01-01\"), \"$lte\": ISODate(\"2017-12-31\")}}]}}, {\"$group\": {\"_id\": null, \"customer_satisfaction_mean\": {\"$avg\": \"$customer.satisfaction\"}}}, {\"$project\": {\"_id\": 0, \"customer.satisfaction\": \"$customer_satisfaction_mean\"}}])",
+      "pred_error": null,
+      "metrics": {
+        "se": 1.0,
+        "cof": 0.0,
+        "neo": 1.0,
+        "ro": 1.0,
+        "ops": 0.4
+      },
+      "complexity": "complex",
+      "db_name": "sample_supplies"
+    },
+    {
+      "question": "What's the average customer satisfaction rating for the store in Denver?",
+      "expected_collection": "sample_supplies.sales",
+      "got_collection": "sample_supplies.sales",
+      "strict_match": true,
+      "discovery_hit": true,
+      "candidates": [
+        "sample_supplies.sales",
+        "sample_restaurants.restaurants",
+        "sample_restaurants.temp_neighborhood_counts",
+        "sample_restaurants.neighborhoods",
+        "sample_mflix.theaters"
+      ],
+      "query_args": {
+        "collection_name": "sample_supplies.sales",
+        "output_properties": [
+          {
+            "property_name": "customer.satisfaction",
+            "aggregation": "MEAN"
+          }
+        ],
+        "filters": [
+          {
+            "property_name": "storeLocation",
+            "operator": "=",
+            "value": "Denver",
+            "property_type": "text"
+          }
+        ]
+      },
+      "pred_mql": "db.sales.aggregate([{\"$match\": {\"storeLocation\": \"Denver\"}}, {\"$group\": {\"_id\": null, \"customer_satisfaction_mean\": {\"$avg\": \"$customer.satisfaction\"}}}, {\"$project\": {\"_id\": 0, \"customer.satisfaction\": \"$customer_satisfaction_mean\"}}])",
+      "pred_error": null,
+      "metrics": {
+        "se": 1.0,
+        "cof": 0.0,
+        "neo": 1.0,
+        "ro": 1.0,
+        "ops": 0.4
+      },
+      "complexity": "moderate",
+      "db_name": "sample_supplies"
+    },
+    {
+      "question": "Which were the top 5 popular items sold in December 2017?",
+      "expected_collection": "sample_supplies.sales",
+      "got_collection": "sample_supplies.sales",
+      "strict_match": true,
+      "discovery_hit": true,
+      "candidates": [
+        "sample_supplies.sales",
+        "sample_mflix.movies",
+        "sample_restaurants.temp_neighborhood_counts",
+        "sample_mflix.theaters",
+        "sample_analytics.transactions"
+      ],
+      "query_args": {
+        "collection_name": "sample_supplies.sales",
+        "filters": [
+          {
+            "property_name": "saleDate",
+            "operator": "BETWEEN",
+            "value": [
+              "2017-12-01",
+              "2017-12-31"
+            ],
+            "property_type": "date"
+          }
+        ],
+        "output_properties": [
+          {
+            "property_name": "items.name",
+            "aggregation": "TOP_OCCURRENCES"
+          }
+        ],
+        "order_by": [
+          {
+            "property_name": "items.name",
+            "aggregation": "COUNT",
+            "direction": "DESC"
+          }
+        ],
+        "limit": 5
+      },
+      "pred_mql": "db.sales.aggregate([{\"$match\": {\"saleDate\": {\"$gte\": ISODate(\"2017-12-01\"), \"$lte\": ISODate(\"2017-12-31\")}}}, {\"$sort\": {\"items.name\": -1}}, {\"$limit\": 5}])",
+      "pred_error": null,
+      "metrics": {
+        "se": 1.0,
+        "cof": 0.0,
+        "neo": 1.0,
+        "ro": 1.0,
+        "ops": 0.4
+      },
+      "complexity": "moderate",
+      "db_name": "sample_supplies"
+    },
+    {
+      "question": "How many sales transactions in New York had a total sale amount over $1000?",
+      "expected_collection": "sample_supplies.sales",
+      "got_collection": "sample_supplies.sales",
+      "strict_match": true,
+      "discovery_hit": true,
+      "candidates": [
+        "sample_supplies.sales",
+        "sample_analytics.transactions",
+        "sample_restaurants.temp_neighborhood_counts",
+        "sample_training.companies",
+        "sample_mflix.theaters"
+      ],
+      "query_args": {
+        "collection_name": "sample_supplies.sales",
+        "filters": [
+          {
+            "property_name": "storeLocation",
+            "operator": "=",
+            "value": "New York",
+            "property_type": "text"
+          }
+        ],
+        "output_properties": [
+          {
+            "property_name": "_id",
+            "aggregation": "COUNT"
+          }
+        ]
+      },
+      "pred_mql": "db.sales.aggregate([{\"$match\": {\"storeLocation\": \"New York\"}}, {\"$group\": {\"_id\": null, \"_id_count\": {\"$sum\": 1}}}])",
+      "pred_error": null,
+      "metrics": {
+        "se": 1.0,
+        "cof": 0.0,
+        "neo": 1.0,
+        "ro": 1.0,
+        "ops": 0.4
+      },
+      "complexity": "complex",
+      "db_name": "sample_supplies"
+    },
+    {
+      "question": "How many items were sold with coupons at the Denver store over the last quarter of 2017?",
+      "expected_collection": "sample_supplies.sales",
+      "got_collection": "sample_supplies.sales",
+      "strict_match": true,
+      "discovery_hit": true,
+      "candidates": [
+        "sample_supplies.sales",
+        "sample_restaurants.temp_neighborhood_counts",
+        "sample_analytics.transactions",
+        "sample_training.zips",
+        "sample_training.companies"
+      ],
+      "query_args": {
+        "collection_name": "sample_supplies.sales",
+        "output_properties": [
+          {
+            "property_name": "_id",
+            "aggregation": "COUNT"
+          }
+        ],
+        "filters": [
+          {
+            "property_name": "storeLocation",
+            "operator": "=",
+            "value": "Denver",
+            "property_type": "text"
+          },
+          {
+            "property_name": "couponUsed",
+            "operator": "=",
+            "value": true,
+            "property_type": "boolean"
+          },
+          {
+            "property_name": "saleDate",
+            "operator": "BETWEEN",
+            "value": [
+              "2017-10-01",
+              "2017-12-31"
+            ],
+            "property_type": "date"
+          }
+        ],
+        "filter_boolean_op": "AND"
+      },
+      "pred_mql": "db.sales.aggregate([{\"$match\": {\"$and\": [{\"storeLocation\": \"Denver\"}, {\"couponUsed\": true}, {\"saleDate\": {\"$gte\": ISODate(\"2017-10-01\"), \"$lte\": ISODate(\"2017-12-31\")}}]}}, {\"$group\": {\"_id\": null, \"_id_count\": {\"$sum\": 1}}}])",
+      "pred_error": null,
+      "metrics": {
+        "se": 1.0,
+        "cof": 0.0,
+        "neo": 1.0,
+        "ro": 1.0,
+        "ops": 0.4
+      },
+      "complexity": "moderate",
+      "db_name": "sample_supplies"
+    },
+    {
+      "question": "What purchase methods were used for sales with coupons in the last quarter of 2017?",
+      "expected_collection": "sample_supplies.sales",
+      "got_collection": "sample_supplies.sales",
+      "strict_match": true,
+      "discovery_hit": true,
+      "candidates": [
+        "sample_supplies.sales",
+        "sample_analytics.transactions",
+        "sample_training.companies",
+        "sample_analytics.accounts",
+        "sample_analytics.customers"
+      ],
+      "query_args": {
+        "collection_name": "sample_supplies.sales",
+        "output_properties": [
+          {
+            "property_name": "purchaseMethod",
+            "aggregation": "TOP_OCCURRENCES"
+          }
+        ],
+        "filters": [
+          {
+            "property_name": "couponUsed",
+            "operator": "=",
+            "value": true,
+            "property_type": "boolean"
+          },
+          {
+            "property_name": "saleDate",
+            "operator": "BETWEEN",
+            "value": [
+              "2017-10-01",
+              "2017-12-31"
+            ],
+            "property_type": "date"
+          }
+        ],
+        "filter_boolean_op": "AND",
+        "group_by_properties": [
+          "purchaseMethod"
+        ]
+      },
+      "pred_mql": "db.sales.aggregate([{\"$match\": {\"$and\": [{\"couponUsed\": true}, {\"saleDate\": {\"$gte\": ISODate(\"2017-10-01\"), \"$lte\": ISODate(\"2017-12-31\")}}]}}])",
+      "pred_error": null,
+      "metrics": {
+        "se": 1.0,
+        "cof": 1.0,
+        "neo": 1.0,
+        "ro": 1.0,
+        "ops": 1.0
+      },
+      "complexity": "moderate",
+      "db_name": "sample_supplies"
+    },
+    {
+      "question": "Compare the average customer satisfaction for sales of 'backpacks' using coupons versus those without, from January to June 2017.",
+      "expected_collection": "sample_supplies.sales",
+      "got_collection": "sample_supplies.sales",
+      "strict_match": true,
+      "discovery_hit": true,
+      "candidates": [
+        "sample_supplies.sales",
+        "sample_restaurants.temp_neighborhood_counts",
+        "sample_analytics.temp_results",
+        "sample_analytics.transactions",
+        "sample_training.routes"
+      ],
+      "query_args": {
+        "collection_name": "sample_supplies.sales",
+        "output_properties": [
+          {
+            "property_name": "couponUsed",
+            "aggregation": "NONE"
+          },
+          {
+            "property_name": "customer.satisfaction",
+            "aggregation": "MEAN"
+          }
+        ],
+        "filters": [
+          {
+            "property_name": "items.name",
+            "operator": "=",
+            "value": "backpack",
+            "property_type": "text"
+          },
+          {
+            "property_name": "saleDate",
+            "operator": "BETWEEN",
+            "value": [
+              "2017-01-01",
+              "2017-06-30"
+            ],
+            "property_type": "date"
+          },
+          {
+            "property_name": "couponUsed",
+            "operator": "=",
+            "value": true,
+            "property_type": "boolean"
+          }
+        ],
+        "group_by_properties": [
+          "couponUsed"
+        ]
+      },
+      "pred_mql": "db.sales.aggregate([{\"$match\": {\"$and\": [{\"items.name\": \"backpack\"}, {\"saleDate\": {\"$gte\": ISODate(\"2017-01-01\"), \"$lte\": ISODate(\"2017-06-30\")}}, {\"couponUsed\": true}]}}, {\"$group\": {\"_id\": \"$couponUsed\", \"customer_satisfaction_mean\": {\"$avg\": \"$customer.satisfaction\"}, \"couponUsed\": {\"$first\": \"$couponUsed\"}}}, {\"$project\": {\"_id\": 0, \"couponUsed\": \"$_id\", \"customer.satisfaction\": \"$customer_satisfaction_mean\"}}])",
+      "pred_error": null,
+      "metrics": {
+        "se": 1.0,
+        "cof": 0.0,
+        "neo": 1.0,
+        "ro": 1.0,
+        "ops": 0.4
+      },
+      "complexity": "moderate",
+      "db_name": "sample_supplies"
+    },
+    {
+      "question": "What's the average quantity of 'pens' sold with and without coupons during 2017?",
+      "expected_collection": "sample_supplies.sales",
+      "got_collection": "sample_supplies.sales",
+      "strict_match": true,
+      "discovery_hit": true,
+      "candidates": [
+        "sample_supplies.sales",
+        "sample_analytics.transactions",
+        "sample_analytics.temp_results",
+        "sample_training.zips",
+        "sample_restaurants.temp_neighborhood_counts"
+      ],
+      "query_args": {
+        "collection_name": "sample_supplies.sales",
+        "output_properties": [
+          {
+            "property_name": "couponUsed",
+            "aggregation": "NONE"
+          },
+          {
+            "property_name": "items.quantity",
+            "aggregation": "MEAN"
+          }
+        ],
+        "filters": [
+          {
+            "property_name": "items.name",
+            "operator": "=",
+            "value": "pens",
+            "property_type": "text"
+          },
+          {
+            "property_name": "saleDate",
+            "operator": "BETWEEN",
+            "value": [
+              "2017-01-01",
+              "2017-12-31"
+            ],
+            "property_type": "date"
+          }
+        ],
+        "group_by_properties": [
+          "couponUsed"
+        ]
+      },
+      "pred_mql": "db.sales.aggregate([{\"$match\": {\"$and\": [{\"items.name\": \"pens\"}, {\"saleDate\": {\"$gte\": ISODate(\"2017-01-01\"), \"$lte\": ISODate(\"2017-12-31\")}}]}}, {\"$group\": {\"_id\": \"$couponUsed\", \"items_quantity_mean\": {\"$avg\": \"$items.quantity\"}, \"couponUsed\": {\"$first\": \"$couponUsed\"}}}, {\"$project\": {\"_id\": 0, \"couponUsed\": \"$_id\", \"items.quantity\": \"$items_quantity_mean\"}}])",
+      "pred_error": null,
+      "metrics": {
+        "se": 1.0,
+        "cof": 0.0,
+        "neo": 1.0,
+        "ro": 0.0,
+        "ops": 0.30000000000000004
+      },
+      "complexity": "moderate",
+      "db_name": "sample_supplies"
+    },
+    {
+      "question": "What is the average customer satisfaction rating for online purchases made in December 2017?",
+      "expected_collection": "sample_supplies.sales",
+      "got_collection": "sample_supplies.sales",
+      "strict_match": true,
+      "discovery_hit": true,
+      "candidates": [
+        "sample_supplies.sales",
+        "sample_analytics.customers",
+        "sample_analytics.transactions",
+        "sample_training.companies",
+        "sample_restaurants.temp_neighborhood_counts"
+      ],
+      "query_args": {
+        "collection_name": "sample_supplies.sales",
+        "output_properties": [
+          {
+            "property_name": "customer.satisfaction",
+            "aggregation": "MEAN"
+          }
+        ],
+        "filters": [
+          {
+            "property_name": "purchaseMethod",
+            "operator": "=",
+            "value": "Online",
+            "property_type": "text"
+          },
+          {
+            "property_name": "saleDate",
+            "operator": "BETWEEN",
+            "value": [
+              "2017-12-01",
+              "2017-12-31"
+            ],
+            "property_type": "date"
+          }
+        ],
+        "filter_boolean_op": "AND"
+      },
+      "pred_mql": "db.sales.aggregate([{\"$match\": {\"$and\": [{\"purchaseMethod\": \"Online\"}, {\"saleDate\": {\"$gte\": ISODate(\"2017-12-01\"), \"$lte\": ISODate(\"2017-12-31\")}}]}}, {\"$group\": {\"_id\": null, \"customer_satisfaction_mean\": {\"$avg\": \"$customer.satisfaction\"}}}, {\"$project\": {\"_id\": 0, \"customer.satisfaction\": \"$customer_satisfaction_mean\"}}])",
+      "pred_error": null,
+      "metrics": {
+        "se": 1.0,
+        "cof": 0.0,
+        "neo": 1.0,
+        "ro": 1.0,
+        "ops": 0.4
+      },
+      "complexity": "moderate",
+      "db_name": "sample_supplies"
+    },
+    {
+      "question": "What was the total quantity of items sold in transactions with coupons versus without coupons in December 2017?",
+      "expected_collection": "sample_supplies.sales",
+      "got_collection": "sample_supplies.sales",
+      "strict_match": true,
+      "discovery_hit": true,
+      "candidates": [
+        "sample_supplies.sales",
+        "sample_analytics.transactions",
+        "sample_analytics.temp_results",
+        "sample_restaurants.temp_neighborhood_counts",
+        "sample_analytics.accounts"
+      ],
+      "query_args": {
+        "collection_name": "sample_supplies.sales",
+        "output_properties": [
+          {
+            "property_name": "couponUsed"
+          },
+          {
+            "property_name": "items.quantity",
+            "aggregation": "SUM"
+          }
+        ],
+        "filters": [
+          {
+            "property_name": "saleDate",
+            "operator": "BETWEEN",
+            "value": [
+              "2017-12-01",
+              "2017-12-31"
+            ],
+            "property_type": "date"
+          }
+        ],
+        "group_by_properties": [
+          "couponUsed"
+        ]
+      },
+      "pred_mql": "db.sales.aggregate([{\"$match\": {\"saleDate\": {\"$gte\": ISODate(\"2017-12-01\"), \"$lte\": ISODate(\"2017-12-31\")}}}, {\"$group\": {\"_id\": \"$couponUsed\", \"items_quantity_sum\": {\"$sum\": \"$items.quantity\"}, \"couponUsed\": {\"$first\": \"$couponUsed\"}}}, {\"$project\": {\"_id\": 0, \"couponUsed\": \"$_id\", \"items.quantity\": \"$items_quantity_sum\"}}])",
+      "pred_error": null,
+      "metrics": {
+        "se": 1.0,
+        "cof": 0.0,
+        "neo": 1.0,
+        "ro": 1.0,
+        "ops": 0.4
+      },
+      "complexity": "moderate",
+      "db_name": "sample_supplies"
+    },
+    {
+      "question": "Which are the top 5 purchase methods with the highest number of transactions throughout 2017?",
+      "expected_collection": "sample_supplies.sales",
+      "got_collection": "sample_supplies.sales",
+      "strict_match": true,
+      "discovery_hit": true,
+      "candidates": [
+        "sample_supplies.sales",
+        "sample_analytics.transactions",
+        "sample_training.companies",
+        "sample_analytics.customers",
+        "sample_mflix.movies"
+      ],
+      "query_args": {
+        "collection_name": "sample_supplies.sales",
+        "output_properties": [
+          {
+            "property_name": "purchaseMethod"
+          },
+          {
+            "property_name": "_id",
+            "aggregation": "COUNT"
+          }
+        ],
+        "filters": [
+          {
+            "property_name": "saleDate",
+            "operator": "BETWEEN",
+            "value": [
+              "2017-01-01",
+              "2017-12-31"
+            ],
+            "property_type": "date"
+          }
+        ],
+        "group_by_properties": [
+          "purchaseMethod"
+        ],
+        "order_by": [
+          {
+            "property_name": "_id",
+            "aggregation": "COUNT",
+            "direction": "DESC"
+          }
+        ],
+        "limit": 5
+      },
+      "pred_mql": "db.sales.aggregate([{\"$match\": {\"saleDate\": {\"$gte\": ISODate(\"2017-01-01\"), \"$lte\": ISODate(\"2017-12-31\")}}}, {\"$group\": {\"_id\": \"$purchaseMethod\", \"_id_count\": {\"$sum\": 1}, \"purchaseMethod\": {\"$first\": \"$purchaseMethod\"}}}, {\"$project\": {\"_id\": \"$_id_count\", \"purchaseMethod\": \"$_id\"}}, {\"$sort\": {\"_id\": -1}}, {\"$limit\": 5}])",
+      "pred_error": null,
+      "metrics": {
+        "se": 1.0,
+        "cof": 0.0,
+        "neo": 1.0,
+        "ro": 1.0,
+        "ops": 0.4
+      },
+      "complexity": "moderate",
+      "db_name": "sample_supplies"
+    },
+    {
+      "question": "List planets with a mean surface temperature above 300 degrees Celsius and nitrogen in their atmosphere.",
+      "expected_collection": "sample_guides.planets",
+      "got_collection": "sample_guides.planets",
+      "strict_match": true,
+      "discovery_hit": true,
+      "candidates": [
+        "sample_guides.planets",
+        "sample_geospatial.shipwrecks",
+        "sample_airbnb.listingsAndReviews",
+        "sample_mflix.movies",
+        "sample_restaurants.neighborhoods"
+      ],
+      "query_args": {
+        "collection_name": "sample_guides.planets",
+        "output_properties": [
+          {
+            "property_name": "name"
+          },
+          {
+            "property_name": "surfaceTemperatureC.mean"
+          },
+          {
+            "property_name": "mainAtmosphere"
+          }
+        ],
+        "filters": [
+          {
+            "property_name": "surfaceTemperatureC.mean",
+            "operator": ">",
+            "value": 300,
+            "property_type": "integer"
+          },
+          {
+            "property_name": "mainAtmosphere",
+            "operator": "=",
+            "value": "N2",
+            "property_type": "text"
+          }
+        ],
+        "filter_boolean_op": "AND"
+      },
+      "pred_mql": "db.planets.aggregate([{\"$match\": {\"$and\": [{\"surfaceTemperatureC.mean\": {\"$gt\": 300}}, {\"mainAtmosphere\": \"N2\"}]}}, {\"$project\": {\"_id\": 0, \"name\": 1, \"surfaceTemperatureC.mean\": 1, \"mainAtmosphere\": 1}}])",
+      "pred_error": null,
+      "metrics": {
+        "se": 1.0,
+        "cof": 0.0,
+        "neo": 0.0,
+        "ro": 0.0,
+        "ops": 0.2
+      },
+      "complexity": "moderate",
+      "db_name": "sample_guides"
+    },
+    {
+      "question": "Find planets with a unique atmosphere composition and a mean surface temperature between 50 and 150 degrees Celsius.",
+      "expected_collection": "sample_guides.planets",
+      "got_collection": "sample_guides.planets",
+      "strict_match": true,
+      "discovery_hit": true,
+      "candidates": [
+        "sample_guides.planets",
+        "sample_geospatial.shipwrecks",
+        "sample_analytics.customers",
+        "sample_restaurants.neighborhoods",
+        "sample_training.routes"
+      ],
+      "query_args": {
+        "collection_name": "sample_guides.planets",
+        "output_properties": [
+          {
+            "property_name": "name"
+          },
+          {
+            "property_name": "mainAtmosphere"
+          },
+          {
+            "property_name": "surfaceTemperatureC.mean"
+          }
+        ],
+        "filters": [
+          {
+            "property_name": "surfaceTemperatureC.mean",
+            "operator": "BETWEEN",
+            "value": [
+              50,
+              150
+            ],
+            "property_type": "integer"
+          }
+        ],
+        "search_query": "unique atmosphere composition"
+      },
+      "pred_mql": "db.planets.aggregate([{\"$match\": {\"surfaceTemperatureC.mean\": {\"$gte\": 50, \"$lte\": 150}}}, {\"$project\": {\"_id\": 0, \"name\": 1, \"mainAtmosphere\": 1, \"surfaceTemperatureC.mean\": 1}}])",
+      "pred_error": null,
+      "metrics": {
+        "se": 1.0,
+        "cof": 0.0,
+        "neo": 1.0,
+        "ro": 0.0,
+        "ops": 0.30000000000000004
+      },
+      "complexity": "complex",
+      "db_name": "sample_guides"
+    },
+    {
+      "question": "What is the transaction count and average customer satisfaction for in-store purchases made in November 2017?",
+      "expected_collection": "sample_supplies.sales",
+      "got_collection": "sample_supplies.sales",
+      "strict_match": true,
+      "discovery_hit": true,
+      "candidates": [
+        "sample_analytics.transactions",
+        "sample_supplies.sales",
+        "sample_restaurants.temp_neighborhood_counts",
+        "sample_training.companies",
+        "sample_analytics.customers"
+      ],
+      "query_args": {
+        "collection_name": "sample_supplies.sales",
+        "filters": [
+          {
+            "property_name": "purchaseMethod",
+            "operator": "=",
+            "value": "In store",
+            "property_type": "text"
+          },
+          {
+            "property_name": "saleDate",
+            "operator": "BETWEEN",
+            "value": [
+              "2017-11-01",
+              "2017-11-30"
+            ],
+            "property_type": "date"
+          }
+        ],
+        "output_properties": [
+          {
+            "property_name": "_id",
+            "aggregation": "COUNT"
+          },
+          {
+            "property_name": "customer.satisfaction",
+            "aggregation": "MEAN"
+          }
+        ],
+        "filter_boolean_op": "AND"
+      },
+      "pred_mql": "db.sales.aggregate([{\"$match\": {\"$and\": [{\"purchaseMethod\": \"In store\"}, {\"saleDate\": {\"$gte\": ISODate(\"2017-11-01\"), \"$lte\": ISODate(\"2017-11-30\")}}]}}, {\"$group\": {\"_id\": null, \"_id_count\": {\"$sum\": 1}, \"customer_satisfaction_mean\": {\"$avg\": \"$customer.satisfaction\"}}}, {\"$project\": {\"_id\": \"$_id_count\", \"customer.satisfaction\": \"$customer_satisfaction_mean\"}}])",
+      "pred_error": null,
+      "metrics": {
+        "se": 1.0,
+        "cof": 0.0,
+        "neo": 1.0,
+        "ro": 1.0,
+        "ops": 0.4
+      },
+      "complexity": "moderate",
+      "db_name": "sample_supplies"
+    },
+    {
+      "question": "Can you show me 10 listings with the highest cleaning fees?",
+      "expected_collection": "sample_airbnb.listingsAndReviews",
+      "got_collection": "sample_airbnb.listingsAndReviews",
+      "strict_match": true,
+      "discovery_hit": true,
+      "candidates": [
+        "sample_airbnb.listingsAndReviews",
+        "sample_training.companies",
+        "sample_training.inspections",
+        "sample_restaurants.neighborhoods",
+        "sample_restaurants.temp_neighborhood_counts"
+      ],
+      "query_args": {
+        "collection_name": "sample_airbnb.listingsAndReviews",
+        "output_properties": [
+          {
+            "property_name": "_id"
+          },
+          {
+            "property_name": "cleaning_fee"
+          },
+          {
+            "property_name": "name"
+          },
+          {
+            "property_name": "address"
+          }
+        ],
+        "order_by": [
+          {
+            "property_name": "cleaning_fee",
+            "direction": "DESC"
+          }
+        ],
+        "limit": 10
+      },
+      "pred_mql": "db.listingsAndReviews.aggregate([{\"$project\": {\"_id\": 1, \"cleaning_fee\": 1, \"name\": 1, \"address\": 1}}, {\"$sort\": {\"cleaning_fee\": -1}}, {\"$limit\": 10}])",
+      "pred_error": "Mongomock does not know how to sort '100.00' of type '<class 'bson.decimal128.Decimal128'>'",
+      "metrics": {
+        "se": 0.0,
+        "cof": 0.0,
+        "neo": 0.0,
+        "ro": 0.0,
+        "ops": 0.0
+      },
+      "complexity": "simple",
+      "db_name": "sample_airbnb"
+    },
+    {
+      "question": "What was the trend in customer satisfaction for online purchases month by month throughout 2017?",
+      "expected_collection": "sample_supplies.sales",
+      "got_collection": "sample_supplies.sales",
+      "strict_match": true,
+      "discovery_hit": true,
+      "candidates": [
+        "sample_supplies.sales",
+        "sample_analytics.transactions",
+        "sample_analytics.customers",
+        "sample_training.companies",
+        "sample_restaurants.temp_neighborhood_counts"
+      ],
+      "query_args": {
+        "collection_name": "sample_supplies.sales",
+        "filters": [
+          {
+            "property_name": "purchaseMethod",
+            "operator": "=",
+            "value": "Online",
+            "property_type": "text"
+          },
+          {
+            "property_name": "saleDate",
+            "operator": "BETWEEN",
+            "value": [
+              "2017-01-01",
+              "2017-12-31"
+            ],
+            "property_type": "date"
+          }
+        ],
+        "output_properties": [
+          {
+            "property_name": "saleDate"
+          },
+          {
+            "property_name": "customer.satisfaction",
+            "aggregation": "MEAN"
+          }
+        ],
+        "group_by_properties": [
+          "saleDate"
+        ],
+        "order_by": [
+          {
+            "property_name": "saleDate",
+            "direction": "ASC"
+          }
+        ]
+      },
+      "pred_mql": "db.sales.aggregate([{\"$match\": {\"$and\": [{\"purchaseMethod\": \"Online\"}, {\"saleDate\": {\"$gte\": ISODate(\"2017-01-01\"), \"$lte\": ISODate(\"2017-12-31\")}}]}}, {\"$group\": {\"_id\": \"$saleDate\", \"customer_satisfaction_mean\": {\"$avg\": \"$customer.satisfaction\"}, \"saleDate\": {\"$first\": \"$saleDate\"}}}, {\"$project\": {\"_id\": 0, \"saleDate\": \"$_id\", \"customer.satisfaction\": \"$customer_satisfaction_mean\"}}, {\"$sort\": {\"saleDate\": 1}}])",
+      "pred_error": null,
+      "metrics": {
+        "se": 1.0,
+        "cof": 0.0,
+        "neo": 1.0,
+        "ro": 1.0,
+        "ops": 0.4
+      },
+      "complexity": "moderate",
+      "db_name": "sample_supplies"
+    },
+    {
+      "question": "Which planets have a mean surface temperature between 5 and 25 degrees Celsius and oxygen in their atmosphere?",
+      "expected_collection": "sample_guides.planets",
+      "got_collection": "sample_guides.planets",
+      "strict_match": true,
+      "discovery_hit": true,
+      "candidates": [
+        "sample_guides.planets",
+        "sample_analytics.customers",
+        "sample_analytics.temp_results",
+        "sample_geospatial.shipwrecks",
+        "sample_airbnb.listingsAndReviews"
+      ],
+      "query_args": {
+        "collection_name": "sample_guides.planets",
+        "output_properties": [
+          {
+            "property_name": "name"
+          },
+          {
+            "property_name": "surfaceTemperatureC.mean"
+          },
+          {
+            "property_name": "mainAtmosphere"
+          }
+        ],
+        "filters": [
+          {
+            "property_name": "surfaceTemperatureC.mean",
+            "operator": "BETWEEN",
+            "value": [
+              5,
+              25
+            ],
+            "property_type": "integer"
+          },
+          {
+            "property_name": "mainAtmosphere",
+            "operator": "=",
+            "value": "O2",
+            "property_type": "text"
+          }
+        ],
+        "filter_boolean_op": "AND"
+      },
+      "pred_mql": "db.planets.aggregate([{\"$match\": {\"$and\": [{\"surfaceTemperatureC.mean\": {\"$gte\": 5, \"$lte\": 25}}, {\"mainAtmosphere\": \"O2\"}]}}, {\"$project\": {\"_id\": 0, \"name\": 1, \"surfaceTemperatureC.mean\": 1, \"mainAtmosphere\": 1}}])",
+      "pred_error": null,
+      "metrics": {
+        "se": 1.0,
+        "cof": 1.0,
+        "neo": 1.0,
+        "ro": 1.0,
+        "ops": 1.0
+      },
+      "complexity": "complex",
+      "db_name": "sample_guides"
+    },
+    {
+      "question": "Could you show me the top 3 purchase methods with the highest average customer satisfaction in 2017?",
+      "expected_collection": "sample_supplies.sales",
+      "got_collection": "sample_supplies.sales",
+      "strict_match": true,
+      "discovery_hit": true,
+      "candidates": [
+        "sample_supplies.sales",
+        "sample_analytics.customers",
+        "sample_training.companies",
+        "sample_analytics.transactions",
+        "sample_mflix.theaters"
+      ],
+      "query_args": {
+        "collection_name": "sample_supplies.sales",
+        "output_properties": [
+          {
+            "property_name": "purchaseMethod"
+          },
+          {
+            "property_name": "customer.satisfaction",
+            "aggregation": "MEAN"
+          }
+        ],
+        "filters": [
+          {
+            "property_name": "saleDate",
+            "operator": "BETWEEN",
+            "value": [
+              "2017-01-01",
+              "2017-12-31"
+            ],
+            "property_type": "date"
+          }
+        ],
+        "group_by_properties": [
+          "purchaseMethod"
+        ],
+        "order_by": [
+          {
+            "property_name": "customer.satisfaction",
+            "aggregation": "MEAN",
+            "direction": "DESC"
+          }
+        ],
+        "limit": 3
+      },
+      "pred_mql": "db.sales.aggregate([{\"$match\": {\"saleDate\": {\"$gte\": ISODate(\"2017-01-01\"), \"$lte\": ISODate(\"2017-12-31\")}}}, {\"$group\": {\"_id\": \"$purchaseMethod\", \"customer_satisfaction_mean\": {\"$avg\": \"$customer.satisfaction\"}, \"purchaseMethod\": {\"$first\": \"$purchaseMethod\"}}}, {\"$project\": {\"_id\": 0, \"purchaseMethod\": \"$_id\", \"customer.satisfaction\": \"$customer_satisfaction_mean\"}}, {\"$sort\": {\"customer.satisfaction\": -1}}, {\"$limit\": 3}])",
+      "pred_error": null,
+      "metrics": {
+        "se": 1.0,
+        "cof": 0.0,
+        "neo": 1.0,
+        "ro": 1.0,
+        "ops": 0.4
+      },
+      "complexity": "moderate",
+      "db_name": "sample_supplies"
+    },
+    {
+      "question": "Please provide details of 10 listings with the top cleaning fees.",
+      "expected_collection": "sample_airbnb.listingsAndReviews",
+      "got_collection": "sample_airbnb.listingsAndReviews",
+      "strict_match": true,
+      "discovery_hit": true,
+      "candidates": [
+        "sample_airbnb.listingsAndReviews",
+        "sample_training.companies",
+        "sample_training.inspections",
+        "sample_restaurants.neighborhoods",
+        "sample_supplies.sales"
+      ],
+      "query_args": {
+        "collection_name": "sample_airbnb.listingsAndReviews",
+        "output_properties": [
+          {
+            "property_name": "_id"
+          },
+          {
+            "property_name": "name"
+          },
+          {
+            "property_name": "cleaning_fee"
+          },
+          {
+            "property_name": "address"
+          },
+          {
+            "property_name": "bedrooms"
+          },
+          {
+            "property_name": "beds"
+          },
+          {
+            "property_name": "accommodates"
+          },
+          {
+            "property_name": "property_type"
+          }
+        ],
+        "order_by": [
+          {
+            "property_name": "cleaning_fee",
+            "direction": "DESC"
+          }
+        ],
+        "limit": 10
+      },
+      "pred_mql": "db.listingsAndReviews.aggregate([{\"$project\": {\"_id\": 1, \"name\": 1, \"cleaning_fee\": 1, \"address\": 1, \"bedrooms\": 1, \"beds\": 1, \"accommodates\": 1, \"property_type\": 1}}, {\"$sort\": {\"cleaning_fee\": -1}}, {\"$limit\": 10}])",
+      "pred_error": "Mongomock does not know how to sort '100.00' of type '<class 'bson.decimal128.Decimal128'>'",
+      "metrics": {
+        "se": 0.0,
+        "cof": 0.0,
+        "neo": 0.0,
+        "ro": 0.0,
+        "ops": 0.0
+      },
+      "complexity": "simple",
+      "db_name": "sample_airbnb"
+    },
+    {
+      "question": "Which planets have rings and what are their atmospheric components?",
+      "expected_collection": "sample_guides.planets",
+      "got_collection": "sample_guides.planets",
+      "strict_match": true,
+      "discovery_hit": true,
+      "candidates": [
+        "sample_guides.planets",
+        "sample_geospatial.shipwrecks",
+        "sample_analytics.transactions",
+        "sample_mflix.movies",
+        "sample_analytics.accounts"
+      ],
+      "query_args": {
+        "collection_name": "sample_guides.planets",
+        "filters": [
+          {
+            "property_name": "hasRings",
+            "operator": "=",
+            "value": true,
+            "property_type": "boolean"
+          }
+        ],
+        "output_properties": [
+          {
+            "property_name": "name"
+          },
+          {
+            "property_name": "hasRings"
+          },
+          {
+            "property_name": "mainAtmosphere"
+          }
+        ]
+      },
+      "pred_mql": "db.planets.aggregate([{\"$match\": {\"hasRings\": true}}, {\"$project\": {\"_id\": 0, \"name\": 1, \"hasRings\": 1, \"mainAtmosphere\": 1}}])",
+      "pred_error": null,
+      "metrics": {
+        "se": 1.0,
+        "cof": 1.0,
+        "neo": 1.0,
+        "ro": 1.0,
+        "ops": 1.0
+      },
+      "complexity": "moderate",
+      "db_name": "sample_guides"
+    },
+    {
+      "question": "Can you give me the wind direction and speed for the coordinates [-144.6, 51.2]?",
+      "expected_collection": "sample_weatherdata.data",
+      "got_collection": "sample_geospatial.shipwrecks",
+      "strict_match": false,
+      "discovery_hit": false,
+      "candidates": [
+        "sample_guides.planets",
+        "sample_airbnb.listingsAndReviews",
+        "sample_geospatial.shipwrecks",
+        "sample_training.trips",
+        "sample_training.routes"
+      ],
+      "query_args": {
+        "collection_name": "sample_geospatial.shipwrecks",
+        "output_properties": [
+          {
+            "property_name": "londec"
+          },
+          {
+            "property_name": "latdec"
+          },
+          {
+            "property_name": "feature_type"
+          },
+          {
+            "property_name": "watlev"
+          }
+        ],
+        "filters": [
+          {
+            "property_name": "londec",
+            "operator": "=",
+            "value": -144.6,
+            "property_type": "integer"
+          },
+          {
+            "property_name": "latdec",
+            "operator": "=",
+            "value": 51.2,
+            "property_type": "integer"
+          }
+        ]
+      },
+      "pred_mql": "db.shipwrecks.aggregate([{\"$match\": {\"$and\": [{\"londec\": -144.6}, {\"latdec\": 51.2}]}}, {\"$project\": {\"_id\": 0, \"londec\": 1, \"latdec\": 1, \"feature_type\": 1, \"watlev\": 1}}])",
+      "pred_error": null,
+      "metrics": {
+        "se": 1.0,
+        "cof": 1.0,
+        "neo": 0.0,
+        "ro": 0.0,
+        "ops": 0.8
+      },
+      "complexity": "simple",
+      "db_name": "sample_weatherdata"
+    },
+    {
+      "question": "Find planets where Oxygen is a major part of the atmosphere.",
+      "expected_collection": "sample_guides.planets",
+      "got_collection": "sample_guides.planets",
+      "strict_match": true,
+      "discovery_hit": true,
+      "candidates": [
+        "sample_guides.planets",
+        "sample_airbnb.listingsAndReviews",
+        "sample_geospatial.shipwrecks",
+        "sample_training.routes",
+        "sample_analytics.customers"
+      ],
+      "query_args": {
+        "collection_name": "sample_guides.planets",
+        "output_properties": [
+          {
+            "property_name": "name"
+          },
+          {
+            "property_name": "mainAtmosphere"
+          }
+        ],
+        "filters": [
+          {
+            "property_name": "mainAtmosphere",
+            "operator": "=",
+            "value": "O2",
+            "property_type": "text"
+          }
+        ]
+      },
+      "pred_mql": "db.planets.aggregate([{\"$match\": {\"mainAtmosphere\": \"O2\"}}, {\"$project\": {\"_id\": 0, \"name\": 1, \"mainAtmosphere\": 1}}])",
+      "pred_error": null,
+      "metrics": {
+        "se": 1.0,
+        "cof": 1.0,
+        "neo": 1.0,
+        "ro": 1.0,
+        "ops": 1.0
+      },
+      "complexity": "moderate",
+      "db_name": "sample_guides"
+    },
+    {
+      "question": "Find listings for apartments with at least 2 beds within 1 mile of the Sydney Opera House.",
+      "expected_collection": "sample_airbnb.listingsAndReviews",
+      "got_collection": "sample_airbnb.listingsAndReviews",
+      "strict_match": true,
+      "discovery_hit": true,
+      "candidates": [
+        "sample_airbnb.listingsAndReviews",
+        "sample_mflix.theaters",
+        "sample_restaurants.neighborhoods",
+        "sample_restaurants.restaurants",
+        "sample_mflix.movies"
+      ],
+      "query_args": {
+        "collection_name": "sample_airbnb.listingsAndReviews",
+        "output_properties": [
+          {
+            "property_name": "_id"
+          },
+          {
+            "property_name": "name"
+          },
+          {
+            "property_name": "beds"
+          },
+          {
+            "property_name": "bedrooms"
+          },
+          {
+            "property_name": "address"
+          },
+          {
+            "property_name": "price"
+          }
+        ],
+        "filters": [
+          {
+            "property_name": "beds",
+            "operator": ">=",
+            "value": 2,
+            "property_type": "integer"
+          },
+          {
+            "property_name": "property_type",
+            "operator": "=",
+            "value": "Apartment",
+            "property_type": "text"
+          }
+        ],
+        "search_query": "apartment near Sydney Opera House"
+      },
+      "pred_mql": "db.listingsAndReviews.aggregate([{\"$match\": {\"$and\": [{\"beds\": {\"$gte\": 2}}, {\"property_type\": \"Apartment\"}]}}, {\"$project\": {\"_id\": 1, \"name\": 1, \"beds\": 1, \"bedrooms\": 1, \"address\": 1, \"price\": 1}}])",
+      "pred_error": null,
+      "metrics": {
+        "se": 1.0,
+        "cof": 0.0,
+        "neo": 1.0,
+        "ro": 0.0,
+        "ops": 0.30000000000000004
+      },
+      "complexity": "complex",
+      "db_name": "sample_airbnb"
+    },
+    {
+      "question": "Can you show me the wind direction angles and speeds at coordinates [-144.6, 51.2] and [-156.4, 56.8]?",
+      "expected_collection": "sample_weatherdata.data",
+      "got_collection": "sample_geospatial.shipwrecks",
+      "strict_match": false,
+      "discovery_hit": false,
+      "candidates": [
+        "sample_guides.planets",
+        "sample_airbnb.listingsAndReviews",
+        "sample_geospatial.shipwrecks",
+        "sample_training.routes",
+        "sample_analytics.transactions"
+      ],
+      "query_args": {
+        "collection_name": "sample_geospatial.shipwrecks",
+        "output_properties": [
+          {
+            "property_name": "londec"
+          },
+          {
+            "property_name": "latdec"
+          },
+          {
+            "property_name": "coordinates"
+          }
+        ],
+        "filters": [
+          {
+            "property_name": "londec",
+            "operator": "=",
+            "value": -144.6,
+            "property_type": "integer"
+          },
+          {
+            "property_name": "latdec",
+            "operator": "=",
+            "value": 51.2,
+            "property_type": "integer"
+          }
+        ],
+        "filter_boolean_op": "AND"
+      },
+      "pred_mql": "db.shipwrecks.aggregate([{\"$match\": {\"$and\": [{\"londec\": -144.6}, {\"latdec\": 51.2}]}}, {\"$project\": {\"_id\": 0, \"londec\": 1, \"latdec\": 1, \"coordinates\": 1}}])",
+      "pred_error": null,
+      "metrics": {
+        "se": 1.0,
+        "cof": 1.0,
+        "neo": 0.0,
+        "ro": 0.0,
+        "ops": 0.8
+      },
+      "complexity": "moderate",
+      "db_name": "sample_weatherdata"
+    },
+    {
+      "question": "List the planets and their atmospheres ordered by their distance from the sun.",
+      "expected_collection": "sample_guides.planets",
+      "got_collection": "sample_guides.planets",
+      "strict_match": true,
+      "discovery_hit": true,
+      "candidates": [
+        "sample_guides.planets",
+        "sample_geospatial.shipwrecks",
+        "sample_airbnb.listingsAndReviews",
+        "sample_restaurants.neighborhoods",
+        "sample_training.routes"
+      ],
+      "query_args": {
+        "collection_name": "sample_guides.planets",
+        "output_properties": [
+          {
+            "property_name": "name"
+          },
+          {
+            "property_name": "mainAtmosphere"
+          },
+          {
+            "property_name": "orderFromSun"
+          }
+        ],
+        "order_by": [
+          {
+            "property_name": "orderFromSun",
+            "direction": "ASC"
+          }
+        ]
+      },
+      "pred_mql": "db.planets.aggregate([{\"$project\": {\"_id\": 0, \"name\": 1, \"mainAtmosphere\": 1, \"orderFromSun\": 1}}, {\"$sort\": {\"orderFromSun\": 1}}])",
+      "pred_error": null,
+      "metrics": {
+        "se": 1.0,
+        "cof": 1.0,
+        "neo": 1.0,
+        "ro": 0.0,
+        "ops": 0.9
+      },
+      "complexity": "complex",
+      "db_name": "sample_guides"
+    },
+    {
+      "question": "I'd like to know the atmospheric components and average temperatures of planets that have rings. Can you provide this information?",
+      "expected_collection": "sample_guides.planets",
+      "got_collection": "sample_guides.planets",
+      "strict_match": true,
+      "discovery_hit": true,
+      "candidates": [
+        "sample_guides.planets",
+        "sample_analytics.transactions",
+        "sample_analytics.temp_results",
+        "sample_geospatial.shipwrecks",
+        "sample_analytics.accounts"
+      ],
+      "query_args": {
+        "collection_name": "sample_guides.planets",
+        "filters": [
+          {
+            "property_name": "hasRings",
+            "operator": "=",
+            "value": true,
+            "property_type": "boolean"
+          }
+        ],
+        "output_properties": [
+          {
+            "property_name": "name"
+          },
+          {
+            "property_name": "mainAtmosphere"
+          },
+          {
+            "property_name": "surfaceTemperatureC.mean",
+            "aggregation": "NONE"
+          }
+        ]
+      },
+      "pred_mql": "db.planets.aggregate([{\"$match\": {\"hasRings\": true}}, {\"$project\": {\"_id\": 0, \"name\": 1, \"mainAtmosphere\": 1, \"surfaceTemperatureC.mean\": 1}}])",
+      "pred_error": null,
+      "metrics": {
+        "se": 1.0,
+        "cof": 1.0,
+        "neo": 1.0,
+        "ro": 1.0,
+        "ops": 1.0
+      },
+      "complexity": "moderate",
+      "db_name": "sample_guides"
+    },
+    {
+      "question": "Could you find all the Italian restaurants in the Chinatown neighborhood? Include their names and addresses.",
+      "expected_collection": "sample_restaurants.neighborhoods",
+      "got_collection": "sample_restaurants.restaurants",
+      "strict_match": false,
+      "discovery_hit": true,
+      "candidates": [
+        "sample_restaurants.neighborhoods",
+        "sample_restaurants.restaurants",
+        "sample_restaurants.temp_neighborhood_counts",
+        "sample_airbnb.listingsAndReviews",
+        "sample_mflix.theaters"
+      ],
+      "query_args": {
+        "collection_name": "sample_restaurants.restaurants",
+        "filters": [
+          {
+            "property_name": "cuisine",
+            "operator": "=",
+            "value": "Italian",
+            "property_type": "text"
+          },
+          {
+            "property_name": "borough",
+            "operator": "=",
+            "value": "Chinatown",
+            "property_type": "text"
+          }
+        ],
+        "output_properties": [
+          {
+            "property_name": "name"
+          },
+          {
+            "property_name": "address.building"
+          },
+          {
+            "property_name": "address.street"
+          },
+          {
+            "property_name": "address.zipcode"
+          }
+        ],
+        "filter_boolean_op": "AND"
+      },
+      "pred_mql": "db.restaurants.aggregate([{\"$match\": {\"$and\": [{\"cuisine\": \"Italian\"}, {\"borough\": \"Chinatown\"}]}}, {\"$project\": {\"_id\": 0, \"name\": 1, \"address.building\": 1, \"address.street\": 1, \"address.zipcode\": 1}}])",
+      "pred_error": null,
+      "metrics": {
+        "se": 1.0,
+        "cof": 0.0,
+        "neo": 0.0,
+        "ro": 0.0,
+        "ops": 0.2
+      },
+      "complexity": "moderate",
+      "db_name": "sample_restaurants"
+    },
+    {
+      "question": "List the ceiling height and total sky coverage for station x+56800-156400 from March 1 to March 10, 1984.",
+      "expected_collection": "sample_weatherdata.data",
+      "got_collection": "sample_geospatial.shipwrecks",
+      "strict_match": false,
+      "discovery_hit": false,
+      "candidates": [
+        "sample_airbnb.listingsAndReviews",
+        "sample_guides.planets",
+        "sample_mflix.theaters",
+        "sample_geospatial.shipwrecks",
+        "sample_training.trips"
+      ],
+      "query_args": {
+        "collection_name": "sample_geospatial.shipwrecks",
+        "output_properties": [
+          {
+            "property_name": "chart"
+          },
+          {
+            "property_name": "depth"
+          }
+        ],
+        "filters": [
+          {
+            "property_name": "recrd",
+            "operator": "LIKE",
+            "value": "%x+56800-156400%"
+          }
+        ]
+      },
+      "pred_mql": "db.shipwrecks.aggregate([{\"$match\": {\"recrd\": {\"$regex\": \".*x+56800-156400.*\", \"$options\": \"i\"}}}, {\"$project\": {\"_id\": 0, \"chart\": 1, \"depth\": 1}}])",
+      "pred_error": null,
+      "metrics": {
+        "se": 1.0,
+        "cof": 1.0,
+        "neo": 0.0,
+        "ro": 0.0,
+        "ops": 0.8
+      },
+      "complexity": "moderate",
+      "db_name": "sample_weatherdata"
+    },
+    {
+      "question": "Could you show me the names, atmospheric compositions, and average surface temperatures of planets that have rings?",
+      "expected_collection": "sample_guides.planets",
+      "got_collection": "sample_guides.planets",
+      "strict_match": true,
+      "discovery_hit": true,
+      "candidates": [
+        "sample_guides.planets",
+        "sample_geospatial.shipwrecks",
+        "sample_analytics.transactions",
+        "sample_mflix.movies",
+        "sample_analytics.temp_results"
+      ],
+      "query_args": {
+        "collection_name": "sample_guides.planets",
+        "filters": [
+          {
+            "property_name": "hasRings",
+            "operator": "=",
+            "value": true,
+            "property_type": "boolean"
+          }
+        ],
+        "output_properties": [
+          {
+            "property_name": "name"
+          },
+          {
+            "property_name": "mainAtmosphere"
+          },
+          {
+            "property_name": "surfaceTemperatureC.mean",
+            "aggregation": "NONE"
+          }
+        ]
+      },
+      "pred_mql": "db.planets.aggregate([{\"$match\": {\"hasRings\": true}}, {\"$project\": {\"_id\": 0, \"name\": 1, \"mainAtmosphere\": 1, \"surfaceTemperatureC.mean\": 1}}])",
+      "pred_error": null,
+      "metrics": {
+        "se": 1.0,
+        "cof": 1.0,
+        "neo": 1.0,
+        "ro": 1.0,
+        "ops": 1.0
+      },
+      "complexity": "moderate",
+      "db_name": "sample_guides"
+    },
+    {
+      "question": "What are the top 5 most popular cuisines in Manhattan?",
+      "expected_collection": "sample_restaurants.restaurants",
+      "got_collection": "sample_restaurants.restaurants",
+      "strict_match": true,
+      "discovery_hit": true,
+      "candidates": [
+        "sample_restaurants.neighborhoods",
+        "sample_restaurants.restaurants",
+        "sample_restaurants.temp_neighborhood_counts",
+        "sample_mflix.theaters",
+        "sample_mflix.movies"
+      ],
+      "query_args": {
+        "collection_name": "sample_restaurants.restaurants",
+        "output_properties": [
+          {
+            "property_name": "cuisine",
+            "aggregation": "TOP_OCCURRENCES"
+          }
+        ],
+        "filters": [
+          {
+            "property_name": "borough",
+            "operator": "=",
+            "value": "Manhattan",
+            "property_type": "text"
+          }
+        ],
+        "group_by_properties": [
+          "cuisine"
+        ],
+        "order_by": [
+          {
+            "property_name": "cuisine",
+            "aggregation": "COUNT",
+            "direction": "DESC"
+          }
+        ],
+        "limit": 5
+      },
+      "pred_mql": "db.restaurants.aggregate([{\"$match\": {\"borough\": \"Manhattan\"}}, {\"$sort\": {\"cuisine\": -1}}, {\"$limit\": 5}])",
+      "pred_error": null,
+      "metrics": {
+        "se": 1.0,
+        "cof": 0.0,
+        "neo": 1.0,
+        "ro": 1.0,
+        "ops": 0.4
+      },
+      "complexity": "simple",
+      "db_name": "sample_restaurants"
+    },
+    {
+      "question": "Which planets have Nitrogen in their atmosphere, and what other gases are present?",
+      "expected_collection": "sample_guides.planets",
+      "got_collection": "sample_guides.planets",
+      "strict_match": true,
+      "discovery_hit": true,
+      "candidates": [
+        "sample_guides.planets",
+        "sample_airbnb.listingsAndReviews",
+        "sample_mflix.movies",
+        "sample_analytics.transactions",
+        "sample_analytics.customers"
+      ],
+      "query_args": {
+        "collection_name": "sample_guides.planets",
+        "filters": [
+          {
+            "property_name": "mainAtmosphere",
+            "operator": "IN",
+            "value": [
+              "N2"
+            ],
+            "property_type": "text"
+          }
+        ],
+        "output_properties": [
+          {
+            "property_name": "name"
+          },
+          {
+            "property_name": "mainAtmosphere"
+          }
+        ]
+      },
+      "pred_mql": "db.planets.aggregate([{\"$match\": {\"mainAtmosphere\": {\"$in\": [\"N2\"]}}}, {\"$project\": {\"_id\": 0, \"name\": 1, \"mainAtmosphere\": 1}}])",
+      "pred_error": null,
+      "metrics": {
+        "se": 1.0,
+        "cof": 0.0,
+        "neo": 0.0,
+        "ro": 0.0,
+        "ops": 0.2
+      },
+      "complexity": "moderate",
+      "db_name": "sample_guides"
+    },
+    {
+      "question": "Could you find 10 apartment listings with the highest cleaning fees?",
+      "expected_collection": "sample_airbnb.listingsAndReviews",
+      "got_collection": "sample_airbnb.listingsAndReviews",
+      "strict_match": true,
+      "discovery_hit": true,
+      "candidates": [
+        "sample_airbnb.listingsAndReviews",
+        "sample_restaurants.neighborhoods",
+        "sample_restaurants.restaurants",
+        "sample_restaurants.temp_neighborhood_counts",
+        "sample_training.zips"
+      ],
+      "query_args": {
+        "collection_name": "sample_airbnb.listingsAndReviews",
+        "output_properties": [
+          {
+            "property_name": "_id"
+          },
+          {
+            "property_name": "cleaning_fee"
+          },
+          {
+            "property_name": "address"
+          }
+        ],
+        "filters": [
+          {
+            "property_name": "property_type",
+            "operator": "=",
+            "value": "Apartment",
+            "property_type": "text"
+          }
+        ],
+        "order_by": [
+          {
+            "property_name": "cleaning_fee",
+            "direction": "DESC"
+          }
+        ],
+        "limit": 10
+      },
+      "pred_mql": "db.listingsAndReviews.aggregate([{\"$match\": {\"property_type\": \"Apartment\"}}, {\"$project\": {\"_id\": 1, \"cleaning_fee\": 1, \"address\": 1}}, {\"$sort\": {\"cleaning_fee\": -1}}, {\"$limit\": 10}])",
+      "pred_error": "Mongomock does not know how to sort '50.00' of type '<class 'bson.decimal128.Decimal128'>'",
+      "metrics": {
+        "se": 0.0,
+        "cof": 0.0,
+        "neo": 0.0,
+        "ro": 0.0,
+        "ops": 0.0
+      },
+      "complexity": "moderate",
+      "db_name": "sample_airbnb"
+    },
+    {
+      "question": "Can you give me details of 10 listings with the highest cleaning fees, focusing on those that are either private rooms or shared rooms?",
+      "expected_collection": "sample_airbnb.listingsAndReviews",
+      "got_collection": "sample_airbnb.listingsAndReviews",
+      "strict_match": true,
+      "discovery_hit": true,
+      "candidates": [
+        "sample_airbnb.listingsAndReviews",
+        "sample_restaurants.neighborhoods",
+        "sample_restaurants.temp_neighborhood_counts",
+        "sample_restaurants.restaurants",
+        "sample_training.companies"
+      ],
+      "query_args": {
+        "collection_name": "sample_airbnb.listingsAndReviews",
+        "output_properties": [
+          {
+            "property_name": "_id"
+          },
+          {
+            "property_name": "name"
+          },
+          {
+            "property_name": "room_type"
+          },
+          {
+            "property_name": "cleaning_fee"
+          },
+          {
+            "property_name": "price"
+          },
+          {
+            "property_name": "bedrooms"
+          },
+          {
+            "property_name": "beds"
+          },
+          {
+            "property_name": "accommodates"
+          },
+          {
+            "property_name": "address"
+          }
+        ],
+        "filters": [
+          {
+            "property_name": "room_type",
+            "operator": "IN",
+            "value": [
+              "Private room",
+              "Shared room"
+            ],
+            "property_type": "text"
+          }
+        ],
+        "order_by": [
+          {
+            "property_name": "cleaning_fee",
+            "direction": "DESC"
+          }
+        ],
+        "limit": 10
+      },
+      "pred_mql": "db.listingsAndReviews.aggregate([{\"$match\": {\"room_type\": {\"$in\": [\"Private room\", \"Shared room\"]}}}, {\"$project\": {\"_id\": 1, \"name\": 1, \"room_type\": 1, \"cleaning_fee\": 1, \"price\": 1, \"bedrooms\": 1, \"beds\": 1, \"accommodates\": 1, \"address\": 1}}, {\"$sort\": {\"cleaning_fee\": -1}}, {\"$limit\": 10}])",
+      "pred_error": "Mongomock does not know how to sort '50.00' of type '<class 'bson.decimal128.Decimal128'>'",
+      "metrics": {
+        "se": 0.0,
+        "cof": 0.0,
+        "neo": 0.0,
+        "ro": 0.0,
+        "ops": 0.0
+      },
+      "complexity": "complex",
+      "db_name": "sample_airbnb"
+    },
+    {
+      "question": "I need details on 8 American cuisine restaurants in the Bronx, including their names, addresses, and cuisine types.",
+      "expected_collection": "sample_restaurants.restaurants",
+      "got_collection": "sample_restaurants.restaurants",
+      "strict_match": true,
+      "discovery_hit": true,
+      "candidates": [
+        "sample_restaurants.restaurants",
+        "sample_restaurants.neighborhoods",
+        "sample_restaurants.temp_neighborhood_counts",
+        "sample_airbnb.listingsAndReviews",
+        "sample_mflix.theaters"
+      ],
+      "query_args": {
+        "collection_name": "sample_restaurants.restaurants",
+        "filters": [
+          {
+            "property_name": "borough",
+            "operator": "=",
+            "value": "Bronx",
+            "property_type": "text"
+          },
+          {
+            "property_name": "cuisine",
+            "operator": "=",
+            "value": "American",
+            "property_type": "text"
+          }
+        ],
+        "filter_boolean_op": "AND",
+        "output_properties": [
+          {
+            "property_name": "name"
+          },
+          {
+            "property_name": "address.building"
+          },
+          {
+            "property_name": "address.street"
+          },
+          {
+            "property_name": "address.zipcode"
+          },
+          {
+            "property_name": "cuisine"
+          }
+        ],
+        "limit": 8
+      },
+      "pred_mql": "db.restaurants.aggregate([{\"$match\": {\"$and\": [{\"borough\": \"Bronx\"}, {\"cuisine\": \"American\"}]}}, {\"$project\": {\"_id\": 0, \"name\": 1, \"address.building\": 1, \"address.street\": 1, \"address.zipcode\": 1, \"cuisine\": 1}}, {\"$limit\": 8}])",
+      "pred_error": null,
+      "metrics": {
+        "se": 1.0,
+        "cof": 0.0,
+        "neo": 1.0,
+        "ro": 1.0,
+        "ops": 0.4
+      },
+      "complexity": "moderate",
+      "db_name": "sample_restaurants"
+    },
+    {
+      "question": "Identify the planets with no rings and their atmospheric composition.",
+      "expected_collection": "sample_guides.planets",
+      "got_collection": "sample_guides.planets",
+      "strict_match": true,
+      "discovery_hit": true,
+      "candidates": [
+        "sample_guides.planets",
+        "sample_geospatial.shipwrecks",
+        "sample_mflix.movies",
+        "sample_airbnb.listingsAndReviews",
+        "sample_restaurants.neighborhoods"
+      ],
+      "query_args": {
+        "collection_name": "sample_guides.planets",
+        "filters": [
+          {
+            "property_name": "hasRings",
+            "operator": "=",
+            "value": false,
+            "property_type": "boolean"
+          }
+        ],
+        "output_properties": [
+          {
+            "property_name": "name"
+          },
+          {
+            "property_name": "mainAtmosphere"
+          }
+        ]
+      },
+      "pred_mql": "db.planets.aggregate([{\"$match\": {\"hasRings\": false}}, {\"$project\": {\"_id\": 0, \"name\": 1, \"mainAtmosphere\": 1}}])",
+      "pred_error": null,
+      "metrics": {
+        "se": 1.0,
+        "cof": 1.0,
+        "neo": 1.0,
+        "ro": 0.0,
+        "ops": 0.9
+      },
+      "complexity": "moderate",
+      "db_name": "sample_guides"
+    },
+    {
+      "question": "Find the coordinates and elevation of weather stations within 100 miles of New York City.",
+      "expected_collection": "sample_weatherdata.data",
+      "got_collection": "sample_training.trips",
+      "strict_match": false,
+      "discovery_hit": false,
+      "candidates": [
+        "sample_training.trips",
+        "sample_training.zips",
+        "sample_geospatial.shipwrecks",
+        "sample_mflix.theaters",
+        "sample_restaurants.neighborhoods"
+      ],
+      "query_args": {
+        "collection_name": "sample_training.trips",
+        "output_properties": [
+          {
+            "property_name": "start station location"
+          },
+          {
+            "property_name": "start station name"
+          }
+        ],
+        "search_query": "weather stations within 100 miles of New York City coordinates elevation",
+        "limit": 10
+      },
+      "pred_mql": "db.trips.aggregate([{\"$project\": {\"_id\": 0, \"start station location\": 1, \"start station name\": 1}}, {\"$limit\": 10}])",
+      "pred_error": null,
+      "metrics": {
+        "se": 1.0,
+        "cof": 0.0,
+        "neo": 0.0,
+        "ro": 0.0,
+        "ops": 0.2
+      },
+      "complexity": "moderate",
+      "db_name": "sample_weatherdata"
+    },
+    {
+      "question": "Which planets have a minimum surface temperature below -80 degrees Celsius?",
+      "expected_collection": "sample_guides.planets",
+      "got_collection": "sample_guides.planets",
+      "strict_match": true,
+      "discovery_hit": true,
+      "candidates": [
+        "sample_guides.planets",
+        "sample_geospatial.shipwrecks",
+        "sample_analytics.customers",
+        "sample_analytics.temp_results",
+        "sample_restaurants.neighborhoods"
+      ],
+      "query_args": {
+        "collection_name": "sample_guides.planets",
+        "output_properties": [
+          {
+            "property_name": "name"
+          },
+          {
+            "property_name": "surfaceTemperatureC.min"
+          }
+        ],
+        "filters": [
+          {
+            "property_name": "surfaceTemperatureC.min",
+            "operator": "<",
+            "value": -80,
+            "property_type": "integer"
+          }
+        ],
+        "order_by": [
+          {
+            "property_name": "surfaceTemperatureC.min",
+            "direction": "ASC"
+          }
+        ]
+      },
+      "pred_mql": "db.planets.aggregate([{\"$match\": {\"surfaceTemperatureC.min\": {\"$lt\": -80}}}, {\"$project\": {\"_id\": 0, \"name\": 1, \"surfaceTemperatureC.min\": 1}}, {\"$sort\": {\"surfaceTemperatureC.min\": 1}}])",
+      "pred_error": null,
+      "metrics": {
+        "se": 1.0,
+        "cof": 1.0,
+        "neo": 1.0,
+        "ro": 1.0,
+        "ops": 1.0
+      },
+      "complexity": "moderate",
+      "db_name": "sample_guides"
+    },
+    {
+      "question": "Please list 12 Indian cuisine restaurants in Queens, showing their names, addresses, and specific cuisine types.",
+      "expected_collection": "sample_restaurants.restaurants",
+      "got_collection": "sample_restaurants.restaurants",
+      "strict_match": true,
+      "discovery_hit": true,
+      "candidates": [
+        "sample_restaurants.restaurants",
+        "sample_restaurants.neighborhoods",
+        "sample_restaurants.temp_neighborhood_counts",
+        "sample_airbnb.listingsAndReviews",
+        "sample_mflix.theaters"
+      ],
+      "query_args": {
+        "collection_name": "sample_restaurants.restaurants",
+        "filters": [
+          {
+            "property_name": "borough",
+            "operator": "=",
+            "value": "Queens",
+            "property_type": "text"
+          },
+          {
+            "property_name": "cuisine",
+            "operator": "=",
+            "value": "Indian",
+            "property_type": "text"
+          }
+        ],
+        "filter_boolean_op": "AND",
+        "output_properties": [
+          {
+            "property_name": "name"
+          },
+          {
+            "property_name": "address.building"
+          },
+          {
+            "property_name": "address.street"
+          },
+          {
+            "property_name": "address.zipcode"
+          },
+          {
+            "property_name": "cuisine"
+          }
+        ],
+        "limit": 12
+      },
+      "pred_mql": "db.restaurants.aggregate([{\"$match\": {\"$and\": [{\"borough\": \"Queens\"}, {\"cuisine\": \"Indian\"}]}}, {\"$project\": {\"_id\": 0, \"name\": 1, \"address.building\": 1, \"address.street\": 1, \"address.zipcode\": 1, \"cuisine\": 1}}, {\"$limit\": 12}])",
+      "pred_error": null,
+      "metrics": {
+        "se": 1.0,
+        "cof": 1.0,
+        "neo": 1.0,
+        "ro": 1.0,
+        "ops": 1.0
+      },
+      "complexity": "moderate",
+      "db_name": "sample_restaurants"
+    },
+    {
+      "question": "List the first 5 planets from the sun that have oxygen (O2) in their atmosphere.",
+      "expected_collection": "sample_guides.planets",
+      "got_collection": "sample_guides.planets",
+      "strict_match": true,
+      "discovery_hit": true,
+      "candidates": [
+        "sample_guides.planets",
+        "sample_airbnb.listingsAndReviews",
+        "sample_geospatial.shipwrecks",
+        "sample_analytics.customers",
+        "sample_mflix.movies"
+      ],
+      "query_args": {
+        "collection_name": "sample_guides.planets",
+        "output_properties": [
+          {
+            "property_name": "name"
+          },
+          {
+            "property_name": "orderFromSun"
+          },
+          {
+            "property_name": "mainAtmosphere"
+          }
+        ],
+        "filters": [
+          {
+            "property_name": "mainAtmosphere",
+            "operator": "IN",
+            "value": [
+              "O2"
+            ],
+            "property_type": "text"
+          }
+        ],
+        "order_by": [
+          {
+            "property_name": "orderFromSun",
+            "direction": "ASC"
+          }
+        ],
+        "limit": 5
+      },
+      "pred_mql": "db.planets.aggregate([{\"$match\": {\"mainAtmosphere\": {\"$in\": [\"O2\"]}}}, {\"$project\": {\"_id\": 0, \"name\": 1, \"orderFromSun\": 1, \"mainAtmosphere\": 1}}, {\"$sort\": {\"orderFromSun\": 1}}, {\"$limit\": 5}])",
+      "pred_error": null,
+      "metrics": {
+        "se": 1.0,
+        "cof": 1.0,
+        "neo": 1.0,
+        "ro": 1.0,
+        "ops": 1.0
+      },
+      "complexity": "complex",
+      "db_name": "sample_guides"
+    }
+  ]
+}

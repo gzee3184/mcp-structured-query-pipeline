@@ -1,0 +1,3962 @@
+[
+  {
+    "question": "Among the customers who paid in euro, how many of them have a monthly consumption of over 1000?",
+    "db_id": "debit_card_specializing",
+    "sql": "SELECT COUNT(*) FROM yearmonth AS T1 INNER JOIN customers AS T2 ON T1.CustomerID = T2.CustomerID WHERE T2.Currency = 'EUR' AND T1.Consumption > 1000.00",
+    "expected": "DebitCardSpecializingYearmonth",
+    "source": "bird_debit_card_specializing",
+    "has_join": true
+  },
+  {
+    "question": "How many times the circuits were held in Austria? Please give their location and coordinates.",
+    "db_id": "formula_1",
+    "sql": "SELECT DISTINCT location, lat, lng FROM circuits WHERE country = 'Austria'",
+    "expected": "Formula1Circuits",
+    "source": "bird_formula_1",
+    "has_join": false
+  },
+  {
+    "question": "What is the eyes colour of Abraham Sapien?",
+    "db_id": "superhero",
+    "sql": "SELECT T2.colour FROM superhero AS T1 INNER JOIN colour AS T2 ON T1.eye_colour_id = T2.id WHERE T1.full_name = 'Abraham Sapien'",
+    "expected": "SuperheroSuperhero",
+    "source": "bird_superhero",
+    "has_join": true
+  },
+  {
+    "question": "Indicates the number of cards with pre-modern format, ruling text \"This is a triggered mana ability.\" that do not have multiple faces.",
+    "db_id": "card_games",
+    "sql": "SELECT COUNT(T1.id) FROM cards AS T1 INNER JOIN legalities AS T2 ON T1.uuid = T2.uuid INNER JOIN rulings AS T3 ON T1.uuid = T3.uuid WHERE T2.format = 'premodern' AND T3.text = 'This is a triggered mana ability.' AND T1.Side IS NULL",
+    "expected": "CardGamesCards",
+    "source": "bird_card_games",
+    "has_join": true
+  },
+  {
+    "question": "Please list the websites where I can purchase the cards that have the promotional type of \"bundle\".",
+    "db_id": "card_games",
+    "sql": "SELECT DISTINCT purchaseUrls FROM cards WHERE promoTypes = 'bundle'",
+    "expected": "CardGamesCards",
+    "source": "bird_card_games",
+    "has_join": false
+  },
+  {
+    "question": "Write the full name of the member who spent money for water, veggie tray and supplies and include the cost of it.",
+    "db_id": "student_club",
+    "sql": "SELECT T2.first_name, T2.last_name, T1.cost FROM expense AS T1 INNER JOIN member AS T2 ON T1.link_to_member = T2.member_id WHERE T1.expense_description = 'Water, Veggie tray, supplies'",
+    "expected": "StudentClubExpense",
+    "source": "bird_student_club",
+    "has_join": true
+  },
+  {
+    "question": "How many chemical compounds in the database are identified as carcinogenic.",
+    "db_id": "toxicology",
+    "sql": "SELECT COUNT(T.molecule_id) FROM molecule AS T WHERE T.label = '+'",
+    "expected": "ToxicologyMolecule",
+    "source": "bird_toxicology",
+    "has_join": false
+  },
+  {
+    "question": "For patient with albumin level lower than 3.5, list their ID, sex and diagnosis.",
+    "db_id": "thrombosis_prediction",
+    "sql": "SELECT DISTINCT T1.ID, T1.SEX, T1.Diagnosis FROM Patient AS T1 INNER JOIN Laboratory AS T2 ON T1.ID = T2.ID WHERE T2.ALB < 3.5",
+    "expected": "ThrombosisPredictionPatient",
+    "source": "bird_thrombosis_prediction",
+    "has_join": true
+  },
+  {
+    "question": "How many cards are oversized, reprinted, and printed for promotions?",
+    "db_id": "card_games",
+    "sql": "SELECT COUNT(id) FROM cards WHERE isOversized = 1 AND isReprint = 1 AND isPromo = 1",
+    "expected": "CardGamesCards",
+    "source": "bird_card_games",
+    "has_join": false
+  },
+  {
+    "question": "What is the total amount of money spent for food?",
+    "db_id": "student_club",
+    "sql": "SELECT SUM(spent) FROM budget WHERE category = 'Food'",
+    "expected": "StudentClubBudget",
+    "source": "bird_student_club",
+    "has_join": false
+  },
+  {
+    "question": "What was the average time in milliseconds Lewis Hamilton spent at a pit stop during Formula_1 races?",
+    "db_id": "formula_1",
+    "sql": "SELECT AVG(milliseconds) FROM pitStops AS T1 INNER JOIN drivers AS T2 on T1.driverId = T2.driverId WHERE T2.forename = 'Lewis' AND T2.surname = 'Hamilton'",
+    "expected": "Formula1Pitstops",
+    "source": "bird_formula_1",
+    "has_join": true
+  },
+  {
+    "question": "Which year was the first Singapore Grand Prix?",
+    "db_id": "formula_1",
+    "sql": "SELECT year FROM races WHERE name = 'Singapore Grand Prix' ORDER BY year ASC LIMIT 1",
+    "expected": "Formula1Races",
+    "source": "bird_formula_1",
+    "has_join": false
+  },
+  {
+    "question": "Provide all ID, sex and birthday of patients whose urea nitrogen (UN) just within the borderline of passing?",
+    "db_id": "thrombosis_prediction",
+    "sql": "SELECT DISTINCT T1.ID, T1.SEX, T1.Birthday FROM Patient AS T1 INNER JOIN Laboratory AS T2 ON T1.ID = T2.ID WHERE T2.UN = 29",
+    "expected": "ThrombosisPredictionPatient",
+    "source": "bird_thrombosis_prediction",
+    "has_join": true
+  },
+  {
+    "question": "What is the educational level name for the schools with Breakfast Provision 2 in county code 37? Indicate the name of the school.",
+    "db_id": "california_schools",
+    "sql": "SELECT T2.EILName, T2.School FROM frpm AS T1 INNER JOIN schools AS T2 ON T1.CDSCode = T2.CDSCode WHERE T1.`NSLP Provision Status` = 'Breakfast Provision 2' AND T1.`County Code` = 37",
+    "expected": "CaliforniaSchoolsFrpm",
+    "source": "bird_california_schools",
+    "has_join": true
+  },
+  {
+    "question": "List the card names with value that cost more converted mana for the face.",
+    "db_id": "card_games",
+    "sql": "SELECT name FROM cards ORDER BY faceConvertedManaCost LIMIT 1",
+    "expected": "CardGamesCards",
+    "source": "bird_card_games",
+    "has_join": false
+  },
+  {
+    "question": "What are the websites for all the partially virtual chartered schools located in San Joaquin?",
+    "db_id": "california_schools",
+    "sql": "SELECT Website FROM schools WHERE County = 'San Joaquin' AND Virtual = 'P' AND Charter = 1",
+    "expected": "CaliforniaSchoolsSchools",
+    "source": "bird_california_schools",
+    "has_join": false
+  },
+  {
+    "question": "State the name of major that Phillip Cullen has joined.",
+    "db_id": "student_club",
+    "sql": "SELECT T1.major_name FROM major AS T1 INNER JOIN member AS T2 ON T1.major_id = T2.link_to_major WHERE T2.first_name = 'Phillip' AND T2.last_name = 'Cullen'",
+    "expected": "StudentClubMajor",
+    "source": "bird_student_club",
+    "has_join": true
+  },
+  {
+    "question": "Among the players whose preferred foot was the left foot when attacking, how many of them would remain in his position when the team attacked?",
+    "db_id": "european_football_2",
+    "sql": "SELECT COUNT(player_api_id) FROM Player_Attributes WHERE preferred_foot = 'left' AND attacking_work_rate = 'low'",
+    "expected": "EuropeanFootball2PlayerAttributes",
+    "source": "bird_european_football_2",
+    "has_join": false
+  },
+  {
+    "question": "What is the phone number and extension number for the school that had the 333rd highest average writing score?",
+    "db_id": "california_schools",
+    "sql": "SELECT T2.Phone, T2.Ext FROM satscores AS T1 INNER JOIN schools AS T2 ON T1.cds = T2.CDSCode ORDER BY T1.AvgScrWrite DESC LIMIT 332, 1",
+    "expected": "CaliforniaSchoolsSatscores",
+    "source": "bird_california_schools",
+    "has_join": true
+  },
+  {
+    "question": "Find the race of the superhero who weighs 108kg and is 188cm tall.",
+    "db_id": "superhero",
+    "sql": "SELECT DISTINCT T2.race FROM superhero AS T1 INNER JOIN race AS T2 ON T1.race_id = T2.id WHERE T1.weight_kg = 108 AND T1.height_cm = 188",
+    "expected": "SuperheroSuperhero",
+    "source": "bird_superhero",
+    "has_join": true
+  },
+  {
+    "question": "Identify superheroes who can control wind and list their names in alphabetical order.",
+    "db_id": "superhero",
+    "sql": "SELECT T1.superhero_name FROM superhero AS T1 INNER JOIN hero_power AS T2 ON T1.id = T2.hero_id INNER JOIN superpower AS T3 ON T2.power_id = T3.id WHERE T3.power_name = 'Wind Control' ORDER BY T1.superhero_name",
+    "expected": "SuperheroSuperhero",
+    "source": "bird_superhero",
+    "has_join": true
+  },
+  {
+    "question": "For the set which had 'SS2' as the code, what is its magic card market id?",
+    "db_id": "card_games",
+    "sql": "SELECT mcmId FROM sets WHERE code = 'SS2'",
+    "expected": "CardGamesSets",
+    "source": "bird_card_games",
+    "has_join": false
+  },
+  {
+    "question": "List out the set name of the set code \"ALL\".",
+    "db_id": "card_games",
+    "sql": "SELECT name FROM sets WHERE code = 'ALL'",
+    "expected": "CardGamesSets",
+    "source": "bird_card_games",
+    "has_join": false
+  },
+  {
+    "question": "What is the average fastest lap time of the top 10 drivers in the 2006 United States Grand Prix?",
+    "db_id": "formula_1",
+    "sql": "SELECT AVG(T1.fastestLapTime) FROM results AS T1 INNER JOIN races AS T2 on T1.raceId = T2.raceId WHERE T1.rank < 11 AND T2.year = 2006 AND T2.name = 'United States Grand Prix'",
+    "expected": "Formula1Results",
+    "source": "bird_formula_1",
+    "has_join": true
+  },
+  {
+    "question": "How many cards of legalities whose status is restricted have text boxes?",
+    "db_id": "card_games",
+    "sql": "SELECT COUNT(DISTINCT T1.id) FROM cards AS T1 INNER JOIN legalities AS T2 ON T1.uuid = T2.uuid WHERE T2.status = 'Restricted' AND T1.isTextless = 0",
+    "expected": "CardGamesCards",
+    "source": "bird_card_games",
+    "has_join": true
+  },
+  {
+    "question": "What is the superpowers of the superhero has Helen Parr as their full name?",
+    "db_id": "superhero",
+    "sql": "SELECT T3.power_name FROM superhero AS T1 INNER JOIN hero_power AS T2 ON T1.id = T2.hero_id INNER JOIN superpower AS T3 ON T2.power_id = T3.id WHERE T1.full_name = 'Helen Parr'",
+    "expected": "SuperheroSuperhero",
+    "source": "bird_superhero",
+    "has_join": true
+  },
+  {
+    "question": "Write down the related posts titles and link type IDs of the post \"What are principal component scores?\".",
+    "db_id": "codebase_community",
+    "sql": "SELECT T3.Title, T2.LinkTypeId FROM posts AS T1 INNER JOIN postLinks AS T2 ON T1.Id = T2.PostId INNER JOIN posts AS T3 ON T2.RelatedPostId = T3.Id WHERE T1.Title = 'What are principal component scores?'",
+    "expected": "CodebaseCommunityPosts",
+    "source": "bird_codebase_community",
+    "has_join": true
+  },
+  {
+    "question": "Identify by their ID the molecules in which there is carbon.",
+    "db_id": "toxicology",
+    "sql": "SELECT T.molecule_id FROM atom AS T WHERE T.element = 'c'",
+    "expected": "ToxicologyAtom",
+    "source": "bird_toxicology",
+    "has_join": false
+  },
+  {
+    "question": "What elements are in the TR004_8_9 bond atoms?",
+    "db_id": "toxicology",
+    "sql": "SELECT DISTINCT T1.element FROM atom AS T1 INNER JOIN connected AS T2 ON T1.atom_id = T2.atom_id WHERE T2.bond_id = 'TR004_8_9'",
+    "expected": "ToxicologyAtom",
+    "source": "bird_toxicology",
+    "has_join": true
+  },
+  {
+    "question": "Please list all display names of users who are adults.",
+    "db_id": "codebase_community",
+    "sql": "SELECT DisplayName FROM users WHERE Age BETWEEN 19 AND 65",
+    "expected": "CodebaseCommunityUsers",
+    "source": "bird_codebase_community",
+    "has_join": false
+  },
+  {
+    "question": "How many users obtained the \"Announcer\" badge?",
+    "db_id": "codebase_community",
+    "sql": "SELECT COUNT(id) FROM badges WHERE Name = 'Announcer'",
+    "expected": "CodebaseCommunityBadges",
+    "source": "bird_codebase_community",
+    "has_join": false
+  },
+  {
+    "question": "Give the team_fifa_api_id of teams with more than 50 but less than 60 build-up play speed.",
+    "db_id": "european_football_2",
+    "sql": "SELECT DISTINCT team_fifa_api_id FROM Team_Attributes WHERE buildUpPlaySpeed > 50 AND buildUpPlaySpeed < 60",
+    "expected": "EuropeanFootball2TeamAttributes",
+    "source": "bird_european_football_2",
+    "has_join": false
+  },
+  {
+    "question": "Please list the account types that are not eligible for loans, and the average income of residents in the district where the account is located exceeds $8000 but is no more than $9000.",
+    "db_id": "financial",
+    "sql": "SELECT T3.type FROM district AS T1 INNER JOIN account AS T2 ON T1.district_id = T2.district_id INNER JOIN disp AS T3 ON T2.account_id = T3.account_id WHERE T3.type != 'OWNER' AND T1.A11 BETWEEN 8000 AND 9000",
+    "expected": "FinancialDistrict",
+    "source": "bird_financial",
+    "has_join": true
+  },
+  {
+    "question": "Give the location for \"Spring Budget Review\".",
+    "db_id": "student_club",
+    "sql": "SELECT location FROM event WHERE event_name = 'Spring Budget Review'",
+    "expected": "StudentClubEvent",
+    "source": "bird_student_club",
+    "has_join": false
+  },
+  {
+    "question": "What are the player api id of 10 heaviest players?",
+    "db_id": "european_football_2",
+    "sql": "SELECT player_api_id FROM Player ORDER BY weight DESC LIMIT 10",
+    "expected": "EuropeanFootball2Player",
+    "source": "bird_european_football_2",
+    "has_join": false
+  },
+  {
+    "question": "Describe the names of neutral alignment superheroes.",
+    "db_id": "superhero",
+    "sql": "SELECT T1.superhero_name FROM superhero AS T1 INNER JOIN alignment AS T2 ON T1.alignment_id = T2.id WHERE T2.alignment = 'Neutral'",
+    "expected": "SuperheroSuperhero",
+    "source": "bird_superhero",
+    "has_join": true
+  },
+  {
+    "question": "When did the user known as 'IrishStat' create his or her account?",
+    "db_id": "codebase_community",
+    "sql": "SELECT CreationDate FROM users WHERE DisplayName = 'IrishStat'",
+    "expected": "CodebaseCommunityUsers",
+    "source": "bird_codebase_community",
+    "has_join": false
+  },
+  {
+    "question": "When is the birthday of the football player who has the highest overall rating?",
+    "db_id": "european_football_2",
+    "sql": "SELECT t1.birthday FROM Player AS t1 INNER JOIN Player_Attributes AS t2 ON t1.player_api_id = t2.player_api_id ORDER BY t2.overall_rating DESC LIMIT 1",
+    "expected": "EuropeanFootball2Player",
+    "source": "bird_european_football_2",
+    "has_join": true
+  },
+  {
+    "question": "Among the patients with the normal level of triglyceride, how many of them have other symptoms observed?",
+    "db_id": "thrombosis_prediction",
+    "sql": "SELECT COUNT(T1.ID) FROM Examination AS T1 INNER JOIN Laboratory AS T2 ON T1.ID = T2.ID WHERE T2.TG < 200 AND T1.Symptoms IS NOT NULL",
+    "expected": "ThrombosisPredictionExamination",
+    "source": "bird_thrombosis_prediction",
+    "has_join": true
+  },
+  {
+    "question": "What is the title of the post that is owned by csgillespie and has the highest popularity?",
+    "db_id": "codebase_community",
+    "sql": "SELECT T1.Title FROM posts AS T1 INNER JOIN users AS T2 ON T1.OwnerUserId = T2.Id WHERE T2.DisplayName = 'csgillespie' ORDER BY T1.ViewCount DESC LIMIT 1",
+    "expected": "CodebaseCommunityPosts",
+    "source": "bird_codebase_community",
+    "has_join": true
+  },
+  {
+    "question": "What is the gender of the oldest client who opened his/her account in the highest average salary branch?",
+    "db_id": "financial",
+    "sql": "SELECT T2.gender FROM district AS T1 INNER JOIN client AS T2 ON T1.district_id = T2.district_id ORDER BY T1.A11 DESC, T2.birth_date ASC LIMIT 1",
+    "expected": "FinancialDistrict",
+    "source": "bird_financial",
+    "has_join": true
+  },
+  {
+    "question": "State the race and year of race in which Michael Schumacher had his fastest lap.",
+    "db_id": "formula_1",
+    "sql": "SELECT T1.name, T1.year FROM races AS T1 INNER JOIN lapTimes AS T2 ON T2.raceId = T1.raceId INNER JOIN drivers AS T3 ON T3.driverId = T2.driverId WHERE T3.forename = 'Michael' AND T3.surname = 'Schumacher' ORDER BY T2.milliseconds ASC LIMIT 1",
+    "expected": "Formula1Races",
+    "source": "bird_formula_1",
+    "has_join": true
+  },
+  {
+    "question": "How many green-skinned villains are there in the superhero universe?",
+    "db_id": "superhero",
+    "sql": "SELECT COUNT(T1.id) FROM superhero AS T1 INNER JOIN alignment AS T2 ON T1.alignment_id = T2.id INNER JOIN colour AS T3 ON T1.skin_colour_id = T3.id WHERE T2.alignment = 'Bad' AND T3.colour = 'Green'",
+    "expected": "SuperheroSuperhero",
+    "source": "bird_superhero",
+    "has_join": true
+  },
+  {
+    "question": "What is the language of the card that has azorius watermark? List out the type of this card.",
+    "db_id": "card_games",
+    "sql": "SELECT DISTINCT T2.language, T1.type FROM cards AS T1 INNER JOIN foreign_data AS T2 ON T2.uuid = T1.uuid WHERE T1.watermark = 'azorius'",
+    "expected": "CardGamesCards",
+    "source": "bird_card_games",
+    "has_join": true
+  },
+  {
+    "question": "Who are the top 5 players who perform better in crossing actions? Indicate their player id.",
+    "db_id": "european_football_2",
+    "sql": "SELECT id FROM Player_Attributes ORDER BY crossing DESC LIMIT 5",
+    "expected": "EuropeanFootball2PlayerAttributes",
+    "source": "bird_european_football_2",
+    "has_join": false
+  },
+  {
+    "question": "Find the uuid of cards in which the old school format is restricted or banned.",
+    "db_id": "card_games",
+    "sql": "SELECT uuid FROM legalities WHERE format = 'oldschool' AND (status = 'Banned' OR status = 'Restricted')",
+    "expected": "CardGamesLegalities",
+    "source": "bird_card_games",
+    "has_join": false
+  },
+  {
+    "question": "Name the cards that were illustrated by Aaron Boyd.",
+    "db_id": "card_games",
+    "sql": "SELECT DISTINCT name FROM cards WHERE artist = 'Aaron Boyd'",
+    "expected": "CardGamesCards",
+    "source": "bird_card_games",
+    "has_join": false
+  },
+  {
+    "question": "What are the labels for TR000, TR001 and TR002?",
+    "db_id": "toxicology",
+    "sql": "SELECT molecule_id, T.label FROM molecule AS T WHERE T.molecule_id IN ('TR000', 'TR001', 'TR002')",
+    "expected": "ToxicologyMolecule",
+    "source": "bird_toxicology",
+    "has_join": false
+  },
+  {
+    "question": "What is the average total price of the transactions taken place in gas stations in the Czech Republic?",
+    "db_id": "debit_card_specializing",
+    "sql": "SELECT AVG(T1.Price) FROM transactions_1k AS T1 INNER JOIN gasstations AS T2 ON T1.GasStationID = T2.GasStationID WHERE T2.Country = 'CZE'",
+    "expected": "DebitCardSpecializingTransactions1k",
+    "source": "bird_debit_card_specializing",
+    "has_join": true
+  },
+  {
+    "question": "How many seasons has Silverstone Circuit hosted the United Kindom grand prix?",
+    "db_id": "formula_1",
+    "sql": "SELECT COUNT(T2.circuitid) FROM circuits AS T1 INNER JOIN races AS T2 ON T2.circuitID = T1.circuitId WHERE T1.name = 'Silverstone Circuit' AND T2.name = 'British Grand Prix'",
+    "expected": "Formula1Circuits",
+    "source": "bird_formula_1",
+    "has_join": true
+  },
+  {
+    "question": "Lists the set code of all cards translated into Spanish.",
+    "db_id": "card_games",
+    "sql": "SELECT setCode FROM set_translations WHERE language = 'Spanish'",
+    "expected": "CardGamesSetTranslations",
+    "source": "bird_card_games",
+    "has_join": false
+  },
+  {
+    "question": "How many comments and answers were left by the users on the post with the title 'Clustering 1D data'?",
+    "db_id": "codebase_community",
+    "sql": "SELECT CommentCount, AnswerCount FROM posts WHERE Title = 'Clustering 1D data'",
+    "expected": "CodebaseCommunityPosts",
+    "source": "bird_codebase_community",
+    "has_join": false
+  },
+  {
+    "question": "Which publisher published the slowest superhero?",
+    "db_id": "superhero",
+    "sql": "SELECT T2.publisher_name FROM superhero AS T1 INNER JOIN publisher AS T2 ON T1.publisher_id = T2.id INNER JOIN hero_attribute AS T3 ON T1.id = T3.hero_id INNER JOIN attribute AS T4 ON T3.attribute_id = T4.id WHERE T4.attribute_name = 'Speed' ORDER BY T3.attribute_value LIMIT 1",
+    "expected": "SuperheroSuperhero",
+    "source": "bird_superhero",
+    "has_join": true
+  },
+  {
+    "question": "Identify the display name and location of the user, who was the last to edit the post with ID 183.",
+    "db_id": "codebase_community",
+    "sql": "SELECT T2.DisplayName, T2.Location FROM posts AS T1 INNER JOIN users AS T2 ON T1.OwnerUserId = T2.Id WHERE T1.Id = 183 ORDER BY T1.LastEditDate DESC LIMIT 1",
+    "expected": "CodebaseCommunityPosts",
+    "source": "bird_codebase_community",
+    "has_join": true
+  },
+  {
+    "question": "What is the ADO Den Haag team freedom of movement in the 1st two thirds of the pitch?",
+    "db_id": "european_football_2",
+    "sql": "SELECT DISTINCT t2.buildUpPlayPositioningClass FROM Team AS t1 INNER JOIN Team_attributes AS t2 ON t1.team_fifa_api_id = t2.team_fifa_api_id WHERE t1.team_long_name = 'ADO Den Haag'",
+    "expected": "EuropeanFootball2Team",
+    "source": "bird_european_football_2",
+    "has_join": true
+  },
+  {
+    "question": "How many positive comments are there on the list?",
+    "db_id": "codebase_community",
+    "sql": "SELECT COUNT(id) FROM comments WHERE score > 60",
+    "expected": "CodebaseCommunityComments",
+    "source": "bird_codebase_community",
+    "has_join": false
+  },
+  {
+    "question": "Please list the constructor names with 0 points at race 291.",
+    "db_id": "formula_1",
+    "sql": "SELECT T2.name FROM constructorStandings AS T1 INNER JOIN constructors AS T2 on T1.constructorId = T2.constructorId WHERE T1.points = 0 AND T1.raceId = 291",
+    "expected": "Formula1Constructorstandings",
+    "source": "bird_formula_1",
+    "has_join": true
+  },
+  {
+    "question": "Count the fastest superheroes.",
+    "db_id": "superhero",
+    "sql": "SELECT COUNT(T3.superhero_name) FROM hero_attribute AS T1 INNER JOIN attribute AS T2 ON T1.attribute_id = T2.id INNER JOIN superhero AS T3 ON T1.hero_id = T3.id WHERE T2.attribute_name = 'Speed' AND T1.attribute_value = 100",
+    "expected": "SuperheroHeroAttribute",
+    "source": "bird_superhero",
+    "has_join": true
+  },
+  {
+    "question": "List down all the card IDs with converted mana cost of 0.",
+    "db_id": "card_games",
+    "sql": "SELECT id FROM cards WHERE convertedManaCost = 0",
+    "expected": "CardGamesCards",
+    "source": "bird_card_games",
+    "has_join": false
+  },
+  {
+    "question": "Which molecule consisted of Sulphur atom with double bond?",
+    "db_id": "toxicology",
+    "sql": "SELECT DISTINCT T1.molecule_id FROM atom AS T1 INNER JOIN bond AS T2 ON T1.molecule_id = T2.molecule_id WHERE T1.element = 's' AND T2.bond_type = '='",
+    "expected": "ToxicologyAtom",
+    "source": "bird_toxicology",
+    "has_join": true
+  },
+  {
+    "question": "Show me the season page of year when the race No. 901 took place.",
+    "db_id": "formula_1",
+    "sql": "SELECT T2.url FROM races AS T1 INNER JOIN seasons AS T2 ON T2.year = T1.year WHERE T1.raceId = 901",
+    "expected": "Formula1Races",
+    "source": "bird_formula_1",
+    "has_join": true
+  },
+  {
+    "question": "How many players whose first names are Adam and weigh more than 170?",
+    "db_id": "european_football_2",
+    "sql": "SELECT COUNT(id) FROM Player WHERE weight > 170 AND player_name LIKE 'Adam%'",
+    "expected": "EuropeanFootball2Player",
+    "source": "bird_european_football_2",
+    "has_join": false
+  },
+  {
+    "question": "What was the release date for the set which card \"Evacuation\" in it?",
+    "db_id": "card_games",
+    "sql": "SELECT T2.releaseDate FROM cards AS T1 INNER JOIN sets AS T2 ON T2.code = T1.setCode WHERE T1.name = 'Evacuation'",
+    "expected": "CardGamesCards",
+    "source": "bird_card_games",
+    "has_join": true
+  },
+  {
+    "question": "What is the surname of the driver with the best lap time in race number 19 in the second qualifying period?",
+    "db_id": "formula_1",
+    "sql": "SELECT T2.surname FROM qualifying AS T1 INNER JOIN drivers AS T2 ON T2.driverId = T1.driverId WHERE T1.raceId = 19 ORDER BY T1.q2 ASC LIMIT 1",
+    "expected": "Formula1Qualifying",
+    "source": "bird_formula_1",
+    "has_join": true
+  },
+  {
+    "question": "Name the event with the highest amount spent on advertisement.",
+    "db_id": "student_club",
+    "sql": "SELECT T2.event_name FROM budget AS T1 INNER JOIN event AS T2 ON T1.link_to_event = T2.event_id WHERE T1.category = 'Advertisement' ORDER BY T1.spent DESC LIMIT 1",
+    "expected": "StudentClubBudget",
+    "source": "bird_student_club",
+    "has_join": true
+  },
+  {
+    "question": "What's the French name of the set of cards with \"Tendo Ice Bridge\" is in?",
+    "db_id": "card_games",
+    "sql": "SELECT T2.translation FROM cards AS T1 INNER JOIN set_translations AS T2 ON T2.setCode = T1.setCode WHERE T1.name = 'Tendo Ice Bridge' AND T2.language = 'French' AND T2.translation IS NOT NULL",
+    "expected": "CardGamesCards",
+    "source": "bird_card_games",
+    "has_join": true
+  },
+  {
+    "question": "Please list the titles of the posts owned by the user csgillespie?",
+    "db_id": "codebase_community",
+    "sql": "SELECT T1.Title FROM posts AS T1 INNER JOIN users AS T2 ON T1.OwnerUserId = T2.Id WHERE T2.DisplayName = 'csgillespie'",
+    "expected": "CodebaseCommunityPosts",
+    "source": "bird_codebase_community",
+    "has_join": true
+  },
+  {
+    "question": "For the driver who had the Q2 time as 0:01:40 in the qualifying race No. 355, what is his nationality?",
+    "db_id": "formula_1",
+    "sql": "SELECT DISTINCT T2.nationality FROM qualifying AS T1 INNER JOIN drivers AS T2 ON T2.driverId = T1.driverId WHERE T1.raceId = 355 AND T1.q2 LIKE '1:40%'",
+    "expected": "Formula1Qualifying",
+    "source": "bird_formula_1",
+    "has_join": true
+  },
+  {
+    "question": "How many schools in merged Alameda have number of test takers less than 100?",
+    "db_id": "california_schools",
+    "sql": "SELECT COUNT(T1.CDSCode) FROM schools AS T1 INNER JOIN satscores AS T2 ON T1.CDSCode = T2.cds WHERE T1.StatusType = 'Merged' AND T2.NumTstTakr < 100 AND T1.County = 'Lake'",
+    "expected": "CaliforniaSchoolsSchools",
+    "source": "bird_california_schools",
+    "has_join": true
+  },
+  {
+    "question": "What is the average height of a non-human superhero in Dark Horse Comics?",
+    "db_id": "superhero",
+    "sql": "SELECT AVG(T1.height_cm) FROM superhero AS T1 INNER JOIN publisher AS T2 ON T1.publisher_id = T2.id INNER JOIN race AS T3 ON T1.race_id = T3.id WHERE T2.publisher_name = 'Dark Horse Comics' AND T3.race != 'Human'",
+    "expected": "SuperheroSuperhero",
+    "source": "bird_superhero",
+    "has_join": true
+  },
+  {
+    "question": "How many superheroes have blue eyes?",
+    "db_id": "superhero",
+    "sql": "SELECT COUNT(T1.id) FROM superhero AS T1 INNER JOIN colour AS T2 ON T1.eye_colour_id = T2.id WHERE T2.colour = 'Blue'",
+    "expected": "SuperheroSuperhero",
+    "source": "bird_superhero",
+    "has_join": true
+  },
+  {
+    "question": "How many superheroes did DC Comics publish?",
+    "db_id": "superhero",
+    "sql": "SELECT COUNT(T1.id) FROM superhero AS T1 INNER JOIN publisher AS T2 ON T1.publisher_id = T2.id WHERE T2.publisher_name = 'DC Comics'",
+    "expected": "SuperheroSuperhero",
+    "source": "bird_superhero",
+    "has_join": true
+  },
+  {
+    "question": "How many patients with a normal RF don't have thrombosis?",
+    "db_id": "thrombosis_prediction",
+    "sql": "SELECT COUNT(DISTINCT T1.ID) FROM Examination AS T1 INNER JOIN Laboratory AS T2 ON T1.ID = T2.ID WHERE T2.RF < 20 AND T1.Thrombosis = 0",
+    "expected": "ThrombosisPredictionExamination",
+    "source": "bird_thrombosis_prediction",
+    "has_join": true
+  },
+  {
+    "question": "Is molecule TR151 carcinogenic?",
+    "db_id": "toxicology",
+    "sql": "SELECT T.label FROM molecule AS T WHERE T.molecule_id = 'TR151'",
+    "expected": "ToxicologyMolecule",
+    "source": "bird_toxicology",
+    "has_join": false
+  },
+  {
+    "question": "On how many cards designed by John Avon is its foil non-powerful?",
+    "db_id": "card_games",
+    "sql": "SELECT COUNT(id) FROM cards WHERE (cardKingdomId IS NULL OR cardKingdomFoilId IS NULL) AND artist = 'John Avon'",
+    "expected": "CardGamesCards",
+    "source": "bird_card_games",
+    "has_join": false
+  },
+  {
+    "question": "Tell the phone number of \"Carlo Jacobs\".",
+    "db_id": "student_club",
+    "sql": "SELECT phone FROM member WHERE first_name = 'Carlo' AND last_name = 'Jacobs'",
+    "expected": "StudentClubMember",
+    "source": "bird_student_club",
+    "has_join": false
+  },
+  {
+    "question": "What is Abomination's eye colour?",
+    "db_id": "superhero",
+    "sql": "SELECT T2.colour FROM superhero AS T1 INNER JOIN colour AS T2 ON T1.eye_colour_id = T2.id WHERE T1.superhero_name = 'Abomination'",
+    "expected": "SuperheroSuperhero",
+    "source": "bird_superhero",
+    "has_join": true
+  },
+  {
+    "question": "Give the number of \"Revival\" badges.",
+    "db_id": "codebase_community",
+    "sql": "SELECT COUNT(Id) FROM badges WHERE Name = 'Revival'",
+    "expected": "CodebaseCommunityBadges",
+    "source": "bird_codebase_community",
+    "has_join": false
+  },
+  {
+    "question": "What is the average index of the lactate dehydrogenase (LDH) for all patients with lactate dehydrogenase (LDH) within the normal range.",
+    "db_id": "thrombosis_prediction",
+    "sql": "SELECT AVG(LDH) FROM Laboratory WHERE LDH < 500",
+    "expected": "ThrombosisPredictionLaboratory",
+    "source": "bird_thrombosis_prediction",
+    "has_join": false
+  },
+  {
+    "question": "What is the total number of superheroes that have John as their first name?",
+    "db_id": "superhero",
+    "sql": "SELECT COUNT(id) FROM superhero WHERE full_name LIKE 'John%'",
+    "expected": "SuperheroSuperhero",
+    "source": "bird_superhero",
+    "has_join": false
+  },
+  {
+    "question": "Among the molecules with element Calcium, are they mostly carcinogenic or non carcinogenic?",
+    "db_id": "toxicology",
+    "sql": "SELECT T2.label FROM atom AS T1 INNER JOIN molecule AS T2 ON T1.molecule_id = T2.molecule_id WHERE T1.element = 'ca' GROUP BY T2.label ORDER BY COUNT(T2.label) DESC LIMIT 1",
+    "expected": "ToxicologyAtom",
+    "source": "bird_toxicology",
+    "has_join": true
+  },
+  {
+    "question": "What is the bond type of TR007_4_19?",
+    "db_id": "toxicology",
+    "sql": "SELECT T.bond_type FROM bond AS T WHERE T.bond_id = 'TR007_4_19'",
+    "expected": "ToxicologyBond",
+    "source": "bird_toxicology",
+    "has_join": false
+  },
+  {
+    "question": "List the toxicology elements associated with molecule TR001.",
+    "db_id": "toxicology",
+    "sql": "SELECT DISTINCT T.element FROM atom AS T WHERE T.molecule_id = 'TR001'",
+    "expected": "ToxicologyAtom",
+    "source": "bird_toxicology",
+    "has_join": false
+  },
+  {
+    "question": "What is the type of the card \"Ancestor's Chosen\" as originally printed?",
+    "db_id": "card_games",
+    "sql": "SELECT originalType FROM cards WHERE name = 'Ancestor''s Chosen' AND originalType IS NOT NULL",
+    "expected": "CardGamesCards",
+    "source": "bird_card_games",
+    "has_join": false
+  },
+  {
+    "question": "In which country was the first European Grand Prix hosted? Name the circuit and location.",
+    "db_id": "formula_1",
+    "sql": "SELECT T1.country, T1.location FROM circuits AS T1 INNER JOIN races AS T2 ON T2.circuitID = T1.circuitId WHERE T2.name = 'European Grand Prix' ORDER BY T2.year ASC LIMIT 1",
+    "expected": "Formula1Circuits",
+    "source": "bird_formula_1",
+    "has_join": true
+  },
+  {
+    "question": "How many posts have a score less than 20?",
+    "db_id": "codebase_community",
+    "sql": "SELECT COUNT(id) FROM posts WHERE Score < 20",
+    "expected": "CodebaseCommunityPosts",
+    "source": "bird_codebase_community",
+    "has_join": false
+  },
+  {
+    "question": "Where is Malaysian Grand Prix held? Give the location coordinates.",
+    "db_id": "formula_1",
+    "sql": "SELECT DISTINCT T1.lat, T1.lng FROM circuits AS T1 INNER JOIN races AS T2 ON T2.circuitID = T1.circuitId WHERE T2.name = 'Malaysian Grand Prix'",
+    "expected": "Formula1Circuits",
+    "source": "bird_formula_1",
+    "has_join": true
+  },
+  {
+    "question": "Among the budgets for Advertising, list out top three which have the most budgeted amount?",
+    "db_id": "student_club",
+    "sql": "SELECT budget_id FROM budget WHERE category = 'Advertisement' ORDER BY amount DESC LIMIT 3",
+    "expected": "StudentClubBudget",
+    "source": "bird_student_club",
+    "has_join": false
+  },
+  {
+    "question": "Which card costs more converted mana, \"Serra Angel\" or \"Shrine Keeper\"?",
+    "db_id": "card_games",
+    "sql": "SELECT name FROM cards WHERE name IN ('Serra Angel', 'Shrine Keeper') ORDER BY convertedManaCost DESC LIMIT 1",
+    "expected": "CardGamesCards",
+    "source": "bird_card_games",
+    "has_join": false
+  },
+  {
+    "question": "Among the superheroes with height from 170 to 190, list the names of the superheroes with no eye color.",
+    "db_id": "superhero",
+    "sql": "SELECT DISTINCT T1.superhero_name FROM superhero AS T1 INNER JOIN colour AS T2 ON T1.eye_colour_id = T2.id WHERE T1.height_cm BETWEEN 170 AND 190 AND T2.colour = 'No Colour'",
+    "expected": "SuperheroSuperhero",
+    "source": "bird_superhero",
+    "has_join": true
+  },
+  {
+    "question": "Describe the information about rulings for card named 'Sublime Epiphany' with number 74s.",
+    "db_id": "card_games",
+    "sql": "SELECT T2.text FROM cards AS T1 INNER JOIN rulings AS T2 ON T1.uuid = T2.uuid WHERE T1.name = 'Sublime Epiphany' AND T1.number = '74s'",
+    "expected": "CardGamesCards",
+    "source": "bird_card_games",
+    "has_join": true
+  },
+  {
+    "question": "What elements are in a double type bond?",
+    "db_id": "toxicology",
+    "sql": "SELECT DISTINCT T1.element FROM atom AS T1 INNER JOIN bond AS T2 ON T1.molecule_id = T2.molecule_id INNER JOIN connected AS T3 ON T1.atom_id = T3.atom_id WHERE T2.bond_type = '='",
+    "expected": "ToxicologyAtom",
+    "source": "bird_toxicology",
+    "has_join": true
+  },
+  {
+    "question": "What is the average of fastest lap speed in the 2009 Spanish Grand Prix race?",
+    "db_id": "formula_1",
+    "sql": "SELECT AVG(T1.fastestLapSpeed) FROM results AS T1 INNER JOIN races AS T2 on T1.raceId = T2.raceId WHERE T2.year = 2009 AND T2.name = 'Spanish Grand Prix'",
+    "expected": "Formula1Results",
+    "source": "bird_formula_1",
+    "has_join": true
+  },
+  {
+    "question": "Among the molecules between TR004 to TR010, how many of them has single bonds?",
+    "db_id": "toxicology",
+    "sql": "SELECT COUNT(DISTINCT T.molecule_id) FROM bond AS T WHERE T.molecule_id BETWEEN 'TR004' AND 'TR010' AND T.bond_type = '-'",
+    "expected": "ToxicologyBond",
+    "source": "bird_toxicology",
+    "has_join": false
+  },
+  {
+    "question": "How many unknown power cards contain info about the triggered ability",
+    "db_id": "card_games",
+    "sql": "SELECT T2.text FROM cards AS T1 INNER JOIN rulings AS T2 ON T1.uuid = T2.uuid WHERE (T1.power IS NULL OR T1.power = '*') AND T2.text LIKE '%triggered ability%'",
+    "expected": "CardGamesCards",
+    "source": "bird_card_games",
+    "has_join": true
+  },
+  {
+    "question": "Among the posts that were voted by user 1465, what is the id of the most valuable post?",
+    "db_id": "codebase_community",
+    "sql": "SELECT T2.Id FROM votes AS T1 INNER JOIN posts AS T2 ON T1.PostId = T2.Id WHERE T1.UserId = 1465 ORDER BY T2.FavoriteCount DESC LIMIT 1",
+    "expected": "CodebaseCommunityVotes",
+    "source": "bird_codebase_community",
+    "has_join": true
+  },
+  {
+    "question": "Among the players with an overall rating between 60 to 65, how many players whose going to be in all of your attack moves instead of defensing?",
+    "db_id": "european_football_2",
+    "sql": "SELECT COUNT(id) FROM Player_Attributes WHERE overall_rating BETWEEN 60 AND 65 AND defensive_work_rate = 'low'",
+    "expected": "EuropeanFootball2PlayerAttributes",
+    "source": "bird_european_football_2",
+    "has_join": false
+  },
+  {
+    "question": "Please list top three unknown power cards that have promotional types for arena league in alphabetical order.",
+    "db_id": "card_games",
+    "sql": "SELECT name FROM cards WHERE (power IS NULL OR power LIKE '%*%') AND promoTypes = 'arenaleague' ORDER BY name LIMIT 3",
+    "expected": "CardGamesCards",
+    "source": "bird_card_games",
+    "has_join": false
+  },
+  {
+    "question": "Among the students from the Student_Club who attended the event \"Women's Soccer\", how many of them want a T-shirt that's in medium size?",
+    "db_id": "student_club",
+    "sql": "SELECT COUNT(T1.event_id) FROM event AS T1 INNER JOIN attendance AS T2 ON T1.event_id = T2.link_to_event INNER JOIN member AS T3 ON T2.link_to_member = T3.member_id WHERE T1.event_name = 'Women''s Soccer' AND T3.t_shirt_size = 'Medium'",
+    "expected": "StudentClubEvent",
+    "source": "bird_student_club",
+    "has_join": true
+  },
+  {
+    "question": "How many of the molecules are carcinogenic?",
+    "db_id": "toxicology",
+    "sql": "SELECT COUNT(T.molecule_id) FROM molecule AS T WHERE T.label = '+'",
+    "expected": "ToxicologyMolecule",
+    "source": "bird_toxicology",
+    "has_join": false
+  },
+  {
+    "question": "Identify the type of expenses and their total value approved for 'October Meeting' event.",
+    "db_id": "student_club",
+    "sql": "SELECT T1.type, SUM(T3.cost) FROM event AS T1 INNER JOIN budget AS T2 ON T1.event_id = T2.link_to_event INNER JOIN expense AS T3 ON T2.budget_id = T3.link_to_budget WHERE T1.event_name = 'October Meeting'",
+    "expected": "StudentClubEvent",
+    "source": "bird_student_club",
+    "has_join": true
+  },
+  {
+    "question": "For the first client who opened his/her account in Prague, what is his/her account ID?",
+    "db_id": "financial",
+    "sql": "SELECT T1.account_id FROM account AS T1 INNER JOIN district AS T2 ON T1.district_id = T2.district_id WHERE T2.A3 = 'Prague' ORDER BY T1.date ASC LIMIT 1",
+    "expected": "FinancialAccount",
+    "source": "bird_financial",
+    "has_join": true
+  },
+  {
+    "question": "Does bond id TR001_1_8 have both element of chlorine and carbon?",
+    "db_id": "toxicology",
+    "sql": "SELECT T2.bond_id, T2.atom_id2, T1.element AS flag_have_CaCl FROM atom AS T1 INNER JOIN connected AS T2 ON T2.atom_id = T1.atom_id WHERE T2.bond_id = 'TR001_1_8' AND (T1.element = 'c1' OR T1.element = 'c')",
+    "expected": "ToxicologyAtom",
+    "source": "bird_toxicology",
+    "has_join": true
+  },
+  {
+    "question": "What's Lewis Hamilton's reference name?",
+    "db_id": "formula_1",
+    "sql": "SELECT driverRef FROM drivers WHERE forename = 'Lewis' AND surname = 'Hamilton'",
+    "expected": "Formula1Drivers",
+    "source": "bird_formula_1",
+    "has_join": false
+  },
+  {
+    "question": "Write the full name of the club member with the position of 'Secretary' and list which college the club member belongs to.",
+    "db_id": "student_club",
+    "sql": "SELECT T1.first_name, T1.last_name, college FROM member AS T1 INNER JOIN major AS T2 ON T2.major_id = T1.link_to_major WHERE T1.position = 'Secretary'",
+    "expected": "StudentClubMember",
+    "source": "bird_student_club",
+    "has_join": true
+  },
+  {
+    "question": "How many of the accounts are from Jesenik district?",
+    "db_id": "financial",
+    "sql": "SELECT COUNT(T2.account_id) FROM district AS T1 INNER JOIN account AS T2 ON T1.district_id = T2.district_id WHERE T1.A2 = 'Jesenik'",
+    "expected": "FinancialDistrict",
+    "source": "bird_financial",
+    "has_join": true
+  },
+  {
+    "question": "What was the position of the circuits during Lewis Hamilton's fastest lap in a Formula_1 race?",
+    "db_id": "formula_1",
+    "sql": "SELECT T1.position FROM lapTimes AS T1 INNER JOIN drivers AS T2 on T1.driverId = T2.driverId WHERE T2.forename = 'Lewis' AND T2.surname = 'Hamilton' ORDER BY T1.time ASC LIMIT 1",
+    "expected": "Formula1Laptimes",
+    "source": "bird_formula_1",
+    "has_join": true
+  },
+  {
+    "question": "When was the medical information on patient number 48473 first documented, and what disease did she have?",
+    "db_id": "thrombosis_prediction",
+    "sql": "SELECT `First Date`, Diagnosis FROM Patient WHERE ID = 48473",
+    "expected": "ThrombosisPredictionPatient",
+    "source": "bird_thrombosis_prediction",
+    "has_join": false
+  },
+  {
+    "question": "How much did customer 6 consume in total between August and November 2013?",
+    "db_id": "debit_card_specializing",
+    "sql": "SELECT SUM(Consumption) FROM yearmonth WHERE CustomerID = 6 AND Date BETWEEN '201308' AND '201311'",
+    "expected": "DebitCardSpecializingYearmonth",
+    "source": "bird_debit_card_specializing",
+    "has_join": false
+  },
+  {
+    "question": "Describe the post title which got positive comments and display names of the users who posted those comments.",
+    "db_id": "codebase_community",
+    "sql": "SELECT T1.Title, T2.UserDisplayName FROM posts AS T1 INNER JOIN comments AS T2 ON T2.PostId = T2.Id WHERE T1.Score > 60",
+    "expected": "CodebaseCommunityPosts",
+    "source": "bird_codebase_community",
+    "has_join": true
+  },
+  {
+    "question": "What are the cards belong to duel deck a? List the ID.",
+    "db_id": "card_games",
+    "sql": "SELECT id FROM cards WHERE duelDeck = 'a'",
+    "expected": "CardGamesCards",
+    "source": "bird_card_games",
+    "has_join": false
+  },
+  {
+    "question": "What is the total score of the posts edited by Yevgeny and include the user's website URL.",
+    "db_id": "codebase_community",
+    "sql": "SELECT SUM(T1.Score), T2.WebsiteUrl FROM posts AS T1 INNER JOIN users AS T2 ON T1.LastEditorUserId = T2.Id WHERE T2.DisplayName = 'Yevgeny' GROUP BY T2.WebsiteUrl",
+    "expected": "CodebaseCommunityPosts",
+    "source": "bird_codebase_community",
+    "has_join": true
+  },
+  {
+    "question": "What is the element with the atom ID of TR004_7 in molecule that is not carcinogenic?",
+    "db_id": "toxicology",
+    "sql": "SELECT T1.element FROM atom AS T1 INNER JOIN molecule AS T2 ON T1.molecule_id = T2.molecule_id WHERE T1.atom_id = 'TR004_7' AND T2.label = '-'",
+    "expected": "ToxicologyAtom",
+    "source": "bird_toxicology",
+    "has_join": true
+  },
+  {
+    "question": "Please state the reference name of the oldest German driver.",
+    "db_id": "formula_1",
+    "sql": "SELECT driverRef FROM drivers WHERE nationality = 'German' ORDER BY JULIANDAY(dob) ASC LIMIT 1",
+    "expected": "Formula1Drivers",
+    "source": "bird_formula_1",
+    "has_join": false
+  },
+  {
+    "question": "Name the superhero, otherwise known as Charles Chandler.",
+    "db_id": "superhero",
+    "sql": "SELECT superhero_name FROM superhero WHERE full_name = 'Charles Chandler'",
+    "expected": "SuperheroSuperhero",
+    "source": "bird_superhero",
+    "has_join": false
+  },
+  {
+    "question": "Among the posts owned by csgillespie, how many of them are root posts?",
+    "db_id": "codebase_community",
+    "sql": "SELECT COUNT(T1.Id) FROM posts AS T1 INNER JOIN users AS T2 ON T1.OwnerUserId = T2.Id WHERE T2.DisplayName = 'csgillespie' AND T1.ParentId IS NULL",
+    "expected": "CodebaseCommunityPosts",
+    "source": "bird_codebase_community",
+    "has_join": true
+  },
+  {
+    "question": "How many white bordered cards are powerful?",
+    "db_id": "card_games",
+    "sql": "SELECT COUNT(id) FROM cards WHERE borderColor = 'white' AND cardKingdomId IS NOT NULL AND cardKingdomFoilId IS NOT NULL",
+    "expected": "CardGamesCards",
+    "source": "bird_card_games",
+    "has_join": false
+  },
+  {
+    "question": "Identify the number of posts and comments left by the user, who has the latest created user account.",
+    "db_id": "codebase_community",
+    "sql": "SELECT COUNT(T2.Id) FROM users AS T1 INNER JOIN posts AS T2 ON T1.Id = T2.OwnerUserId INNER JOIN comments AS T3 ON T3.PostId = T2.Id ORDER BY T1.CreationDate DESC LIMIT 1",
+    "expected": "CodebaseCommunityUsers",
+    "source": "bird_codebase_community",
+    "has_join": true
+  },
+  {
+    "question": "For the patients whose anti-SSB are normal, how many of them have other symptoms observed in their examination?",
+    "db_id": "thrombosis_prediction",
+    "sql": "SELECT COUNT(DISTINCT T1.ID) FROM Examination AS T1 INNER JOIN Laboratory AS T2 ON T1.ID = T2.ID WHERE T2.SSB = 'negative' OR '0' AND T1.Symptoms IS NOT NULL",
+    "expected": "ThrombosisPredictionExamination",
+    "source": "bird_thrombosis_prediction",
+    "has_join": true
+  },
+  {
+    "question": "Which are the cards that have incredibly powerful foils.",
+    "db_id": "card_games",
+    "sql": "SELECT id FROM cards WHERE cardKingdomFoilId IS NOT NULL AND cardKingdomId IS NOT NULL",
+    "expected": "CardGamesCards",
+    "source": "bird_card_games",
+    "has_join": false
+  },
+  {
+    "question": "List the keyrune code for the set whose code is 'PKHC'.",
+    "db_id": "card_games",
+    "sql": "SELECT keyruneCode FROM sets WHERE code = 'PKHC'",
+    "expected": "CardGamesSets",
+    "source": "bird_card_games",
+    "has_join": false
+  },
+  {
+    "question": "For artifact type of cards that do not have multiple faces on the same card, state its legalities status for vintage play format.",
+    "db_id": "card_games",
+    "sql": "SELECT DISTINCT T2.status FROM cards AS T1 INNER JOIN legalities AS T2 ON T1.uuid = T2.uuid WHERE T1.type = 'Artifact' AND T2.format = 'vintage' AND T1.side IS NULL",
+    "expected": "CardGamesCards",
+    "source": "bird_card_games",
+    "has_join": true
+  },
+  {
+    "question": "Which superheroes have blue eyes with brown hair?",
+    "db_id": "superhero",
+    "sql": "SELECT T1.superhero_name FROM superhero AS T1 INNER JOIN colour AS T2 ON T1.eye_colour_id = T2.id INNER JOIN colour AS T3 ON T1.hair_colour_id = T3.id WHERE T2.colour = 'Blue' AND T3.colour = 'Brown'",
+    "expected": "SuperheroSuperhero",
+    "source": "bird_superhero",
+    "has_join": true
+  },
+  {
+    "question": "How many users were awarded with 'Citizen Patrol' badge?",
+    "db_id": "codebase_community",
+    "sql": "SELECT COUNT(id) FROM badges WHERE `Name` = 'Citizen Patrol'",
+    "expected": "CodebaseCommunityBadges",
+    "source": "bird_codebase_community",
+    "has_join": false
+  },
+  {
+    "question": "How many badges has the user csgillespie obtained?",
+    "db_id": "codebase_community",
+    "sql": "SELECT COUNT(T1.Id) FROM badges AS T1 INNER JOIN users AS T2 ON T1.UserId = T2.Id WHERE T2.DisplayName = 'csgillespie'",
+    "expected": "CodebaseCommunityBadges",
+    "source": "bird_codebase_community",
+    "has_join": true
+  },
+  {
+    "question": "Identify the heaviest superhero in DC Comics.",
+    "db_id": "superhero",
+    "sql": "SELECT T1.superhero_name FROM superhero AS T1 INNER JOIN publisher AS T2 ON T1.publisher_id = T2.id WHERE T2.publisher_name = 'DC Comics' ORDER BY T1.weight_kg DESC LIMIT 1",
+    "expected": "SuperheroSuperhero",
+    "source": "bird_superhero",
+    "has_join": true
+  },
+  {
+    "question": "How many sets are available just in Japanese and not in Magic: The Gathering Online?",
+    "db_id": "card_games",
+    "sql": "SELECT COUNT(T1.id) FROM sets AS T1 INNER JOIN set_translations AS T2 ON T2.setCode = T1.code WHERE T2.language = 'Japanese'  AND (T1.mtgoCode IS NULL OR T1.mtgoCode = '')",
+    "expected": "CardGamesSets",
+    "source": "bird_card_games",
+    "has_join": true
+  },
+  {
+    "question": "What is the unique id of the set that has the highest number of cards?",
+    "db_id": "card_games",
+    "sql": "SELECT id FROM sets ORDER BY baseSetSize DESC LIMIT 1",
+    "expected": "CardGamesSets",
+    "source": "bird_card_games",
+    "has_join": false
+  },
+  {
+    "question": "Identify the atoms belong to the molecule with ID between TR010 to TR050 that contain the element carbon.",
+    "db_id": "toxicology",
+    "sql": "SELECT T.atom_id FROM atom AS T WHERE T.molecule_id BETWEEN 'TR010' AND 'TR050' AND T.element = 'c'",
+    "expected": "ToxicologyAtom",
+    "source": "bird_toxicology",
+    "has_join": false
+  },
+  {
+    "question": "Which event has the lowest cost?",
+    "db_id": "student_club",
+    "sql": "SELECT T1.event_name FROM event AS T1 INNER JOIN budget AS T2 ON T1.event_id = T2.link_to_event INNER JOIN expense AS T3 ON T2.budget_id = T3.link_to_budget ORDER BY T3.cost LIMIT 1",
+    "expected": "StudentClubEvent",
+    "source": "bird_student_club",
+    "has_join": true
+  },
+  {
+    "question": "What is the total cost of the pizzas for all the events?",
+    "db_id": "student_club",
+    "sql": "SELECT SUM(cost) FROM expense WHERE expense_description = 'Pizza'",
+    "expected": "StudentClubExpense",
+    "source": "bird_student_club",
+    "has_join": false
+  },
+  {
+    "question": "Please list the countries of the gas stations with transactions taken place in June, 2013.",
+    "db_id": "debit_card_specializing",
+    "sql": "SELECT DISTINCT T2.Country FROM transactions_1k AS T1 INNER JOIN gasstations AS T2 ON T1.GasStationID = T2.GasStationID INNER JOIN yearmonth AS T3 ON T1.CustomerID = T3.CustomerID WHERE T3.Date = '201306'",
+    "expected": "DebitCardSpecializingTransactions1k",
+    "source": "bird_debit_card_specializing",
+    "has_join": true
+  },
+  {
+    "question": "What is the name of user with the ID of 30?",
+    "db_id": "codebase_community",
+    "sql": "SELECT DisplayName FROM users WHERE Id = 30",
+    "expected": "CodebaseCommunityUsers",
+    "source": "bird_codebase_community",
+    "has_join": false
+  },
+  {
+    "question": "List the element and bond type included in the molecule with molecule ID of TR002.",
+    "db_id": "toxicology",
+    "sql": "SELECT DISTINCT T1.element, T2.bond_type FROM atom AS T1 INNER JOIN bond AS T2 ON T1.molecule_id = T2.molecule_id WHERE T1.molecule_id = 'TR002'",
+    "expected": "ToxicologyAtom",
+    "source": "bird_toxicology",
+    "has_join": true
+  },
+  {
+    "question": "Please list all the years that Silverstone Circuit was used in a Formula_1 race.",
+    "db_id": "formula_1",
+    "sql": "SELECT DISTINCT T2.year FROM circuits AS T1 INNER JOIN races AS T2 ON T2.circuitID = T1.circuitId WHERE T1.name = 'Silverstone Circuit'",
+    "expected": "Formula1Circuits",
+    "source": "bird_formula_1",
+    "has_join": true
+  },
+  {
+    "question": "Which power do superheroes have the most of?",
+    "db_id": "superhero",
+    "sql": "SELECT T2.power_name FROM hero_power AS T1 INNER JOIN superpower AS T2 ON T1.power_id = T2.id GROUP BY T2.power_name ORDER BY COUNT(T1.hero_id) DESC LIMIT 1",
+    "expected": "SuperheroHeroPower",
+    "source": "bird_superhero",
+    "has_join": true
+  },
+  {
+    "question": "Provide the full name and email address of the Student_Club's Secretary.",
+    "db_id": "student_club",
+    "sql": "SELECT first_name, last_name, email FROM member WHERE position = 'Secretary'",
+    "expected": "StudentClubMember",
+    "source": "bird_student_club",
+    "has_join": false
+  },
+  {
+    "question": "For the constructor which got the highest point in the race No. 9 , what is its introduction website?",
+    "db_id": "formula_1",
+    "sql": "SELECT T2.url FROM constructorResults AS T1 INNER JOIN constructors AS T2 ON T2.constructorId = T1.constructorId WHERE T1.raceId = 9 ORDER BY T1.points DESC LIMIT 1",
+    "expected": "Formula1Constructorresults",
+    "source": "bird_formula_1",
+    "has_join": true
+  },
+  {
+    "question": "Among the superheroes with the super power of \"Super Strength\", how many of them have a height of over 200cm?",
+    "db_id": "superhero",
+    "sql": "SELECT COUNT(T1.id) FROM superhero AS T1 INNER JOIN hero_power AS T2 ON T1.id = T2.hero_id INNER JOIN superpower AS T3 ON T2.power_id = T3.id WHERE T3.power_name = 'Super Strength' AND T1.height_cm > 200",
+    "expected": "SuperheroSuperhero",
+    "source": "bird_superhero",
+    "has_join": true
+  },
+  {
+    "question": "State the racing year which has the fastest lap time?",
+    "db_id": "formula_1",
+    "sql": "SELECT T2.year FROM results AS T1 INNER JOIN races AS T2 on T1.raceId = T2.raceId WHERE T1.fastestLapTime IS NOT NULL",
+    "expected": "Formula1Results",
+    "source": "bird_formula_1",
+    "has_join": true
+  },
+  {
+    "question": "Please specify all of the schools and their related mailing zip codes that are under Avetik Atoian's administration.",
+    "db_id": "california_schools",
+    "sql": "SELECT School, MailZip FROM schools WHERE AdmFName1 = 'Avetik' AND AdmLName1 = 'Atoian'",
+    "expected": "CaliforniaSchoolsSchools",
+    "source": "bird_california_schools",
+    "has_join": false
+  },
+  {
+    "question": "Among the members who incurred expenses in more than one event, who paid the most amount?",
+    "db_id": "student_club",
+    "sql": "SELECT T2.member_id FROM expense AS T1 INNER JOIN member AS T2 ON T1.link_to_member = T2.member_id INNER JOIN budget AS T3 ON T1.link_to_budget = T3.budget_id INNER JOIN event AS T4 ON T3.link_to_event = T4.event_id GROUP BY T2.member_id HAVING COUNT(DISTINCT T4.event_id) > 1 ORDER BY SUM(T1.cost) DESC LIMIT 1",
+    "expected": "StudentClubExpense",
+    "source": "bird_student_club",
+    "has_join": true
+  },
+  {
+    "question": "How many card border with black color ? List out the card id.",
+    "db_id": "card_games",
+    "sql": "SELECT id FROM cards WHERE borderColor = 'black' GROUP BY id",
+    "expected": "CardGamesCards",
+    "source": "bird_card_games",
+    "has_join": false
+  },
+  {
+    "question": "In which race did the fastest 1st lap time was recorded? Please indicate the time in milliseconds.",
+    "db_id": "formula_1",
+    "sql": "SELECT T1.milliseconds FROM lapTimes AS T1 INNER JOIN races AS T2 on T1.raceId = T2.raceId WHERE T1.lap = 1 ORDER BY T1.time LIMIT 1",
+    "expected": "Formula1Laptimes",
+    "source": "bird_formula_1",
+    "has_join": true
+  },
+  {
+    "question": "List the driver's ID of the top five driver, by descending order, the fastest time during the first lap of the race.",
+    "db_id": "formula_1",
+    "sql": "SELECT driverId FROM lapTimes WHERE lap = 1 ORDER BY time LIMIT 5",
+    "expected": "Formula1Laptimes",
+    "source": "bird_formula_1",
+    "has_join": false
+  },
+  {
+    "question": "Calculate the total amount spent on speaker gifts and list the name of the event they were spent on.",
+    "db_id": "student_club",
+    "sql": "SELECT SUM(T1.spent), T2.event_name FROM budget AS T1 INNER JOIN event AS T2 ON T1.link_to_event = T2.event_id WHERE T1.category = 'Speaker Gifts' GROUP BY T2.event_name",
+    "expected": "StudentClubBudget",
+    "source": "bird_student_club",
+    "has_join": true
+  },
+  {
+    "question": "List the last names of students under the Elementary Education major and include their phone numbers.",
+    "db_id": "student_club",
+    "sql": "SELECT T1.last_name, T1.phone FROM member AS T1 INNER JOIN major AS T2 ON T2.major_id = T1.link_to_major WHERE T2.major_name = 'Elementary Education'",
+    "expected": "StudentClubMember",
+    "source": "bird_student_club",
+    "has_join": true
+  },
+  {
+    "question": "In the branch where the largest number of crimes were committed in 1996, how many accounts were opened?",
+    "db_id": "financial",
+    "sql": "SELECT COUNT(T2.account_id) FROM district AS T1 INNER JOIN account AS T2 ON T1.district_id = T2.district_id GROUP BY T1.A16 ORDER BY T1.A16 DESC LIMIT 1",
+    "expected": "FinancialDistrict",
+    "source": "bird_financial",
+    "has_join": true
+  },
+  {
+    "question": "What's the long name for the team GEN?",
+    "db_id": "european_football_2",
+    "sql": "SELECT team_long_name FROM Team WHERE team_short_name = 'GEN'",
+    "expected": "EuropeanFootball2Team",
+    "source": "bird_european_football_2",
+    "has_join": false
+  },
+  {
+    "question": "Give the total number of comments posted by user ID 13.",
+    "db_id": "codebase_community",
+    "sql": "SELECT COUNT(Id) FROM comments WHERE UserId = 13",
+    "expected": "CodebaseCommunityComments",
+    "source": "bird_codebase_community",
+    "has_join": false
+  },
+  {
+    "question": "How many cards with a 1993 frame version and available on paper have a sensitive content warning?",
+    "db_id": "card_games",
+    "sql": "SELECT COUNT(id) FROM cards WHERE frameVersion = 1993 AND availability = 'paper' AND hasContentWarning = 1",
+    "expected": "CardGamesCards",
+    "source": "bird_card_games",
+    "has_join": false
+  },
+  {
+    "question": "Which citizenship do the vast majority of the drivers hold?",
+    "db_id": "formula_1",
+    "sql": "SELECT nationality FROM drivers GROUP BY nationality ORDER BY COUNT(driverId) DESC LIMIT 1",
+    "expected": "Formula1Drivers",
+    "source": "bird_formula_1",
+    "has_join": false
+  },
+  {
+    "question": "Give the only one comment text of the post with parent id 107829.",
+    "db_id": "codebase_community",
+    "sql": "SELECT T2.Text FROM posts AS T1 INNER JOIN comments AS T2 ON T1.Id = T2.PostId WHERE T1.ParentId = 107829 AND T1.CommentCount = 1",
+    "expected": "CodebaseCommunityPosts",
+    "source": "bird_codebase_community",
+    "has_join": true
+  },
+  {
+    "question": "How many cards have frame effect as extendedart? List out the id of those cards.",
+    "db_id": "card_games",
+    "sql": "SELECT id FROM cards WHERE frameEffects = 'extendedart' GROUP BY id",
+    "expected": "CardGamesCards",
+    "source": "bird_card_games",
+    "has_join": false
+  },
+  {
+    "question": "How many gold-eyed superheroes did Marvel Comics publish?",
+    "db_id": "superhero",
+    "sql": "SELECT COUNT(T1.id) FROM superhero AS T1 INNER JOIN publisher AS T2 ON T1.publisher_id = T2.id INNER JOIN colour AS T3 ON T1.eye_colour_id = T3.id WHERE T2.publisher_name = 'Marvel Comics' AND T3.colour = 'Gold'",
+    "expected": "SuperheroSuperhero",
+    "source": "bird_superhero",
+    "has_join": true
+  },
+  {
+    "question": "What kind of printing is on the card that Daren Bader created?",
+    "db_id": "card_games",
+    "sql": "SELECT DISTINCT availability FROM cards WHERE artist = 'Daren Bader'",
+    "expected": "CardGamesCards",
+    "source": "bird_card_games",
+    "has_join": false
+  },
+  {
+    "question": "What are the available printing types of the cards that doesn't have a text box created by Aleksi Briclot?",
+    "db_id": "card_games",
+    "sql": "SELECT DISTINCT availability FROM cards WHERE artist = 'Aleksi Briclot' AND isTextless = 1",
+    "expected": "CardGamesCards",
+    "source": "bird_card_games",
+    "has_join": false
+  },
+  {
+    "question": "What is the administrator's email address for the school with the highest number of test takers who received SAT scores of at least 1500?Provide the name of the school.",
+    "db_id": "california_schools",
+    "sql": "SELECT T2.AdmEmail1, T2.School FROM satscores AS T1 INNER JOIN schools AS T2 ON T1.cds = T2.CDSCode ORDER BY T1.NumGE1500 DESC LIMIT 1",
+    "expected": "CaliforniaSchoolsSatscores",
+    "source": "bird_california_schools",
+    "has_join": true
+  },
+  {
+    "question": "For the client who applied the biggest loan, what was his/her first amount of transaction after opened the account?",
+    "db_id": "financial",
+    "sql": "SELECT T3.amount FROM loan AS T1 INNER JOIN account AS T2 ON T1.account_id = T2.account_id INNER JOIN trans AS T3 ON T2.account_id = T3.account_id ORDER BY T1.amount DESC, T3.date ASC LIMIT 1",
+    "expected": "FinancialLoan",
+    "source": "bird_financial",
+    "has_join": true
+  },
+  {
+    "question": "List account ID and account opening date for accounts from 'Prachatice'.",
+    "db_id": "financial",
+    "sql": "SELECT T1.account_id, T1.date FROM account AS T1 INNER JOIN district AS T2 ON T1.district_id = T2.district_id WHERE T2.A2 = 'Prachatice'",
+    "expected": "FinancialAccount",
+    "source": "bird_financial",
+    "has_join": true
+  },
+  {
+    "question": "List circuits in USA which hosted f1 races in 2006. State the name and location of circuit and the name of the race it hosted.",
+    "db_id": "formula_1",
+    "sql": "SELECT T1.name, T1.location, T2.name FROM circuits AS T1 INNER JOIN races AS T2 ON T2.circuitID = T1.circuitId WHERE T1.country = 'USA' AND T2.year = 2006",
+    "expected": "Formula1Circuits",
+    "source": "bird_formula_1",
+    "has_join": true
+  },
+  {
+    "question": "Which bond ids are double-bond with carcinogenic compound?",
+    "db_id": "toxicology",
+    "sql": "SELECT T1.bond_id FROM bond AS T1 INNER JOIN molecule AS T2 ON T1.molecule_id = T2.molecule_id WHERE T2.label = '+' AND T1.bond_type = '='",
+    "expected": "ToxicologyBond",
+    "source": "bird_toxicology",
+    "has_join": true
+  },
+  {
+    "question": "How many superheroes with blonde hair are there?",
+    "db_id": "superhero",
+    "sql": "SELECT COUNT(T1.id) FROM superhero AS T1 INNER JOIN colour AS T2 ON T1.hair_colour_id = T2.id WHERE T2.colour = 'Blond'",
+    "expected": "SuperheroSuperhero",
+    "source": "bird_superhero",
+    "has_join": true
+  },
+  {
+    "question": "What are the foiled cards that are incredibly powerful when paired with non foiled cards? List the IDs.",
+    "db_id": "card_games",
+    "sql": "SELECT id FROM cards WHERE cardKingdomId IS NOT NULL AND cardKingdomFoilId IS NOT NULL",
+    "expected": "CardGamesCards",
+    "source": "bird_card_games",
+    "has_join": false
+  },
+  {
+    "question": "What is the power ID of cryokinesis?",
+    "db_id": "superhero",
+    "sql": "SELECT id FROM superpower WHERE power_name = 'Cryokinesis'",
+    "expected": "SuperheroSuperpower",
+    "source": "bird_superhero",
+    "has_join": false
+  },
+  {
+    "question": "Calculate the average attribute value of all superheroes.",
+    "db_id": "superhero",
+    "sql": "SELECT AVG(attribute_value) FROM hero_attribute",
+    "expected": "SuperheroHeroAttribute",
+    "source": "bird_superhero",
+    "has_join": false
+  },
+  {
+    "question": "What is the examination date of the patient whose albumin is the highest in the normal range?",
+    "db_id": "thrombosis_prediction",
+    "sql": "SELECT Date FROM Laboratory WHERE ALB > 3.5 AND ALB < 5.5 ORDER BY ALB DESC LIMIT 1",
+    "expected": "ThrombosisPredictionLaboratory",
+    "source": "bird_thrombosis_prediction",
+    "has_join": false
+  },
+  {
+    "question": "Please list the time each driver spent at the pit stop during the 2011 Australian Grand Prix.",
+    "db_id": "formula_1",
+    "sql": "SELECT T1.duration FROM pitStops AS T1 INNER JOIN races AS T2 on T1.raceId = T2.raceId WHERE T2.year = 2011 AND T2.name = 'Australian Grand Prix'",
+    "expected": "Formula1Pitstops",
+    "source": "bird_formula_1",
+    "has_join": true
+  },
+  {
+    "question": "Tell the Japanese name of the set which card \"Fellwar Stone\" is in it.",
+    "db_id": "card_games",
+    "sql": "SELECT T2.translation FROM cards AS T1 INNER JOIN set_translations AS T2 ON T2.setCode = T1.setCode WHERE T1.name = 'Fellwar Stone' AND T2.language = 'Japanese' AND T2.translation IS NOT NULL",
+    "expected": "CardGamesCards",
+    "source": "bird_card_games",
+    "has_join": true
+  },
+  {
+    "question": "Which player is older, Aaron Lennon or Abdelaziz Barrada?",
+    "db_id": "european_football_2",
+    "sql": "SELECT player_name FROM Player WHERE player_name IN ('Aaron Lennon', 'Abdelaziz Barrada') ORDER BY birthday ASC LIMIT 1",
+    "expected": "EuropeanFootball2Player",
+    "source": "bird_european_football_2",
+    "has_join": false
+  },
+  {
+    "question": "What is the publisher name of the superhero ID 38?",
+    "db_id": "superhero",
+    "sql": "SELECT T2.publisher_name FROM superhero AS T1 INNER JOIN publisher AS T2 ON T1.publisher_id = T2.id WHERE T1.id = 38",
+    "expected": "SuperheroSuperhero",
+    "source": "bird_superhero",
+    "has_join": true
+  },
+  {
+    "question": "How many molecules without sulphur element is not having double bond?",
+    "db_id": "toxicology",
+    "sql": "SELECT COUNT(DISTINCT T1.molecule_id) FROM atom AS T1 INNER JOIN bond AS T2 ON T1.molecule_id = T2.molecule_id WHERE T1.element <> 's' AND T2.bond_type <> '='",
+    "expected": "ToxicologyAtom",
+    "source": "bird_toxicology",
+    "has_join": true
+  },
+  {
+    "question": "What are the race and alignment of Cameron Hicks?",
+    "db_id": "superhero",
+    "sql": "SELECT T2.race, T3.alignment FROM superhero AS T1 INNER JOIN race AS T2 ON T1.race_id = T2.id INNER JOIN alignment AS T3 ON T1.alignment_id = T3.id WHERE T1.superhero_name = 'Cameron Hicks'",
+    "expected": "SuperheroSuperhero",
+    "source": "bird_superhero",
+    "has_join": true
+  },
+  {
+    "question": "What is the most expensive item that was spent in support of club events?",
+    "db_id": "student_club",
+    "sql": "SELECT expense_description FROM expense ORDER BY cost DESC LIMIT 1",
+    "expected": "StudentClubExpense",
+    "source": "bird_student_club",
+    "has_join": false
+  },
+  {
+    "question": "Between San Diego and Santa Barbara, which county offers the most number of schools that does not offer physical building? Indicate the amount.",
+    "db_id": "california_schools",
+    "sql": "SELECT County, COUNT(Virtual) FROM schools WHERE (County = 'San Diego' OR County = 'Santa Barbara') AND Virtual = 'F' GROUP BY County ORDER BY COUNT(Virtual) DESC LIMIT 1",
+    "expected": "CaliforniaSchoolsSchools",
+    "source": "bird_california_schools",
+    "has_join": false
+  },
+  {
+    "question": "What's Lucas di Grassi's Q1 result in the race No. 345?",
+    "db_id": "formula_1",
+    "sql": "SELECT T1.q1 FROM qualifying AS T1 INNER JOIN drivers AS T2 ON T2.driverId = T1.driverId WHERE T1.raceId = 345 AND T2.forename = 'Lucas' AND T2.surname = 'di Grassi'",
+    "expected": "Formula1Qualifying",
+    "source": "bird_formula_1",
+    "has_join": true
+  },
+  {
+    "question": "For the patient who has the highest Ig A within the normal range, what is his or her diagnosis?",
+    "db_id": "thrombosis_prediction",
+    "sql": "SELECT patientData.Diagnosis FROM Patient AS patientData INNER JOIN Laboratory AS labData ON patientData.ID = labData.ID WHERE labData.IGA BETWEEN 80 AND 500 ORDER BY labData.IGA DESC LIMIT 1",
+    "expected": "ThrombosisPredictionPatient",
+    "source": "bird_thrombosis_prediction",
+    "has_join": true
+  },
+  {
+    "question": "Who is the dumbest superhero?",
+    "db_id": "superhero",
+    "sql": "SELECT T1.superhero_name FROM superhero AS T1 INNER JOIN hero_attribute AS T2 ON T1.id = T2.hero_id INNER JOIN attribute AS T3 ON T2.attribute_id = T3.id WHERE T3.attribute_name = 'Intelligence' ORDER BY T2.attribute_value LIMIT 1",
+    "expected": "SuperheroSuperhero",
+    "source": "bird_superhero",
+    "has_join": true
+  },
+  {
+    "question": "Which artist designed the card whose promotional name is \"Battra, Dark Destroyer\"?",
+    "db_id": "card_games",
+    "sql": "SELECT artist FROM cards WHERE flavorName = 'Battra, Dark Destroyer'",
+    "expected": "CardGamesCards",
+    "source": "bird_card_games",
+    "has_join": false
+  },
+  {
+    "question": "What is the telephone number for the school with the lowest average score in reading in Fresno Unified?",
+    "db_id": "california_schools",
+    "sql": "SELECT T2.Phone FROM satscores AS T1 INNER JOIN schools AS T2 ON T1.cds = T2.CDSCode WHERE T2.District = 'Fresno Unified' AND T1.AvgScrRead IS NOT NULL ORDER BY T1.AvgScrRead ASC LIMIT 1",
+    "expected": "CaliforniaSchoolsSatscores",
+    "source": "bird_california_schools",
+    "has_join": true
+  },
+  {
+    "question": "Lists all types of cards in German.",
+    "db_id": "card_games",
+    "sql": "SELECT T1.subtypes, T1.supertypes FROM cards AS T1 INNER JOIN foreign_data AS T2 ON T1.uuid = T2.uuid WHERE T2.language = 'German' AND T1.subtypes IS NOT NULL AND T1.supertypes IS NOT NULL",
+    "expected": "CardGamesCards",
+    "source": "bird_card_games",
+    "has_join": true
+  },
+  {
+    "question": "List all the mythic rarity print cards banned in gladiator format.",
+    "db_id": "card_games",
+    "sql": "SELECT DISTINCT T1.id FROM cards AS T1 INNER JOIN legalities AS T2 ON T1.uuid = T2.uuid WHERE T2.format = 'gladiator' AND T2.status = 'Banned' AND T1.rarity = 'mythic'",
+    "expected": "CardGamesCards",
+    "source": "bird_card_games",
+    "has_join": true
+  },
+  {
+    "question": "Among the molecules which contain \"c\" element, which of them are not carcinogenic?",
+    "db_id": "toxicology",
+    "sql": "SELECT DISTINCT T1.molecule_id FROM atom AS T1 INNER JOIN molecule AS T2 ON T1.molecule_id = T2.molecule_id WHERE T1.element = 'c' AND T2.label = '-'",
+    "expected": "ToxicologyAtom",
+    "source": "bird_toxicology",
+    "has_join": true
+  },
+  {
+    "question": "Calculate the total atoms with triple-bond molecules containing the element phosphorus or bromine.",
+    "db_id": "toxicology",
+    "sql": "SELECT COUNT(T1.atom_id) FROM atom AS T1 INNER JOIN molecule AS T2 ON T1.molecule_id = T2.molecule_id INNER JOIN bond AS T3 ON T2.molecule_id = T3.molecule_id WHERE T3.bond_type = '#' AND T1.element IN ('p', 'br')",
+    "expected": "ToxicologyAtom",
+    "source": "bird_toxicology",
+    "has_join": true
+  },
+  {
+    "question": "List out the code for drivers who have nationality in America.",
+    "db_id": "formula_1",
+    "sql": "SELECT code FROM drivers WHERE Nationality = 'American'",
+    "expected": "Formula1Drivers",
+    "source": "bird_formula_1",
+    "has_join": false
+  },
+  {
+    "question": "Provide the superpowers of the superhero called Deathlok.",
+    "db_id": "superhero",
+    "sql": "SELECT T3.power_name FROM superhero AS T1 INNER JOIN hero_power AS T2 ON T1.id = T2.hero_id INNER JOIN superpower AS T3 ON T2.power_id = T3.id WHERE T1.superhero_name = 'Deathlok'",
+    "expected": "SuperheroSuperhero",
+    "source": "bird_superhero",
+    "has_join": true
+  },
+  {
+    "question": "Count the number of posts with a tag specified as 'careers'.",
+    "db_id": "codebase_community",
+    "sql": "SELECT COUNT(Id) FROM tags WHERE TagName = 'careers'",
+    "expected": "CodebaseCommunityTags",
+    "source": "bird_codebase_community",
+    "has_join": false
+  },
+  {
+    "question": "Provide the display name of the user who made the vote No.6347.",
+    "db_id": "codebase_community",
+    "sql": "SELECT T1.DisplayName FROM users AS T1 INNER JOIN votes AS T2 ON T1.Id = T2.UserId WHERE T2.Id = 6347",
+    "expected": "CodebaseCommunityUsers",
+    "source": "bird_codebase_community",
+    "has_join": true
+  },
+  {
+    "question": "Enumerate the bond ID of triple bond type molecules and tell me if they are carcinogenic or not.",
+    "db_id": "toxicology",
+    "sql": "SELECT DISTINCT T1.bond_id, T2.label FROM bond AS T1 INNER JOIN molecule AS T2 ON T1.molecule_id = T2.molecule_id WHERE T1.bond_type = '#'",
+    "expected": "ToxicologyBond",
+    "source": "bird_toxicology",
+    "has_join": true
+  },
+  {
+    "question": "What are the atom IDs of the bond TR000_2_5?",
+    "db_id": "toxicology",
+    "sql": "SELECT T.atom_id FROM connected AS T WHERE T.bond_id = 'TR000_2_5'",
+    "expected": "ToxicologyConnected",
+    "source": "bird_toxicology",
+    "has_join": false
+  },
+  {
+    "question": "Please list the surnames of all the Italian drivers.",
+    "db_id": "formula_1",
+    "sql": "SELECT surname FROM drivers WHERE nationality = 'Italian'",
+    "expected": "Formula1Drivers",
+    "source": "bird_formula_1",
+    "has_join": false
+  },
+  {
+    "question": "How many atoms belong to molecule id TR001?",
+    "db_id": "toxicology",
+    "sql": "SELECT COUNT(T.atom_id) FROM atom AS T WHERE T.molecule_id = 'TR001'",
+    "expected": "ToxicologyAtom",
+    "source": "bird_toxicology",
+    "has_join": false
+  },
+  {
+    "question": "Which of these artists have designed a card in the set Coldsnap, Jeremy Jarvis, Aaron Miller or Chippy?",
+    "db_id": "card_games",
+    "sql": "SELECT T1.artist FROM cards AS T1 INNER JOIN sets AS T2 ON T2.code = T1.setCode WHERE (T2.name = 'Coldsnap' AND T1.artist = 'Chippy') OR (T2.name = 'Coldsnap' AND T1.artist = 'Aaron Miller') OR (T2.name = 'Coldsnap' AND T1.artist = 'Jeremy Jarvis') GROUP BY T1.artist",
+    "expected": "CardGamesCards",
+    "source": "bird_card_games",
+    "has_join": true
+  },
+  {
+    "question": "Which card name in the set 'Journey into Nyx Hero's Path' has the highest converted mana cost.",
+    "db_id": "card_games",
+    "sql": "SELECT T1.name FROM cards AS T1 INNER JOIN sets AS T2 ON T2.code = T1.setCode WHERE T2.name = 'Journey into Nyx Hero''s Path' ORDER BY T1.convertedManaCost DESC LIMIT 1",
+    "expected": "CardGamesCards",
+    "source": "bird_card_games",
+    "has_join": true
+  },
+  {
+    "question": "How many black border cards are only available on mtgo?",
+    "db_id": "card_games",
+    "sql": "SELECT COUNT(id) FROM cards WHERE availability = 'mtgo' AND borderColor = 'black'",
+    "expected": "CardGamesCards",
+    "source": "bird_card_games",
+    "has_join": false
+  },
+  {
+    "question": "What is the short name of the football team Queens Park Rangers?",
+    "db_id": "european_football_2",
+    "sql": "SELECT team_short_name FROM Team WHERE team_long_name = 'Queens Park Rangers'",
+    "expected": "EuropeanFootball2Team",
+    "source": "bird_european_football_2",
+    "has_join": false
+  },
+  {
+    "question": "State the alternative languages available for card named Annul numbered 29.",
+    "db_id": "card_games",
+    "sql": "SELECT T2.language FROM cards AS T1 INNER JOIN foreign_data AS T2 ON T1.uuid = T2.uuid WHERE T1.name = 'Annul' AND T1.number = 29",
+    "expected": "CardGamesCards",
+    "source": "bird_card_games",
+    "has_join": true
+  },
+  {
+    "question": "Which player has the highest overall rating? Indicate the player's api id.",
+    "db_id": "european_football_2",
+    "sql": "SELECT player_api_id FROM Player_Attributes ORDER BY overall_rating DESC LIMIT 1",
+    "expected": "EuropeanFootball2PlayerAttributes",
+    "source": "bird_european_football_2",
+    "has_join": false
+  },
+  {
+    "question": "What is the title of the post with the oldest post link?",
+    "db_id": "codebase_community",
+    "sql": "SELECT T1.Title FROM posts AS T1 INNER JOIN postLinks AS T2 ON T2.PostId = T1.Id ORDER BY T1.CreaionDate LIMIT 1",
+    "expected": "CodebaseCommunityPosts",
+    "source": "bird_codebase_community",
+    "has_join": true
+  },
+  {
+    "question": "Among products comments with 0 score, what is the total number of users ages 40 years old?",
+    "db_id": "codebase_community",
+    "sql": "SELECT COUNT(DISTINCT T1.id) FROM comments AS T1 INNER JOIN users AS T2 ON T1.UserId = T2.Id WHERE T1.Score = 0 AND T2.Age = 40",
+    "expected": "CodebaseCommunityComments",
+    "source": "bird_codebase_community",
+    "has_join": true
+  },
+  {
+    "question": "Write the contents of comments with a score of 17.",
+    "db_id": "codebase_community",
+    "sql": "SELECT Text FROM comments WHERE Score = 17",
+    "expected": "CodebaseCommunityComments",
+    "source": "bird_codebase_community",
+    "has_join": false
+  },
+  {
+    "question": "What is the most common visual frame effects among the incredibly powerful foils?",
+    "db_id": "card_games",
+    "sql": "SELECT frameEffects FROM cards WHERE cardKingdomFoilId IS NOT NULL AND cardKingdomId IS NOT NULL GROUP BY frameEffects ORDER BY COUNT(frameEffects) DESC LIMIT 1",
+    "expected": "CardGamesCards",
+    "source": "bird_card_games",
+    "has_join": false
+  },
+  {
+    "question": "What is the most common type of grade span served in the city of Adelanto?",
+    "db_id": "california_schools",
+    "sql": "SELECT GSserved FROM schools WHERE City = 'Adelanto' GROUP BY GSserved ORDER BY COUNT(GSserved) DESC LIMIT 1",
+    "expected": "CaliforniaSchoolsSchools",
+    "source": "bird_california_schools",
+    "has_join": false
+  },
+  {
+    "question": "Which set is not available outside of the United States and has foil cards with Japanese writing on them? Please include the set ID in your response.",
+    "db_id": "card_games",
+    "sql": "SELECT T1.name, T1.id FROM sets AS T1 INNER JOIN set_translations AS T2 ON T1.code = T2.setCode WHERE T2.language = 'Japanese' AND T1.isFoilOnly = 1 AND T1.isForeignOnly = 0",
+    "expected": "CardGamesSets",
+    "source": "bird_card_games",
+    "has_join": true
+  },
+  {
+    "question": "Which Russian set of cards contains the most cards overall?",
+    "db_id": "card_games",
+    "sql": "SELECT T1.id FROM sets AS T1 INNER JOIN set_translations AS T2 ON T1.code = T2.setCode WHERE T2.language = 'Russian' GROUP BY T1.baseSetSize ORDER BY T1.baseSetSize DESC LIMIT 1",
+    "expected": "CardGamesSets",
+    "source": "bird_card_games",
+    "has_join": true
+  },
+  {
+    "question": "Please list player names which are higher than 180.",
+    "db_id": "european_football_2",
+    "sql": "SELECT player_name FROM Player WHERE height > 180",
+    "expected": "EuropeanFootball2Player",
+    "source": "bird_european_football_2",
+    "has_join": false
+  },
+  {
+    "question": "Among the drivers who participated in the French Grand Prix, who has the slowest time in the 3rd lap.",
+    "db_id": "formula_1",
+    "sql": "SELECT T1.driverId FROM lapTimes AS T1 INNER JOIN races AS T2 on T1.raceId = T2.raceId WHERE T2.name = 'French Grand Prix' AND T1.lap = 3 ORDER BY T1.time DESC LIMIT 1",
+    "expected": "Formula1Laptimes",
+    "source": "bird_formula_1",
+    "has_join": true
+  },
+  {
+    "question": "Please list the full names of all the superheroes with over 15 super powers.",
+    "db_id": "superhero",
+    "sql": "SELECT DISTINCT T1.full_name FROM superhero AS T1 INNER JOIN hero_power AS T2 ON T1.id = T2.hero_id GROUP BY T1.full_name HAVING COUNT(T2.power_id) > 15",
+    "expected": "SuperheroSuperhero",
+    "source": "bird_superhero",
+    "has_join": true
+  },
+  {
+    "question": "How many cards have infinite power?",
+    "db_id": "card_games",
+    "sql": "SELECT COUNT(*) FROM cards WHERE power = '*'",
+    "expected": "CardGamesCards",
+    "source": "bird_card_games",
+    "has_join": false
+  },
+  {
+    "question": "List down the name of artists for cards in Chinese Simplified.",
+    "db_id": "card_games",
+    "sql": "SELECT T1.artist FROM cards AS T1 INNER JOIN foreign_data AS T2 ON T1.uuid = T2.uuid WHERE T2.language = 'Chinese Simplified'",
+    "expected": "CardGamesCards",
+    "source": "bird_card_games",
+    "has_join": true
+  },
+  {
+    "question": "Determine the bond type that is formed in the chemical compound containing element Carbon.",
+    "db_id": "toxicology",
+    "sql": "SELECT DISTINCT T2.bond_type FROM atom AS T1 INNER JOIN bond AS T2 ON T1.molecule_id = T2.molecule_id WHERE T1.element = 'c'",
+    "expected": "ToxicologyAtom",
+    "source": "bird_toxicology",
+    "has_join": true
+  },
+  {
+    "question": "How many superheroes have the super power of \"Super Strength\"?",
+    "db_id": "superhero",
+    "sql": "SELECT COUNT(T1.hero_id) FROM hero_power AS T1 INNER JOIN superpower AS T2 ON T1.power_id = T2.id WHERE T2.power_name = 'Super Strength'",
+    "expected": "SuperheroHeroPower",
+    "source": "bird_superhero",
+    "has_join": true
+  },
+  {
+    "question": "What is the most laps f1 races had? Name the race, year and circuit location where the races with most laps was hosted.",
+    "db_id": "formula_1",
+    "sql": "SELECT T3.lap, T2.name, T2.year, T1.location FROM circuits AS T1 INNER JOIN races AS T2 ON T1.circuitId = T2.circuitId INNER JOIN lapTimes AS T3 ON T3.raceId = T2.raceId ORDER BY T3.lap DESC LIMIT 1",
+    "expected": "Formula1Circuits",
+    "source": "bird_formula_1",
+    "has_join": true
+  },
+  {
+    "question": "Among the cards in the set \"Hauptset Zehnte Edition\", how many of them are designed by Adam Rex?",
+    "db_id": "card_games",
+    "sql": "SELECT COUNT(T1.id) FROM cards AS T1 INNER JOIN set_translations AS T2 ON T2.setCode = T1.setCode WHERE T2.translation = 'Hauptset Zehnte Edition' AND T1.artist = 'Adam Rex'",
+    "expected": "CardGamesCards",
+    "source": "bird_card_games",
+    "has_join": true
+  },
+  {
+    "question": "How many transactions taken place in the gas station in the Czech Republic are with a price of over 1000?",
+    "db_id": "debit_card_specializing",
+    "sql": "SELECT COUNT(T1.TransactionID) FROM transactions_1k AS T1 INNER JOIN gasstations AS T2 ON T1.GasStationID = T2.GasStationID WHERE T2.Country = 'CZE' AND T1.Price > 1000",
+    "expected": "DebitCardSpecializingTransactions1k",
+    "source": "bird_debit_card_specializing",
+    "has_join": true
+  },
+  {
+    "question": "Which of the cards that are a promotional painting have multiple faces on the same card? Please list their names.",
+    "db_id": "card_games",
+    "sql": "SELECT DISTINCT name FROM cards WHERE isPromo = 1 AND side IS NOT NULL",
+    "expected": "CardGamesCards",
+    "source": "bird_card_games",
+    "has_join": false
+  },
+  {
+    "question": "Identify all the atoms that are connected to the atoms of the TR181 molecule.",
+    "db_id": "toxicology",
+    "sql": "SELECT T2.atom_id, T2.atom_id2 FROM atom AS T1 INNER JOIN connected AS T2 ON T2.atom_id = T1.atom_id WHERE T1.molecule_id = 'TR181'",
+    "expected": "ToxicologyAtom",
+    "source": "bird_toxicology",
+    "has_join": true
+  },
+  {
+    "question": "How many superheroes have a neutral alignment?",
+    "db_id": "superhero",
+    "sql": "SELECT COUNT(T1.id) FROM superhero AS T1 INNER JOIN alignment AS T2 ON T1.alignment_id = T2.id WHERE T2.alignment = 'Neutral'",
+    "expected": "SuperheroSuperhero",
+    "source": "bird_superhero",
+    "has_join": true
+  },
+  {
+    "question": "How many molecules are carcinogenic and have the bromine element?",
+    "db_id": "toxicology",
+    "sql": "SELECT COUNT(DISTINCT T2.molecule_id) FROM atom AS T1 INNER JOIN molecule AS T2 ON T1.molecule_id = T2.molecule_id WHERE T2.label = '+' AND T1.element = 'br'",
+    "expected": "ToxicologyAtom",
+    "source": "bird_toxicology",
+    "has_join": true
+  },
+  {
+    "question": "In chartered schools with charter number 00D2, what are the names of all the administrators? Include the name of the school and the city to which it belongs",
+    "db_id": "california_schools",
+    "sql": "SELECT AdmFName1, AdmLName1, School, City FROM schools WHERE Charter = 1 AND CharterNum = '00D2'",
+    "expected": "CaliforniaSchoolsSchools",
+    "source": "bird_california_schools",
+    "has_join": false
+  },
+  {
+    "question": "Please provide the full name of the away team that scored the most goals.",
+    "db_id": "european_football_2",
+    "sql": "SELECT t2.team_long_name FROM Match AS t1 INNER JOIN Team AS t2 ON t1.away_team_api_id = t2.team_api_id ORDER BY t1.away_team_goal DESC LIMIT 1",
+    "expected": "EuropeanFootball2Match",
+    "source": "bird_european_football_2",
+    "has_join": true
+  },
+  {
+    "question": "What language is the set of 180 cards that belongs to the Ravnica block translated into?",
+    "db_id": "card_games",
+    "sql": "SELECT T2.language FROM sets AS T1 INNER JOIN set_translations AS T2 ON T1.code = T2.setCode WHERE T1.block = 'Ravnica' AND T1.baseSetSize = 180",
+    "expected": "CardGamesSets",
+    "source": "bird_card_games",
+    "has_join": true
+  },
+  {
+    "question": "What is the location of the owner of the post \"Eliciting priors from experts\"?",
+    "db_id": "codebase_community",
+    "sql": "SELECT T2.Location FROM posts AS T1 INNER JOIN users AS T2 ON T1.OwnerUserId = T2.Id WHERE T1.Title = 'Eliciting priors from experts'",
+    "expected": "CodebaseCommunityPosts",
+    "source": "bird_codebase_community",
+    "has_join": true
+  },
+  {
+    "question": "Among the schools with the average score in Math over 560 in the SAT test, how many schools are directly charter-funded?",
+    "db_id": "california_schools",
+    "sql": "SELECT COUNT(T2.`School Code`) FROM satscores AS T1 INNER JOIN frpm AS T2 ON T1.cds = T2.CDSCode WHERE T1.AvgScrMath > 560 AND T2.`Charter Funding Type` = 'Directly funded'",
+    "expected": "CaliforniaSchoolsSatscores",
+    "source": "bird_california_schools",
+    "has_join": true
+  },
+  {
+    "question": "List the skin colour of the superheroes with 100 attribute value.",
+    "db_id": "superhero",
+    "sql": "SELECT DISTINCT T2.colour FROM superhero AS T1 INNER JOIN colour AS T2 ON T1.skin_colour_id = T2.id INNER JOIN hero_attribute AS T3 ON T1.id = T3.hero_id WHERE T3.attribute_value = 100",
+    "expected": "SuperheroSuperhero",
+    "source": "bird_superhero",
+    "has_join": true
+  },
+  {
+    "question": "What are the bond type and the atoms of the bond ID of TR001_6_9?",
+    "db_id": "toxicology",
+    "sql": "SELECT T1.bond_type, T2.atom_id, T2.atom_id2 FROM bond AS T1 INNER JOIN connected AS T2 ON T1.bond_id = T2.bond_id WHERE T2.bond_id = 'TR001_6_9'",
+    "expected": "ToxicologyBond",
+    "source": "bird_toxicology",
+    "has_join": true
+  },
+  {
+    "question": "Please list the location coordinates of the US circuits.",
+    "db_id": "formula_1",
+    "sql": "SELECT lat, lng FROM circuits WHERE country = 'USA'",
+    "expected": "Formula1Circuits",
+    "source": "bird_formula_1",
+    "has_join": false
+  },
+  {
+    "question": "How many football players born after the 1990s have the first name \"Aaron\"?",
+    "db_id": "european_football_2",
+    "sql": "SELECT COUNT(id) FROM Player WHERE birthday > '1990' AND player_name LIKE 'Aaron%'",
+    "expected": "EuropeanFootball2Player",
+    "source": "bird_european_football_2",
+    "has_join": false
+  },
+  {
+    "question": "What is the height of the tallest player? Indicate his name.",
+    "db_id": "european_football_2",
+    "sql": "SELECT player_name FROM Player ORDER BY height DESC LIMIT 1",
+    "expected": "EuropeanFootball2Player",
+    "source": "bird_european_football_2",
+    "has_join": false
+  },
+  {
+    "question": "Which foreign language used by \"A Pedra Fellwar\"?",
+    "db_id": "card_games",
+    "sql": "SELECT DISTINCT language FROM foreign_data WHERE name = 'A Pedra Fellwar'",
+    "expected": "CardGamesForeignData",
+    "source": "bird_card_games",
+    "has_join": false
+  },
+  {
+    "question": "How many members of the Student_Club have major in 'Physics Teaching'?",
+    "db_id": "student_club",
+    "sql": "SELECT COUNT(T2.member_id) FROM major AS T1 INNER JOIN member AS T2 ON T1.major_id = T2.link_to_major WHERE T1.major_name = 'Physics Teaching'",
+    "expected": "StudentClubMajor",
+    "source": "bird_student_club",
+    "has_join": true
+  },
+  {
+    "question": "Give the publisher ID of Star Trek.",
+    "db_id": "superhero",
+    "sql": "SELECT id FROM publisher WHERE publisher_name = 'Star Trek'",
+    "expected": "SuperheroPublisher",
+    "source": "bird_superhero",
+    "has_join": false
+  },
+  {
+    "question": "Please provide the names of top three football players who are over 180 cm tall in alphabetical order.",
+    "db_id": "european_football_2",
+    "sql": "SELECT player_name FROM Player WHERE height > 180 ORDER BY player_name LIMIT 3",
+    "expected": "EuropeanFootball2Player",
+    "source": "bird_european_football_2",
+    "has_join": false
+  },
+  {
+    "question": "What are the card layout of cards with keyword of flying?",
+    "db_id": "card_games",
+    "sql": "SELECT layout FROM cards WHERE keywords = 'Flying'",
+    "expected": "CardGamesCards",
+    "source": "bird_card_games",
+    "has_join": false
+  },
+  {
+    "question": "Describe the last accessed date and location of the users who received the outliers badge.",
+    "db_id": "codebase_community",
+    "sql": "SELECT T1.LastAccessDate, T1.Location FROM users AS T1 INNER JOIN badges AS T2 ON T1.Id = T2.UserId WHERE T2.Name = 'outliers'",
+    "expected": "CodebaseCommunityUsers",
+    "source": "bird_codebase_community",
+    "has_join": true
+  },
+  {
+    "question": "Please list the name of the cards in the set Coldsnap with the highest converted mana cost.",
+    "db_id": "card_games",
+    "sql": "SELECT T1.name FROM cards AS T1 INNER JOIN sets AS T2 ON T2.code = T1.setCode WHERE T2.name = 'Coldsnap' ORDER BY T1.convertedManaCost DESC LIMIT 1",
+    "expected": "CardGamesCards",
+    "source": "bird_card_games",
+    "has_join": true
+  },
+  {
+    "question": "Is it true that more SMEs pay in Czech koruna than in euros? If so, how many more?",
+    "db_id": "debit_card_specializing",
+    "sql": "SELECT SUM(Currency = 'CZK') - SUM(Currency = 'EUR') FROM customers WHERE Segment = 'SME'",
+    "expected": "DebitCardSpecializingCustomers",
+    "source": "bird_debit_card_specializing",
+    "has_join": false
+  },
+  {
+    "question": "Show me the season page of year when the race No. 901 took place.",
+    "db_id": "formula_1",
+    "sql": "SELECT T2.url FROM races AS T1 INNER JOIN seasons AS T2 ON T2.year = T1.year WHERE T1.raceId = 901",
+    "expected": "Formula1Races",
+    "source": "bird_formula_1",
+    "has_join": true
+  },
+  {
+    "question": "Name chemical elements that form a bond TR001_10_11.",
+    "db_id": "toxicology",
+    "sql": "SELECT T1.element FROM atom AS T1 INNER JOIN connected AS T2 ON T1.atom_id = T2.atom_id INNER JOIN bond AS T3 ON T2.bond_id = T3.bond_id WHERE T3.bond_id = 'TR001_10_11'",
+    "expected": "ToxicologyAtom",
+    "source": "bird_toxicology",
+    "has_join": true
+  },
+  {
+    "question": "What is the element of toxicology for the atom with the ID of TR000_1?",
+    "db_id": "toxicology",
+    "sql": "SELECT T.element FROM atom AS T WHERE T.atom_id = 'TR000_1'",
+    "expected": "ToxicologyAtom",
+    "source": "bird_toxicology",
+    "has_join": false
+  },
+  {
+    "question": "List the comments commented by the user with a username of Harvey Motulsky.",
+    "db_id": "codebase_community",
+    "sql": "SELECT T1.Text FROM comments AS T1 INNER JOIN users AS T2 ON T1.UserId = T2.Id WHERE T2.DisplayName = 'Harvey Motulsky'",
+    "expected": "CodebaseCommunityComments",
+    "source": "bird_codebase_community",
+    "has_join": true
+  },
+  {
+    "question": "Among the cards whose version of frame style is 1997, what is the status of the card illustrated by D. Alexander Gregory in legacy play format that has sensitive content or Wizards of the Coast?",
+    "db_id": "card_games",
+    "sql": "SELECT DISTINCT T2.status FROM cards AS T1 INNER JOIN legalities AS T2 ON T2.uuid = T1.uuid WHERE T1.frameVersion = 1997 AND T1.hasContentWarning = 1 AND T1.artist = 'D. Alexander Gregory' AND T2.format = 'legacy'",
+    "expected": "CardGamesCards",
+    "source": "bird_card_games",
+    "has_join": true
+  },
+  {
+    "question": "Provide list of patients and their diagnosis with triglyceride (TG) index greater than 100 of the normal range?",
+    "db_id": "thrombosis_prediction",
+    "sql": "SELECT T1.ID, T1.Diagnosis FROM Patient AS T1 INNER JOIN Laboratory AS T2 ON T1.ID = T2.ID WHERE T2.TG > 300",
+    "expected": "ThrombosisPredictionPatient",
+    "source": "bird_thrombosis_prediction",
+    "has_join": true
+  },
+  {
+    "question": "On average, how much did the Student_Club spend on food for the typical event in the past?",
+    "db_id": "student_club",
+    "sql": "SELECT SUM(spent) / COUNT(spent) FROM budget WHERE category = 'Food' AND event_status = 'Closed'",
+    "expected": "StudentClubBudget",
+    "source": "bird_student_club",
+    "has_join": false
+  },
+  {
+    "question": "What is the average writing score of each of the schools managed by Ricci Ulrich? List the schools and the corresponding average writing scores.",
+    "db_id": "california_schools",
+    "sql": "SELECT T2.School, T1.AvgScrWrite FROM satscores AS T1 INNER JOIN schools AS T2 ON T1.cds = T2.CDSCode WHERE T2.AdmFName1 = 'Ricci' AND T2.AdmLName1 = 'Ulrich'",
+    "expected": "CaliforniaSchoolsSatscores",
+    "source": "bird_california_schools",
+    "has_join": true
+  },
+  {
+    "question": "Find all cards illustrated by Stephen Daniel and describe the text of the ruling of these cards. State if these cards have missing or degraded properties and values.",
+    "db_id": "card_games",
+    "sql": "SELECT T1.id, T2.text, T1.hasContentWarning FROM cards AS T1 INNER JOIN rulings AS T2 ON T1.uuid = T2.uuid WHERE T1.artist = 'Stephen Daniele'",
+    "expected": "CardGamesCards",
+    "source": "bird_card_games",
+    "has_join": true
+  },
+  {
+    "question": "List the account IDs with monthly issuance of statements.",
+    "db_id": "financial",
+    "sql": "SELECT account_id FROM account WHERE Frequency = 'POPLATEK MESICNE'",
+    "expected": "FinancialAccount",
+    "source": "bird_financial",
+    "has_join": false
+  },
+  {
+    "question": "Please provide links to events for members who have paid more than 50 dollar.",
+    "db_id": "student_club",
+    "sql": "SELECT DISTINCT T3.link_to_event FROM expense AS T1 INNER JOIN member AS T2 ON T1.link_to_member = T2.member_id INNER JOIN attendance AS T3 ON T2.member_id = T3.link_to_member WHERE T1.cost > 50",
+    "expected": "StudentClubExpense",
+    "source": "bird_student_club",
+    "has_join": true
+  },
+  {
+    "question": "What is the gender of Agent 13 hero?",
+    "db_id": "superhero",
+    "sql": "SELECT T2.gender FROM superhero AS T1 INNER JOIN gender AS T2 ON T1.gender_id = T2.id WHERE T1.superhero_name = 'Agent 13'",
+    "expected": "SuperheroSuperhero",
+    "source": "bird_superhero",
+    "has_join": true
+  },
+  {
+    "question": "Indicate the full names of the top 10 players with the highest number of penalties.",
+    "db_id": "european_football_2",
+    "sql": "SELECT t2.player_name FROM Player_Attributes AS t1 INNER JOIN Player AS t2 ON t1.id = t2.id ORDER BY t1.penalties DESC LIMIT 10",
+    "expected": "EuropeanFootball2PlayerAttributes",
+    "source": "bird_european_football_2",
+    "has_join": true
+  },
+  {
+    "question": "What's the reference name of Marina Bay Street Circuit?",
+    "db_id": "formula_1",
+    "sql": "SELECT circuitRef FROM circuits WHERE name = 'Marina Bay Street Circuit'",
+    "expected": "Formula1Circuits",
+    "source": "bird_formula_1",
+    "has_join": false
+  },
+  {
+    "question": "What is the publisher's name of Blue Beetle II?",
+    "db_id": "superhero",
+    "sql": "SELECT T2.publisher_name FROM superhero AS T1 INNER JOIN publisher AS T2 ON T1.publisher_id = T2.id WHERE T1.superhero_name = 'Blue Beetle II'",
+    "expected": "SuperheroSuperhero",
+    "source": "bird_superhero",
+    "has_join": true
+  },
+  {
+    "question": "How many superheroes are published by Marvel Comics?",
+    "db_id": "superhero",
+    "sql": "SELECT COUNT(T1.id) FROM superhero AS T1 INNER JOIN publisher AS T2 ON T1.publisher_id = T2.id WHERE T2.publisher_name = 'Marvel Comics'",
+    "expected": "SuperheroSuperhero",
+    "source": "bird_superhero",
+    "has_join": true
+  },
+  {
+    "question": "What is the preferred foot when attacking of the player with the lowest potential?",
+    "db_id": "european_football_2",
+    "sql": "SELECT preferred_foot FROM Player_Attributes WHERE potential IS NOT NULL ORDER BY potential ASC LIMIT 1",
+    "expected": "EuropeanFootball2PlayerAttributes",
+    "source": "bird_european_football_2",
+    "has_join": false
+  },
+  {
+    "question": "What are the atoms that can bond with the atom that has the element lead?",
+    "db_id": "toxicology",
+    "sql": "SELECT T2.atom_id, T2.atom_id2 FROM atom AS T1 INNER JOIN connected AS T2 ON T1.atom_id = T2.atom_id WHERE T1.element = 'pb'",
+    "expected": "ToxicologyAtom",
+    "source": "bird_toxicology",
+    "has_join": true
+  },
+  {
+    "question": "List out the age of users who located in Vienna, Austria obtained the badge?",
+    "db_id": "codebase_community",
+    "sql": "SELECT T1.Age FROM users AS T1 INNER JOIN badges AS T2 ON T1.Id = T2.UserId WHERE T1.Location = 'Vienna, Austria'",
+    "expected": "CodebaseCommunityUsers",
+    "source": "bird_codebase_community",
+    "has_join": true
+  },
+  {
+    "question": "What is the superpower of hero ID 56?",
+    "db_id": "superhero",
+    "sql": "SELECT T2.power_name FROM hero_power AS T1 INNER JOIN superpower AS T2 ON T1.power_id = T2.id WHERE T1.hero_id = 56",
+    "expected": "SuperheroHeroPower",
+    "source": "bird_superhero",
+    "has_join": true
+  },
+  {
+    "question": "How many cards that illusrtated in German have been reprinted?",
+    "db_id": "card_games",
+    "sql": "SELECT COUNT(T1.id) FROM cards AS T1 INNER JOIN foreign_data AS T2 ON T1.uuid = T2.uuid WHERE T2.language = 'German' AND T1.isReprint = 1",
+    "expected": "CardGamesCards",
+    "source": "bird_card_games",
+    "has_join": true
+  },
+  {
+    "question": "How many users whose reputations are higher than 2000 and the number of views is higher than 1000?",
+    "db_id": "codebase_community",
+    "sql": "SELECT COUNT(id) FROM users WHERE Reputation > 2000 AND Views > 1000",
+    "expected": "CodebaseCommunityUsers",
+    "source": "bird_codebase_community",
+    "has_join": false
+  },
+  {
+    "question": "Which football player has the shortest height?",
+    "db_id": "european_football_2",
+    "sql": "SELECT player_name FROM player ORDER BY height ASC LIMIT 1",
+    "expected": "EuropeanFootball2Player",
+    "source": "bird_european_football_2",
+    "has_join": false
+  },
+  {
+    "question": "What atoms comprise TR186?",
+    "db_id": "toxicology",
+    "sql": "SELECT T.atom_id FROM atom AS T WHERE T.molecule_id = 'TR186'",
+    "expected": "ToxicologyAtom",
+    "source": "bird_toxicology",
+    "has_join": false
+  },
+  {
+    "question": "Please list the accounts whose district is Tabor that are eligible for loans.",
+    "db_id": "financial",
+    "sql": "SELECT T2.account_id FROM district AS T1 INNER JOIN account AS T2 ON T1.district_id = T2.district_id INNER JOIN disp AS T3 ON T2.account_id = T3.account_id WHERE T3.type = 'OWNER' AND T1.A2 = 'Tabor'",
+    "expected": "FinancialDistrict",
+    "source": "bird_financial",
+    "has_join": true
+  },
+  {
+    "question": "What is the mana cost of cards with a normal layout, a 2003 frame version, with a black border color, and available in paper and mtgo?",
+    "db_id": "card_games",
+    "sql": "SELECT manaCost FROM cards WHERE availability = 'mtgo,paper' AND borderColor = 'black' AND frameVersion = 2003 AND layout = 'normal'",
+    "expected": "CardGamesCards",
+    "source": "bird_card_games",
+    "has_join": false
+  },
+  {
+    "question": "What is the average height of the superheroes from Marvel Comics?",
+    "db_id": "superhero",
+    "sql": "SELECT AVG(T1.height_cm) FROM superhero AS T1 INNER JOIN publisher AS T2 ON T1.publisher_id = T2.id WHERE T2.publisher_name = 'Marvel Comics'",
+    "expected": "SuperheroSuperhero",
+    "source": "bird_superhero",
+    "has_join": true
+  },
+  {
+    "question": "Identify the number of posts that have been viewed over 35000 times but have received no comments from other users.",
+    "db_id": "codebase_community",
+    "sql": "SELECT COUNT(Id) FROM posts WHERE ViewCount > 35000 AND CommentCount = 0",
+    "expected": "CodebaseCommunityPosts",
+    "source": "bird_codebase_community",
+    "has_join": false
+  },
+  {
+    "question": "Give the code of sets have expansion type of 'expansion'?",
+    "db_id": "card_games",
+    "sql": "SELECT T2.setCode FROM sets AS T1 INNER JOIN set_translations AS T2 ON T2.setCode = T1.code WHERE T1.type = 'expansion' GROUP BY T2.setCode",
+    "expected": "CardGamesSets",
+    "source": "bird_card_games",
+    "has_join": true
+  },
+  {
+    "question": "How many majors are there in \"College of Humanities and Social Sciences\"?",
+    "db_id": "student_club",
+    "sql": "SELECT COUNT(major_name) FROM major WHERE college = 'College of Humanities and Social Sciences'",
+    "expected": "StudentClubMajor",
+    "source": "bird_student_club",
+    "has_join": false
+  },
+  {
+    "question": "How many clients opened their accounts in Jesenik branch were women?",
+    "db_id": "financial",
+    "sql": "SELECT COUNT(T1.client_id) FROM client AS T1 INNER JOIN district AS T2 ON T1.district_id = T2.district_id WHERE T1.gender = 'F' AND T2.A2 = 'Jesenik'",
+    "expected": "FinancialClient",
+    "source": "bird_financial",
+    "has_join": true
+  },
+  {
+    "question": "How many high-level credit cards have \"OWNER\" type of disposition?",
+    "db_id": "financial",
+    "sql": "SELECT COUNT(T1.card_id) FROM card AS T1 INNER JOIN disp AS T2 ON T1.disp_id = T2.disp_id WHERE T1.type = 'gold' AND T2.type = 'OWNER'",
+    "expected": "FinancialCard",
+    "source": "bird_financial",
+    "has_join": true
+  },
+  {
+    "question": "Among black card borders, which card has full artwork?",
+    "db_id": "card_games",
+    "sql": "SELECT id FROM cards WHERE borderColor = 'black' AND isFullArt = 1",
+    "expected": "CardGamesCards",
+    "source": "bird_card_games",
+    "has_join": false
+  },
+  {
+    "question": "Please list the phone numbers of the members who majored in business at the College of Agriculture and Applied Sciences.",
+    "db_id": "student_club",
+    "sql": "SELECT T1.phone FROM member AS T1 INNER JOIN major AS T2 ON T2.major_id = T1.link_to_major WHERE T2.major_name = 'Business' AND T2.college = 'College of Agriculture and Applied Sciences'",
+    "expected": "StudentClubMember",
+    "source": "bird_student_club",
+    "has_join": true
+  },
+  {
+    "question": "Where can I find the information about the races held on Sepang International Circuit?",
+    "db_id": "formula_1",
+    "sql": "SELECT DISTINCT T1.url FROM circuits AS T1 INNER JOIN races AS T2 ON T2.circuitID = T1.circuitId WHERE T1.name = 'Sepang International Circuit'",
+    "expected": "Formula1Circuits",
+    "source": "bird_formula_1",
+    "has_join": true
+  },
+  {
+    "question": "What is the score and the link type ID for post ID 395?",
+    "db_id": "codebase_community",
+    "sql": "SELECT T1.Score, T2.LinkTypeId FROM posts AS T1 INNER JOIN postLinks AS T2 ON T1.Id = T2.PostId WHERE T2.PostId = 395",
+    "expected": "CodebaseCommunityPosts",
+    "source": "bird_codebase_community",
+    "has_join": true
+  },
+  {
+    "question": "What is the language of the card with the multiverse number 149934?",
+    "db_id": "card_games",
+    "sql": "SELECT language FROM foreign_data WHERE multiverseid = 149934",
+    "expected": "CardGamesForeignData",
+    "source": "bird_card_games",
+    "has_join": false
+  },
+  {
+    "question": "How many of the banned cards are white border?",
+    "db_id": "card_games",
+    "sql": "SELECT COUNT(T1.id) FROM cards AS T1 INNER JOIN legalities AS T2 ON T1.uuid = T2.uuid WHERE T2.status = 'Banned' AND T1.borderColor = 'white'",
+    "expected": "CardGamesCards",
+    "source": "bird_card_games",
+    "has_join": true
+  },
+  {
+    "question": "Give the code of sets have expansion commander type?",
+    "db_id": "card_games",
+    "sql": "SELECT T2.setCode FROM sets AS T1 INNER JOIN set_translations AS T2 ON T2.setCode = T1.code WHERE T1.type = 'commander'",
+    "expected": "CardGamesSets",
+    "source": "bird_card_games",
+    "has_join": true
+  },
+  {
+    "question": "What is the defensive work rate of the football player David Wilson\n?",
+    "db_id": "european_football_2",
+    "sql": "SELECT DISTINCT t2.defensive_work_rate FROM Player AS t1 INNER JOIN Player_Attributes AS t2 ON t1.player_api_id = t2.player_api_id WHERE t1.player_name = 'David Wilson'",
+    "expected": "EuropeanFootball2Player",
+    "source": "bird_european_football_2",
+    "has_join": true
+  },
+  {
+    "question": "What is the reputation and view count of the user, who is known by his or her display name 'Jarrod Dixon'?",
+    "db_id": "codebase_community",
+    "sql": "SELECT Reputation, Views FROM users WHERE DisplayName = 'Jarrod Dixon'",
+    "expected": "CodebaseCommunityUsers",
+    "source": "bird_codebase_community",
+    "has_join": false
+  },
+  {
+    "question": "Please list the names of the top 3 cards with the highest converted mana cost and have a 2003 card frame style.",
+    "db_id": "card_games",
+    "sql": "SELECT name FROM cards WHERE frameVersion = 2003 ORDER BY convertedManaCost DESC LIMIT 3",
+    "expected": "CardGamesCards",
+    "source": "bird_card_games",
+    "has_join": false
+  },
+  {
+    "question": "How many cards designed by UDON and available in mtgo print type has a starting maximum hand size of -1?",
+    "db_id": "card_games",
+    "sql": "SELECT COUNT(id) FROM cards WHERE hAND = '-1' AND artist = 'UDON' AND Availability = 'mtgo' ",
+    "expected": "CardGamesCards",
+    "source": "bird_card_games",
+    "has_join": false
+  },
+  {
+    "question": "Which countries have zip codes with post office boxes?",
+    "db_id": "student_club",
+    "sql": "SELECT DISTINCT county FROM zip_code WHERE type = 'PO Box' AND county IS NOT NULL",
+    "expected": "StudentClubZipCode",
+    "source": "bird_student_club",
+    "has_join": false
+  },
+  {
+    "question": "Please list the display names of all the users who owns a post that is well-finished.",
+    "db_id": "codebase_community",
+    "sql": "SELECT T2.DisplayName FROM posts AS T1 INNER JOIN users AS T2 ON T1.OwnerUserId = T2.Id WHERE T1.ClosedDate IS NOT NULL",
+    "expected": "CodebaseCommunityPosts",
+    "source": "bird_codebase_community",
+    "has_join": true
+  },
+  {
+    "question": "Who was the driver that got the best lap time in the race No. 348? Give his full name.",
+    "db_id": "formula_1",
+    "sql": "SELECT T2.forename, T2.surname FROM lapTimes AS T1 INNER JOIN drivers AS T2 ON T2.driverId = T1.driverId WHERE T1.raceId = 348 ORDER BY T1.time ASC LIMIT 1",
+    "expected": "Formula1Laptimes",
+    "source": "bird_formula_1",
+    "has_join": true
+  },
+  {
+    "question": "List the hero ID of superheroes have intellegence as their power.",
+    "db_id": "superhero",
+    "sql": "SELECT T1.hero_id FROM hero_power AS T1 INNER JOIN superpower AS T2 ON T1.power_id = T2.id WHERE T2.power_name = 'Intelligence'",
+    "expected": "SuperheroHeroPower",
+    "source": "bird_superhero",
+    "has_join": true
+  },
+  {
+    "question": "Among the superheroes with blue eyes, how many of them have the super power of \"Agility\"?",
+    "db_id": "superhero",
+    "sql": "SELECT COUNT(T1.id) FROM superhero AS T1 INNER JOIN hero_power AS T2 ON T1.id = T2.hero_id INNER JOIN superpower AS T3 ON T2.power_id = T3.id INNER JOIN colour AS T4 ON T1.eye_colour_id = T4.id WHERE T3.power_name = 'Agility' AND T4.colour = 'Blue'",
+    "expected": "SuperheroSuperhero",
+    "source": "bird_superhero",
+    "has_join": true
+  },
+  {
+    "question": "What is the administrator's last name that oversees the school with Charter number 40? Indicate the district, the county where the school is situated, and the name of the school.",
+    "db_id": "california_schools",
+    "sql": "SELECT AdmLName1, District, County, School FROM schools WHERE CharterNum = '0040'",
+    "expected": "CaliforniaSchoolsSchools",
+    "source": "bird_california_schools",
+    "has_join": false
+  },
+  {
+    "question": "Who is the tallest superhero?",
+    "db_id": "superhero",
+    "sql": "SELECT superhero_name FROM superhero ORDER BY height_cm DESC LIMIT 1",
+    "expected": "SuperheroSuperhero",
+    "source": "bird_superhero",
+    "has_join": false
+  },
+  {
+    "question": "Name the foreign name of the card that has boros watermark? List out the type of this card.",
+    "db_id": "card_games",
+    "sql": "SELECT DISTINCT T1.name, T1.type FROM cards AS T1 INNER JOIN foreign_data AS T2 ON T2.uuid = T1.uuid WHERE T1.watermark = 'boros'",
+    "expected": "CardGamesCards",
+    "source": "bird_card_games",
+    "has_join": true
+  },
+  {
+    "question": "State the name of players who came from Belgium.",
+    "db_id": "european_football_2",
+    "sql": "SELECT t3.player_name FROM Country AS t1 INNER JOIN Match AS t2 ON t1.id = t2.country_id INNER JOIN Player AS t3 ON t2.home_player_1 = t3.player_api_id WHERE t1.name = 'Belgium'",
+    "expected": "EuropeanFootball2Country",
+    "source": "bird_european_football_2",
+    "has_join": true
+  },
+  {
+    "question": "State the name and date of the last round of race in year 1999.",
+    "db_id": "formula_1",
+    "sql": "SELECT name, date FROM races WHERE year = 1999 ORDER BY round DESC LIMIT 1",
+    "expected": "Formula1Races",
+    "source": "bird_formula_1",
+    "has_join": false
+  },
+  {
+    "question": "When was the oldest mythic card released and what are its legal play formats?",
+    "db_id": "card_games",
+    "sql": "SELECT T1.originalReleaseDate, T2.format FROM cards AS T1 INNER JOIN legalities AS T2 ON T1.uuid = T2.uuid WHERE T1.rarity = 'mythic' AND T1.originalReleaseDate IS NOT NULL AND T2.status = 'Legal' ORDER BY T1.originalReleaseDate LIMIT 1",
+    "expected": "CardGamesCards",
+    "source": "bird_card_games",
+    "has_join": true
+  },
+  {
+    "question": "What's the location coordinates of Silverstone Circuit?",
+    "db_id": "formula_1",
+    "sql": "SELECT lat, lng FROM circuits WHERE name = 'Silverstone Circuit'",
+    "expected": "Formula1Circuits",
+    "source": "bird_formula_1",
+    "has_join": false
+  },
+  {
+    "question": "List the event names which were budgeted for the food.",
+    "db_id": "student_club",
+    "sql": "SELECT T1.event_name FROM event AS T1 INNER JOIN budget AS T2 ON T1.event_id = T2.link_to_event WHERE T2.category = 'Food'",
+    "expected": "StudentClubEvent",
+    "source": "bird_student_club",
+    "has_join": true
+  },
+  {
+    "question": "Please list the phone numbers of the students from the Student_Club that has attended the event \"Women's Soccer\".",
+    "db_id": "student_club",
+    "sql": "SELECT T3.phone FROM event AS T1 INNER JOIN attendance AS T2 ON T1.event_id = T2.link_to_event INNER JOIN member AS T3 ON T2.link_to_member = T3.member_id WHERE T1.event_name = 'Women''s Soccer'",
+    "expected": "StudentClubEvent",
+    "source": "bird_student_club",
+    "has_join": true
+  },
+  {
+    "question": "How many powers does Amazo hero have?",
+    "db_id": "superhero",
+    "sql": "SELECT COUNT(T1.power_id) FROM hero_power AS T1 INNER JOIN superhero AS T2 ON T1.hero_id = T2.id WHERE T2.superhero_name = 'Amazo'",
+    "expected": "SuperheroHeroPower",
+    "source": "bird_superhero",
+    "has_join": true
+  },
+  {
+    "question": "How many posts have a score of 10 on the list?",
+    "db_id": "codebase_community",
+    "sql": "SELECT COUNT(id) FROM posts WHERE Score = 10",
+    "expected": "CodebaseCommunityPosts",
+    "source": "bird_codebase_community",
+    "has_join": false
+  },
+  {
+    "question": "How many of the members' hometowns are from Maryland state?",
+    "db_id": "student_club",
+    "sql": "SELECT COUNT(T2.member_id) FROM zip_code AS T1 INNER JOIN member AS T2 ON T1.zip_code = T2.zip WHERE T1.state = 'Maryland'",
+    "expected": "StudentClubZipCode",
+    "source": "bird_student_club",
+    "has_join": true
+  },
+  {
+    "question": "Name the elements that comprise the atoms of bond TR001_2_4.",
+    "db_id": "toxicology",
+    "sql": "SELECT DISTINCT T1.element FROM atom AS T1 INNER JOIN connected AS T2 ON T1.atom_id = T2.atom_id WHERE T2.bond_id = 'TR001_2_4'",
+    "expected": "ToxicologyAtom",
+    "source": "bird_toxicology",
+    "has_join": true
+  },
+  {
+    "question": "Indicate the cost of posters for 'September Speaker' event.",
+    "db_id": "student_club",
+    "sql": "SELECT T3.cost FROM event AS T1 INNER JOIN budget AS T2 ON T1.event_id = T2.link_to_event INNER JOIN expense AS T3 ON T2.budget_id = T3.link_to_budget WHERE T1.event_name = 'September Speaker' AND T3.expense_description = 'Posters'",
+    "expected": "StudentClubEvent",
+    "source": "bird_student_club",
+    "has_join": true
+  },
+  {
+    "question": "How many students of the Student_Club have attended the event \"Women's Soccer\"?",
+    "db_id": "student_club",
+    "sql": "SELECT COUNT(T1.event_id) FROM event AS T1 INNER JOIN attendance AS T2 ON T1.event_id = T2.link_to_event WHERE T1.event_name = 'Women''s Soccer'",
+    "expected": "StudentClubEvent",
+    "source": "bird_student_club",
+    "has_join": true
+  },
+  {
+    "question": "Which year has the most number of races?",
+    "db_id": "formula_1",
+    "sql": "SELECT year FROM races GROUP BY year ORDER BY COUNT(round) DESC LIMIT 1",
+    "expected": "Formula1Races",
+    "source": "bird_formula_1",
+    "has_join": false
+  },
+  {
+    "question": "Who is the illustrator that illustrated the least amount of cards? List the format of play of the cards that he/she illustrated.",
+    "db_id": "card_games",
+    "sql": "SELECT T1.artist, T2.format FROM cards AS T1 INNER JOIN legalities AS T2 ON T2.uuid = T1.uuid GROUP BY T1.artist ORDER BY COUNT(T1.id) ASC LIMIT 1",
+    "expected": "CardGamesCards",
+    "source": "bird_card_games",
+    "has_join": true
+  },
+  {
+    "question": "How many Italian drivers haven't finished the race?",
+    "db_id": "formula_1",
+    "sql": "SELECT COUNT(T1.driverId) FROM results AS T1 INNER JOIN drivers AS T2 on T1.driverId = T2.driverId WHERE T2.nationality = 'Italian' AND T1.time IS NULL",
+    "expected": "Formula1Results",
+    "source": "bird_formula_1",
+    "has_join": true
+  },
+  {
+    "question": "What are the cards that only available in paper and Japanese language?",
+    "db_id": "card_games",
+    "sql": "SELECT T1.name FROM cards AS T1 INNER JOIN foreign_data AS T2 ON T1.uuid = T2.uuid WHERE T1.availability = 'paper' AND T2.language = 'Japanese'",
+    "expected": "CardGamesCards",
+    "source": "bird_card_games",
+    "has_join": true
+  },
+  {
+    "question": "Which cards are ranked 1st on EDHRec? List all of the cards name and its banned play format.",
+    "db_id": "card_games",
+    "sql": "SELECT T1.name, T2.format FROM cards AS T1 INNER JOIN legalities AS T2 ON T2.uuid = T1.uuid WHERE T1.edhrecRank = 1 AND T2.status = 'Banned' GROUP BY T1.name, T2.format",
+    "expected": "CardGamesCards",
+    "source": "bird_card_games",
+    "has_join": true
+  },
+  {
+    "question": "Give the race of the blue-haired male superhero.",
+    "db_id": "superhero",
+    "sql": "SELECT T3.race FROM superhero AS T1 INNER JOIN colour AS T2 ON T1.hair_colour_id = T2.id INNER JOIN race AS T3 ON T1.race_id = T3.id INNER JOIN gender AS T4 ON T1.gender_id = T4.id WHERE T2.colour = 'Blue' AND T4.gender = 'Male'",
+    "expected": "SuperheroSuperhero",
+    "source": "bird_superhero",
+    "has_join": true
+  },
+  {
+    "question": "How many circuits are there in Adelaide, Australia?",
+    "db_id": "formula_1",
+    "sql": "SELECT COUNT(circuitId) FROM circuits WHERE location = 'Adelaide' AND country = 'Australia'",
+    "expected": "Formula1Circuits",
+    "source": "bird_formula_1",
+    "has_join": false
+  },
+  {
+    "question": "After making a credit card withdrawal, how many account/s with monthly issuance has a negative balance?",
+    "db_id": "financial",
+    "sql": "SELECT COUNT(T1.account_id) FROM trans AS T1 INNER JOIN account AS T2 ON T1.account_id = T2.account_id WHERE T1.balance < 0 AND T1.operation = 'VYBER KARTOU' AND T2.frequency = 'POPLATEK MESICNE'",
+    "expected": "FinancialTrans",
+    "source": "bird_financial",
+    "has_join": true
+  },
+  {
+    "question": "Which district has the most accounts with loan contracts finished with no problems?",
+    "db_id": "financial",
+    "sql": "SELECT T1.A2 FROM District AS T1 INNER JOIN Account AS T2 ON T1.District_id = T2.District_id INNER JOIN Loan AS T3 ON T2.Account_id = T3.Account_id WHERE T3.status = 'A' GROUP BY T1.District_id ORDER BY COUNT(T2.Account_id) DESC LIMIT 1",
+    "expected": "FinancialDistrict",
+    "source": "bird_financial",
+    "has_join": true
+  },
+  {
+    "question": "Which event has the highest budget amount?",
+    "db_id": "student_club",
+    "sql": "SELECT T2.event_name FROM budget AS T1 INNER JOIN event AS T2 ON T1.link_to_event = T2.event_id ORDER BY T1.amount DESC LIMIT 1",
+    "expected": "StudentClubBudget",
+    "source": "bird_student_club",
+    "has_join": true
+  },
+  {
+    "question": "Please list the names of the cards in the set \"Hauptset Zehnte Edition\".",
+    "db_id": "card_games",
+    "sql": "SELECT DISTINCT T1.name FROM cards AS T1 INNER JOIN set_translations AS T2 ON T2.setCode = T1.setCode WHERE T2.translation = 'Hauptset Zehnte Edition'",
+    "expected": "CardGamesCards",
+    "source": "bird_card_games",
+    "has_join": true
+  },
+  {
+    "question": "How many cards are there with toughness of 99?",
+    "db_id": "card_games",
+    "sql": "SELECT COUNT(id) FROM cards WHERE toughness = 99",
+    "expected": "CardGamesCards",
+    "source": "bird_card_games",
+    "has_join": false
+  },
+  {
+    "question": "Which racetrack hosted the most recent race? Indicate the full location.",
+    "db_id": "formula_1",
+    "sql": "SELECT T1.location FROM circuits AS T1 INNER JOIN races AS T2 ON T1.circuitId = T2.circuitId ORDER BY T2.date DESC LIMIT 1",
+    "expected": "Formula1Circuits",
+    "source": "bird_formula_1",
+    "has_join": true
+  },
+  {
+    "question": "List out the Id number of races which were hold in 2009.",
+    "db_id": "formula_1",
+    "sql": "SELECT raceId FROM races WHERE year = 2009",
+    "expected": "Formula1Races",
+    "source": "bird_formula_1",
+    "has_join": false
+  },
+  {
+    "question": "List the full names of superheroes with missing weight.",
+    "db_id": "superhero",
+    "sql": "SELECT DISTINCT full_name FROM superhero WHERE full_name IS NOT NULL AND (weight_kg IS NULL OR weight_kg = 0)",
+    "expected": "SuperheroSuperhero",
+    "source": "bird_superhero",
+    "has_join": false
+  },
+  {
+    "question": "Which budget category does the expense 'Posters' fall to?",
+    "db_id": "student_club",
+    "sql": "SELECT DISTINCT T2.category FROM expense AS T1 INNER JOIN budget AS T2 ON T1.link_to_budget = T2.budget_id WHERE T1.expense_description = 'Posters'",
+    "expected": "StudentClubExpense",
+    "source": "bird_student_club",
+    "has_join": true
+  },
+  {
+    "question": "In the College of Agriculture and Applied Sciences, how many majors are under the department of School of Applied Sciences, Technology and Education?",
+    "db_id": "student_club",
+    "sql": "SELECT COUNT(major_id) FROM major WHERE department = 'School of Applied Sciences, Technology and Education' AND college = 'College of Agriculture and Applied Sciences'",
+    "expected": "StudentClubMajor",
+    "source": "bird_student_club",
+    "has_join": false
+  },
+  {
+    "question": "Name all bonds with single bond types and what atoms are connected to the molecules.",
+    "db_id": "toxicology",
+    "sql": "SELECT T1.bond_id, T2.atom_id, T2.atom_id2 FROM bond AS T1 INNER JOIN connected AS T2 ON T1.bond_id = T2.bond_id WHERE T1.bond_type = '-'",
+    "expected": "ToxicologyBond",
+    "source": "bird_toxicology",
+    "has_join": true
+  },
+  {
+    "question": "What is the name of set number 5 and its translation?",
+    "db_id": "card_games",
+    "sql": "SELECT T1.name, T2.translation FROM sets AS T1 INNER JOIN set_translations AS T2 ON T1.code = T2.setCode WHERE T2.id = 5 GROUP BY T1.name, T2.translation",
+    "expected": "CardGamesSets",
+    "source": "bird_card_games",
+    "has_join": true
+  },
+  {
+    "question": "Among the users who have more than 100 upvotes, how many of them have more then 1 downvotes?",
+    "db_id": "codebase_community",
+    "sql": "SELECT COUNT(Id) FROM users WHERE Upvotes > 100 AND Downvotes > 1",
+    "expected": "CodebaseCommunityUsers",
+    "source": "bird_codebase_community",
+    "has_join": false
+  },
+  {
+    "question": "Among the tags with tag ID below 15, how many of them have 20 count of posts and below?",
+    "db_id": "codebase_community",
+    "sql": "SELECT COUNT(id) FROM tags WHERE Count <= 20 AND Id < 15",
+    "expected": "CodebaseCommunityTags",
+    "source": "bird_codebase_community",
+    "has_join": false
+  },
+  {
+    "question": "Name all cards with 2015 frame style ranking below 100 on EDHRec.",
+    "db_id": "card_games",
+    "sql": "SELECT id FROM cards WHERE edhrecRank < 100 AND frameVersion = 2015",
+    "expected": "CardGamesCards",
+    "source": "bird_card_games",
+    "has_join": false
+  },
+  {
+    "question": "What is the total number of comments of all the posts owned by csgillespie?",
+    "db_id": "codebase_community",
+    "sql": "SELECT SUM(T1.CommentCount) FROM posts AS T1 INNER JOIN users AS T2 ON T1.OwnerUserId = T2.Id WHERE T2.DisplayName = 'csgillespie'",
+    "expected": "CodebaseCommunityPosts",
+    "source": "bird_codebase_community",
+    "has_join": true
+  },
+  {
+    "question": "List out the atom id that belongs to the TR346 molecule and how many bond type can be created by this molecule?",
+    "db_id": "toxicology",
+    "sql": "SELECT T1.atom_id, COUNT(DISTINCT T2.bond_type),T1.molecule_id FROM atom AS T1 INNER JOIN bond AS T2 ON T1.molecule_id = T2.molecule_id WHERE T1.molecule_id = 'TR000' GROUP BY T1.atom_id, T2.bond_type",
+    "expected": "ToxicologyAtom",
+    "source": "bird_toxicology",
+    "has_join": true
+  },
+  {
+    "question": "Provide the weight and race of the superhero with superhero ID 40.",
+    "db_id": "superhero",
+    "sql": "SELECT T1.weight_kg, T2.race FROM superhero AS T1 INNER JOIN race AS T2 ON T1.race_id = T2.id WHERE T1.id = 40",
+    "expected": "SuperheroSuperhero",
+    "source": "bird_superhero",
+    "has_join": true
+  },
+  {
+    "question": "What are the superpowers of heroes with ID 1?",
+    "db_id": "superhero",
+    "sql": "SELECT DISTINCT T2.power_name FROM hero_power AS T1 INNER JOIN superpower AS T2 ON T1.power_id = T2.id WHERE T1.hero_id = 1",
+    "expected": "SuperheroHeroPower",
+    "source": "bird_superhero",
+    "has_join": true
+  },
+  {
+    "question": "Rank heroes published by Marvel Comics by their height in descending order.",
+    "db_id": "superhero",
+    "sql": "SELECT superhero_name, height_cm, RANK() OVER (ORDER BY height_cm DESC) AS HeightRank FROM superhero INNER JOIN publisher ON superhero.publisher_id = publisher.id WHERE publisher.publisher_name = 'Marvel Comics'",
+    "expected": "SuperheroSuperhero",
+    "source": "bird_superhero",
+    "has_join": true
+  },
+  {
+    "question": "What is the average writing score of the school who has the highest number of test takers whose total SAT sscores are greater or equal to 1500? Indicate the city to where the school is situated.",
+    "db_id": "california_schools",
+    "sql": "SELECT T1.AvgScrWrite, T2.City FROM satscores AS T1 INNER JOIN schools AS T2 ON T1.cds = T2.CDSCode ORDER BY T1.NumGE1500 DESC LIMIT 1",
+    "expected": "CaliforniaSchoolsSatscores",
+    "source": "bird_california_schools",
+    "has_join": true
+  },
+  {
+    "question": "What is the grade span offered in the school with the highest longitude?",
+    "db_id": "california_schools",
+    "sql": "SELECT GSoffered FROM schools ORDER BY ABS(longitude) DESC LIMIT 1",
+    "expected": "CaliforniaSchoolsSchools",
+    "source": "bird_california_schools",
+    "has_join": false
+  },
+  {
+    "question": "Indicate the name of the closed event whose cost has exceeded the budget the most.",
+    "db_id": "student_club",
+    "sql": "SELECT T2.event_name FROM budget AS T1 INNER JOIN event AS T2 ON T2.event_id = T1.link_to_event WHERE T1.event_status = 'Closed' AND T1.remaining < 0 ORDER BY T1.remaining LIMIT 1",
+    "expected": "StudentClubBudget",
+    "source": "bird_student_club",
+    "has_join": true
+  },
+  {
+    "question": "Point out the language of set id \"174\"?",
+    "db_id": "card_games",
+    "sql": "SELECT language FROM set_translations WHERE id = 174",
+    "expected": "CardGamesSetTranslations",
+    "source": "bird_card_games",
+    "has_join": false
+  },
+  {
+    "question": "List the patient ID, sex and birthday of patient with LDH beyond normal range.",
+    "db_id": "thrombosis_prediction",
+    "sql": "SELECT DISTINCT T1.ID, T1.SEX, T1.Birthday FROM Patient AS T1 INNER JOIN Laboratory AS T2 ON T1.ID = T2.ID WHERE T2.LDH > 500",
+    "expected": "ThrombosisPredictionPatient",
+    "source": "bird_thrombosis_prediction",
+    "has_join": true
+  },
+  {
+    "question": "Which country is the constructor which got 1 point in the race No. 24 from?",
+    "db_id": "formula_1",
+    "sql": "SELECT T2.nationality FROM constructorResults AS T1 INNER JOIN constructors AS T2 ON T2.constructorId = T1.constructorId WHERE T1.raceId = 24 AND T1.points = 1",
+    "expected": "Formula1Constructorresults",
+    "source": "bird_formula_1",
+    "has_join": true
+  },
+  {
+    "question": "For the set \"From the Vault: Lore\", what is its expansion type?",
+    "db_id": "card_games",
+    "sql": "SELECT type FROM sets WHERE name LIKE '%FROM the Vault: Lore%'",
+    "expected": "CardGamesSets",
+    "source": "bird_card_games",
+    "has_join": false
+  },
+  {
+    "question": "Which superhero has the most durability published by Dark Horse Comics?",
+    "db_id": "superhero",
+    "sql": "SELECT T1.superhero_name FROM superhero AS T1 INNER JOIN hero_attribute AS T2 ON T1.id = T2.hero_id INNER JOIN attribute AS T3 ON T3.id = T2.attribute_id INNER JOIN publisher AS T4 ON T4.id = T1.publisher_id WHERE T4.publisher_name = 'Dark Horse Comics' AND T3.attribute_name = 'Durability' ORDER BY T2.attribute_value DESC LIMIT 1",
+    "expected": "SuperheroSuperhero",
+    "source": "bird_superhero",
+    "has_join": true
+  },
+  {
+    "question": "How many patients with a normal level of complement 3 have a P pattern observed in the sheet of ANA examination?",
+    "db_id": "thrombosis_prediction",
+    "sql": "SELECT COUNT(DISTINCT T1.ID) FROM Examination AS T1 INNER JOIN Laboratory AS T2 ON T1.ID = T2.ID WHERE T2.C3 > 35 AND T1.`ANA Pattern` = 'P'",
+    "expected": "ThrombosisPredictionExamination",
+    "source": "bird_thrombosis_prediction",
+    "has_join": true
+  },
+  {
+    "question": "Provide the name of superhero with superhero ID 294.",
+    "db_id": "superhero",
+    "sql": "SELECT superhero_name FROM superhero WHERE id = 294",
+    "expected": "SuperheroSuperhero",
+    "source": "bird_superhero",
+    "has_join": false
+  },
+  {
+    "question": "What is the eye colour of superhero with superhero ID 75?",
+    "db_id": "superhero",
+    "sql": "SELECT T2.colour FROM superhero AS T1 INNER JOIN colour AS T2 ON T1.eye_colour_id = T2.id WHERE T1.id = 75",
+    "expected": "SuperheroSuperhero",
+    "source": "bird_superhero",
+    "has_join": true
+  },
+  {
+    "question": "List the artists who illustrated cards with black borders which are available only in arena.",
+    "db_id": "card_games",
+    "sql": "SELECT DISTINCT artist FROM cards WHERE availability = 'arena' AND BorderColor = 'black'",
+    "expected": "CardGamesCards",
+    "source": "bird_card_games",
+    "has_join": false
+  },
+  {
+    "question": "Among the card designed by Matthew D. Wilson, how many are available only in the paper?",
+    "db_id": "card_games",
+    "sql": "SELECT COUNT(id) FROM cards WHERE artist = 'Matthew D. Wilson' AND availability = 'paper'",
+    "expected": "CardGamesCards",
+    "source": "bird_card_games",
+    "has_join": false
+  },
+  {
+    "question": "Lists all types of cards available in arena.",
+    "db_id": "card_games",
+    "sql": "SELECT DISTINCT subtypes, supertypes FROM cards WHERE availability = 'arena' AND subtypes IS NOT NULL AND supertypes IS NOT NULL",
+    "expected": "CardGamesCards",
+    "source": "bird_card_games",
+    "has_join": false
+  },
+  {
+    "question": "Give the number of votes for the post about data visualization.",
+    "db_id": "codebase_community",
+    "sql": "SELECT COUNT(T1.Id) FROM posts AS T1 INNER JOIN votes AS T2 ON T1.Id = T2.PostId WHERE T1.Title LIKE '%data visualization%'",
+    "expected": "CodebaseCommunityPosts",
+    "source": "bird_codebase_community",
+    "has_join": true
+  },
+  {
+    "question": "What languages are available in the set known as Archenemy on the magic card market and having the code ARC?",
+    "db_id": "card_games",
+    "sql": "SELECT T2.language FROM sets AS T1 INNER JOIN set_translations AS T2 ON T1.code = T2.setCode WHERE T1.mcmName = 'Archenemy' AND T2.setCode = 'ARC'",
+    "expected": "CardGamesSets",
+    "source": "bird_card_games",
+    "has_join": true
+  },
+  {
+    "question": "Which country is the oldest driver from?",
+    "db_id": "formula_1",
+    "sql": "SELECT nationality FROM drivers WHERE dob IS NOT NULL ORDER BY dob ASC LIMIT 1",
+    "expected": "Formula1Drivers",
+    "source": "bird_formula_1",
+    "has_join": false
+  },
+  {
+    "question": "Among the sets in the block \"Ice Age\", how many of them have an Italian translation?",
+    "db_id": "card_games",
+    "sql": "SELECT COUNT(DISTINCT T1.id) FROM sets AS T1 INNER JOIN set_translations AS T2 ON T2.setCode = T1.code WHERE T1.block = 'Ice Age' AND T2.language = 'Italian' AND T2.translation IS NOT NULL",
+    "expected": "CardGamesSets",
+    "source": "bird_card_games",
+    "has_join": true
+  },
+  {
+    "question": "Provide the full names of vampire heroes.",
+    "db_id": "superhero",
+    "sql": "SELECT T1.full_name FROM superhero AS T1 INNER JOIN race AS T2 ON T1.race_id = T2.id WHERE T2.race = 'Vampire'",
+    "expected": "SuperheroSuperhero",
+    "source": "bird_superhero",
+    "has_join": true
+  },
+  {
+    "question": "List all carcinogenic molecules and their elements.",
+    "db_id": "toxicology",
+    "sql": "SELECT DISTINCT T2.molecule_id, T1.element FROM atom AS T1 INNER JOIN molecule AS T2 ON T1.molecule_id = T2.molecule_id WHERE T2.label = '+'",
+    "expected": "ToxicologyAtom",
+    "source": "bird_toxicology",
+    "has_join": true
+  },
+  {
+    "question": "Who was the player that got the lap time of 0:01:27 in the race No. 161? Show his introduction website.",
+    "db_id": "formula_1",
+    "sql": "SELECT DISTINCT T2.forename, T2.surname, T2.url FROM lapTimes AS T1 INNER JOIN drivers AS T2 ON T2.driverId = T1.driverId WHERE T1.raceId = 161 AND T1.time LIKE '1:27%'",
+    "expected": "Formula1Laptimes",
+    "source": "bird_formula_1",
+    "has_join": true
+  },
+  {
+    "question": "Give the eye colour of Blackwulf.",
+    "db_id": "superhero",
+    "sql": "SELECT T2.colour FROM superhero AS T1 INNER JOIN colour AS T2 ON T1.eye_colour_id = T2.id WHERE T1.superhero_name = 'Blackwulf'",
+    "expected": "SuperheroSuperhero",
+    "source": "bird_superhero",
+    "has_join": true
+  },
+  {
+    "question": "List all the card id and artist with unknown power which are legal for commander play format.",
+    "db_id": "card_games",
+    "sql": "SELECT T1.id, T1.artist FROM cards AS T1 INNER JOIN legalities AS T2 ON T1.uuid = T2.uuid WHERE T2.status = 'Legal' AND T2.format = 'commander' AND (T1.power IS NULL OR T1.power = '*')",
+    "expected": "CardGamesCards",
+    "source": "bird_card_games",
+    "has_join": true
+  },
+  {
+    "question": "Identify the gender of the superhero who has the ability of Phoenix Force.",
+    "db_id": "superhero",
+    "sql": "SELECT T4.gender FROM superhero AS T1 INNER JOIN hero_power AS T2 ON T1.id = T2.hero_id INNER JOIN superpower AS T3 ON T2.power_id = T3.id INNER JOIN gender AS T4 ON T1.gender_id = T4.id WHERE T3.power_name = 'Phoenix Force'",
+    "expected": "SuperheroSuperhero",
+    "source": "bird_superhero",
+    "has_join": true
+  },
+  {
+    "question": "What is the language and expansion type of set number 206?",
+    "db_id": "card_games",
+    "sql": "SELECT T2.language, T1.type FROM sets AS T1 INNER JOIN set_translations AS T2 ON T1.code = T2.setCode WHERE T2.id = 206",
+    "expected": "CardGamesSets",
+    "source": "bird_card_games",
+    "has_join": true
+  },
+  {
+    "question": "How many users were from New York?",
+    "db_id": "codebase_community",
+    "sql": "SELECT COUNT(Id) FROM users WHERE Location = 'New York'",
+    "expected": "CodebaseCommunityUsers",
+    "source": "bird_codebase_community",
+    "has_join": false
+  },
+  {
+    "question": "For all the budgets for \"November Meeting\", how many of them had exceeded the budget?",
+    "db_id": "student_club",
+    "sql": "SELECT COUNT(T2.event_id) FROM budget AS T1 INNER JOIN event AS T2 ON T1.link_to_event = T2.event_id WHERE T2.event_name = 'November Meeting' AND T1.remaining < 0",
+    "expected": "StudentClubBudget",
+    "source": "bird_student_club",
+    "has_join": true
+  },
+  {
+    "question": "Mention the base set size and set code of the set that was in block named \"Masques\" and \"Mirage\".",
+    "db_id": "card_games",
+    "sql": "SELECT DISTINCT T1.baseSetSize, T2.setCode FROM sets AS T1 INNER JOIN set_translations AS T2 ON T2.setCode = T1.code WHERE T1.block IN ('Masques', 'Mirage')",
+    "expected": "CardGamesSets",
+    "source": "bird_card_games",
+    "has_join": true
+  },
+  {
+    "question": "Among the Artifact cards, which are black color and comes with foreign languague translation?",
+    "db_id": "card_games",
+    "sql": "SELECT DISTINCT T1.name FROM cards AS T1 INNER JOIN foreign_data AS T2 ON T1.uuid = T2.uuid WHERE T1.originalType = 'Artifact' AND T1.colors = 'B'",
+    "expected": "CardGamesCards",
+    "source": "bird_card_games",
+    "has_join": true
+  },
+  {
+    "question": "How many accounts have running contracts in Branch location 1?",
+    "db_id": "financial",
+    "sql": "SELECT COUNT(T1.account_id) FROM account AS T1 INNER JOIN district AS T2 ON T1.district_id = T2.district_id INNER JOIN loan AS T3 ON T1.account_id = T3.account_id WHERE T1.district_id = 1 AND (T3.status = 'C' OR T3.status = 'D')",
+    "expected": "FinancialAccount",
+    "source": "bird_financial",
+    "has_join": true
+  },
+  {
+    "question": "List all the elements of the toxicology of the molecule \"TR004\".",
+    "db_id": "toxicology",
+    "sql": "SELECT DISTINCT T.element FROM atom AS T WHERE T.molecule_id = 'TR004'",
+    "expected": "ToxicologyAtom",
+    "source": "bird_toxicology",
+    "has_join": false
+  },
+  {
+    "question": "Please provide top three sets that don't appear in Magic: The Gathering Online, along with their names in in alphabetical order.",
+    "db_id": "card_games",
+    "sql": "SELECT name FROM sets WHERE mtgoCode IS NULL ORDER BY name LIMIT 3",
+    "expected": "CardGamesSets",
+    "source": "bird_card_games",
+    "has_join": false
+  },
+  {
+    "question": "Give the name of the alien superheroes.",
+    "db_id": "superhero",
+    "sql": "SELECT T1.superhero_name FROM superhero AS T1 INNER JOIN race AS T2 ON T1.race_id = T2.id WHERE T2.race = 'Alien'",
+    "expected": "SuperheroSuperhero",
+    "source": "bird_superhero",
+    "has_join": true
+  },
+  {
+    "question": "How many superheroes didn't have any publisher?",
+    "db_id": "superhero",
+    "sql": "SELECT COUNT(T1.id) FROM superhero AS T1 INNER JOIN publisher AS T2 ON T1.publisher_id = T2.id WHERE T2.id = 1",
+    "expected": "SuperheroSuperhero",
+    "source": "bird_superhero",
+    "has_join": true
+  },
+  {
+    "question": "How many negative comments were given by user ID 13?",
+    "db_id": "codebase_community",
+    "sql": "SELECT COUNT(Id) FROM comments WHERE UserId = 13 AND Score < 60",
+    "expected": "CodebaseCommunityComments",
+    "source": "bird_codebase_community",
+    "has_join": false
+  },
+  {
+    "question": "Find the triple-bonded molecules which are carcinogenic.",
+    "db_id": "toxicology",
+    "sql": "SELECT DISTINCT T2.molecule_id FROM bond AS T1 INNER JOIN molecule AS T2 ON T1.molecule_id = T2.molecule_id WHERE T1.bond_type = '#' AND T2.label = '+'",
+    "expected": "ToxicologyBond",
+    "source": "bird_toxicology",
+    "has_join": true
+  },
+  {
+    "question": "What is card number 4 in the set Coldsnap?",
+    "db_id": "card_games",
+    "sql": "SELECT T1.name FROM cards AS T1 INNER JOIN sets AS T2 ON T2.code = T1.setCode WHERE T2.name = 'Coldsnap' AND T1.number = 4",
+    "expected": "CardGamesCards",
+    "source": "bird_card_games",
+    "has_join": true
+  },
+  {
+    "question": "How many comments were added to the post with the highest score?",
+    "db_id": "codebase_community",
+    "sql": "SELECT COUNT(T2.Id) FROM posts AS T1 INNER JOIN comments AS T2 ON T1.Id = T2.PostId GROUP BY T1.Id ORDER BY SUM(T1.Score) DESC LIMIT 1",
+    "expected": "CodebaseCommunityPosts",
+    "source": "bird_codebase_community",
+    "has_join": true
+  },
+  {
+    "question": "For the post which got 1910 view counts, how many comments does it get?",
+    "db_id": "codebase_community",
+    "sql": "SELECT COUNT(T1.Id) FROM posts AS T1 INNER JOIN comments AS T2 ON T1.Id = T2.PostId WHERE T1.ViewCount = 1910",
+    "expected": "CodebaseCommunityPosts",
+    "source": "bird_codebase_community",
+    "has_join": true
+  },
+  {
+    "question": "What is the keyword found on card 'Angel of Mercy'?",
+    "db_id": "card_games",
+    "sql": "SELECT DISTINCT keywords FROM cards WHERE name = 'Angel of Mercy'",
+    "expected": "CardGamesCards",
+    "source": "bird_card_games",
+    "has_join": false
+  },
+  {
+    "question": "Which school in Contra Costa has the highest number of test takers?",
+    "db_id": "california_schools",
+    "sql": "SELECT sname FROM satscores WHERE cname = 'Contra Costa' AND sname IS NOT NULL ORDER BY NumTstTakr DESC LIMIT 1",
+    "expected": "CaliforniaSchoolsSatscores",
+    "source": "bird_california_schools",
+    "has_join": false
+  },
+  {
+    "question": "Please give more information about the Formula_1 races that used the Silverstone Circuit.",
+    "db_id": "formula_1",
+    "sql": "SELECT DISTINCT T1.url FROM circuits AS T1 INNER JOIN races AS T2 ON T2.circuitID = T1.circuitId WHERE T1.name = 'Silverstone Circuit'",
+    "expected": "Formula1Circuits",
+    "source": "bird_formula_1",
+    "has_join": true
+  },
+  {
+    "question": "What is the total number of schools with a mailing city in Hickman belonging to the charter number 00D4?",
+    "db_id": "california_schools",
+    "sql": "SELECT COUNT(*) FROM schools WHERE CharterNum = '00D4' AND MailCity = 'Hickman'",
+    "expected": "CaliforniaSchoolsSchools",
+    "source": "bird_california_schools",
+    "has_join": false
+  },
+  {
+    "question": "Calculate the total cost spent for Parking in the list.",
+    "db_id": "student_club",
+    "sql": "SELECT SUM(cost) FROM expense WHERE expense_description = 'Parking'",
+    "expected": "StudentClubExpense",
+    "source": "bird_student_club",
+    "has_join": false
+  },
+  {
+    "question": "How many borderless cards are illustrated in Russian?",
+    "db_id": "card_games",
+    "sql": "SELECT COUNT(T1.id) FROM cards AS T1 INNER JOIN foreign_data AS T2 ON T1.uuid = T2.uuid WHERE T1.borderColor = 'borderless' AND T2.language = 'Russian'",
+    "expected": "CardGamesCards",
+    "source": "bird_card_games",
+    "has_join": true
+  },
+  {
+    "question": "List all of the College of Humanities and Social Sciences' departments.",
+    "db_id": "student_club",
+    "sql": "SELECT department FROM major WHERE college = 'College of Humanities and Social Sciences'",
+    "expected": "StudentClubMajor",
+    "source": "bird_student_club",
+    "has_join": false
+  },
+  {
+    "question": "How many bond id have element iodine?",
+    "db_id": "toxicology",
+    "sql": "SELECT COUNT(T3.bond_id) FROM atom AS T1 INNER JOIN molecule AS T2 ON T1.molecule_id = T2.molecule_id INNER JOIN bond AS T3 ON T2.molecule_id = T3.molecule_id WHERE T1.element = 'i'",
+    "expected": "ToxicologyAtom",
+    "source": "bird_toxicology",
+    "has_join": true
+  },
+  {
+    "question": "Please list the names of the cards that have a text box.",
+    "db_id": "card_games",
+    "sql": "SELECT DISTINCT name FROM cards WHERE isTextless = 0",
+    "expected": "CardGamesCards",
+    "source": "bird_card_games",
+    "has_join": false
+  },
+  {
+    "question": "Is molecule TR124 carcinogenic?",
+    "db_id": "toxicology",
+    "sql": "SELECT T.label FROM molecule AS T WHERE T.molecule_id = 'TR124'",
+    "expected": "ToxicologyMolecule",
+    "source": "bird_toxicology",
+    "has_join": false
+  },
+  {
+    "question": "What is the  unconverted mana do all the cards created by Rob Alexander cost in total?",
+    "db_id": "card_games",
+    "sql": "SELECT manaCost FROM cards WHERE artist = 'Rob Alexander'",
+    "expected": "CardGamesCards",
+    "source": "bird_card_games",
+    "has_join": false
+  },
+  {
+    "question": "What is the event that has the highest attendance of the students from the Student_Club?",
+    "db_id": "student_club",
+    "sql": "SELECT T1.event_name FROM event AS T1 INNER JOIN attendance AS T2 ON T1.event_id = T2.link_to_event GROUP BY T1.event_name ORDER BY COUNT(T2.link_to_event) DESC LIMIT 1",
+    "expected": "StudentClubEvent",
+    "source": "bird_student_club",
+    "has_join": true
+  },
+  {
+    "question": "What are the borderless cards available without powerful foils?",
+    "db_id": "card_games",
+    "sql": "SELECT id FROM cards WHERE borderColor = 'borderless' AND (cardKingdomId IS NULL OR cardKingdomId IS NULL)",
+    "expected": "CardGamesCards",
+    "source": "bird_card_games",
+    "has_join": false
+  },
+  {
+    "question": "Which of these circuits is located at a higher latitude, Silverstone Circuit, Hockenheimring or Hungaroring?",
+    "db_id": "formula_1",
+    "sql": "SELECT name FROM circuits WHERE name IN ('Silverstone Circuit', 'Hockenheimring', 'Hungaroring') ORDER BY lat DESC LIMIT 1",
+    "expected": "Formula1Circuits",
+    "source": "bird_formula_1",
+    "has_join": false
+  },
+  {
+    "question": "Is molecule TR000 is carcinogenic or not?",
+    "db_id": "toxicology",
+    "sql": "SELECT label FROM molecule AS T WHERE T.molecule_id = 'TR000'",
+    "expected": "ToxicologyMolecule",
+    "source": "bird_toxicology",
+    "has_join": false
+  },
+  {
+    "question": "Among the sets whose expansion type is Commander, which set has the highest total number of cards including promotional and related supplemental products but excluding Alchemy modifications? Indicate the id of the set.",
+    "db_id": "card_games",
+    "sql": "SELECT id FROM sets WHERE type = 'commander' ORDER BY totalSetSize DESC LIMIT 1",
+    "expected": "CardGamesSets",
+    "source": "bird_card_games",
+    "has_join": false
+  },
+  {
+    "question": "In which country can I find the circuit with the highest altitude?",
+    "db_id": "formula_1",
+    "sql": "SELECT country FROM circuits ORDER BY alt DESC LIMIT 1",
+    "expected": "Formula1Circuits",
+    "source": "bird_formula_1",
+    "has_join": false
+  },
+  {
+    "question": "List down at least five full names of superheroes with blue eyes.",
+    "db_id": "superhero",
+    "sql": "SELECT T1.superhero_name FROM superhero AS T1 INNER JOIN colour AS T2 ON T1.eye_colour_id = T2.id WHERE T2.colour = 'Blue' LIMIT 5",
+    "expected": "SuperheroSuperhero",
+    "source": "bird_superhero",
+    "has_join": true
+  },
+  {
+    "question": "Provide the full name of the superhero named Alien.",
+    "db_id": "superhero",
+    "sql": "SELECT full_name FROM superhero WHERE superhero_name = 'Alien'",
+    "expected": "SuperheroSuperhero",
+    "source": "bird_superhero",
+    "has_join": false
+  },
+  {
+    "question": "Please list the event names of all the events attended by Maya Mclean.",
+    "db_id": "student_club",
+    "sql": "SELECT T1.event_name FROM event AS T1 INNER JOIN attendance AS T2 ON T1.event_id = T2.link_to_event INNER JOIN member AS T3 ON T2.link_to_member = T3.member_id WHERE T3.first_name = 'Maya' AND T3.last_name = 'Mclean'",
+    "expected": "StudentClubEvent",
+    "source": "bird_student_club",
+    "has_join": true
+  },
+  {
+    "question": "Write down bond id for molecules that are carcinogenic.",
+    "db_id": "toxicology",
+    "sql": "SELECT DISTINCT T1.bond_id FROM bond AS T1 INNER JOIN molecule AS T2 ON T1.molecule_id = T2.molecule_id WHERE T2.label = '+'",
+    "expected": "ToxicologyBond",
+    "source": "bird_toxicology",
+    "has_join": true
+  },
+  {
+    "question": "How many single bonds are there in the list?",
+    "db_id": "toxicology",
+    "sql": "SELECT COUNT(T.bond_id) FROM bond AS T WHERE T.bond_type = '-'",
+    "expected": "ToxicologyBond",
+    "source": "bird_toxicology",
+    "has_join": false
+  },
+  {
+    "question": "State the category of events were held at MU 215.",
+    "db_id": "student_club",
+    "sql": "SELECT DISTINCT T2.category FROM event AS T1 INNER JOIN budget AS T2 ON T1.event_id = T2.link_to_event WHERE T1.location = 'MU 215'",
+    "expected": "StudentClubEvent",
+    "source": "bird_student_club",
+    "has_join": true
+  },
+  {
+    "question": "Of the first 100 molecules in number order, how many are carcinogenic?",
+    "db_id": "toxicology",
+    "sql": "SELECT COUNT(T.molecule_id) FROM molecule AS T WHERE molecule_id BETWEEN 'TR000' AND 'TR099' AND T.label = '+'",
+    "expected": "ToxicologyMolecule",
+    "source": "bird_toxicology",
+    "has_join": false
+  },
+  {
+    "question": "Provide the last edit date and last edit user ID for the post \"Detecting a given face in a database of facial images\".",
+    "db_id": "codebase_community",
+    "sql": "SELECT LastEditDate, LastEditorUserId FROM posts WHERE Title = 'Detecting a given face in a database of facial images'",
+    "expected": "CodebaseCommunityPosts",
+    "source": "bird_codebase_community",
+    "has_join": false
+  },
+  {
+    "question": "Calculate the total carcinogenic molecules for molecule id from TR000 to TR030.",
+    "db_id": "toxicology",
+    "sql": "SELECT COUNT(T.molecule_id) FROM molecule AS T WHERE T.molecule_id BETWEEN 'TR000' AND 'TR030' AND T.label = '+'",
+    "expected": "ToxicologyMolecule",
+    "source": "bird_toxicology",
+    "has_join": false
+  },
+  {
+    "question": "Please provide the IDs of the 3 female clients with the largest loans.",
+    "db_id": "financial",
+    "sql": "SELECT T1.client_id FROM client AS T1 INNER JOIN disp AS T4 on T1.client_id= T4.client_id INNER JOIN account AS T2 ON T4.account_id = T2.account_id  INNER JOIN loan AS T3 ON T2.account_id = T3.account_id and T4.account_id = T3.account_id WHERE T1.gender = 'F' ORDER BY T3.amount DESC LIMIT 3",
+    "expected": "FinancialClient",
+    "source": "bird_financial",
+    "has_join": true
+  },
+  {
+    "question": "What is the postal street address for the school with the 7th highest Math average? Indicate the school's name.",
+    "db_id": "california_schools",
+    "sql": "SELECT T2.MailStreet, T2.School FROM satscores AS T1 INNER JOIN schools AS T2 ON T1.cds = T2.CDSCode ORDER BY T1.AvgScrMath DESC LIMIT 6, 1",
+    "expected": "CaliforniaSchoolsSatscores",
+    "source": "bird_california_schools",
+    "has_join": true
+  },
+  {
+    "question": "How many wins was achieved by the oldest racer? Indicate his/her full name.",
+    "db_id": "formula_1",
+    "sql": "SELECT SUM(T1.wins),T2.forename, T2.surname FROM driverStandings AS T1 INNER JOIN drivers AS T2 on T1.driverId = T2.driverId ORDER BY T2.dob ASC LIMIT 1",
+    "expected": "Formula1Driverstandings",
+    "source": "bird_formula_1",
+    "has_join": true
+  },
+  {
+    "question": "What is the total number of superheroes without full name?",
+    "db_id": "superhero",
+    "sql": "SELECT COUNT(id) FROM superhero WHERE full_name IS NULL",
+    "expected": "SuperheroSuperhero",
+    "source": "bird_superhero",
+    "has_join": false
+  },
+  {
+    "question": "Who is the champion of the Canadian Grand Prix in 2008? Indicate his finish time.",
+    "db_id": "formula_1",
+    "sql": "SELECT T1.time FROM results AS T1 INNER JOIN races AS T2 ON T1.raceId = T2.raceId WHERE T2.name = 'Canadian Grand Prix' AND T2.year = 2008 AND T1.time LIKE '_:%:__.___'",
+    "expected": "Formula1Results",
+    "source": "bird_formula_1",
+    "has_join": true
+  },
+  {
+    "question": "How many triple type bonds are there?",
+    "db_id": "toxicology",
+    "sql": "SELECT COUNT(T.bond_id) FROM bond AS T WHERE T.bond_type = '#'",
+    "expected": "ToxicologyBond",
+    "source": "bird_toxicology",
+    "has_join": false
+  },
+  {
+    "question": "What is the website for the schools under the administrations of Mike Larson and Dante Alvarez?",
+    "db_id": "california_schools",
+    "sql": "SELECT Website FROM schools WHERE (AdmFName1 = 'Mike' AND AdmLName1 = 'Larson') OR (AdmFName1 = 'Dante' AND AdmLName1 = 'Alvarez')",
+    "expected": "CaliforniaSchoolsSchools",
+    "source": "bird_california_schools",
+    "has_join": false
+  },
+  {
+    "question": "What is his number of the driver who finished 0:01:54 in the Q3 of qualifying race No.903?",
+    "db_id": "formula_1",
+    "sql": "SELECT T2.number FROM qualifying AS T1 INNER JOIN drivers AS T2 ON T2.driverId = T1.driverId WHERE T1.raceId = 903 AND T1.q3 LIKE '1:54%'",
+    "expected": "Formula1Qualifying",
+    "source": "bird_formula_1",
+    "has_join": true
+  },
+  {
+    "question": "What is the fastest lap number of the champion in 2009?",
+    "db_id": "formula_1",
+    "sql": "SELECT T1.fastestLap FROM results AS T1 INNER JOIN races AS T2 on T1.raceId = T2.raceId WHERE T2.year = 2009 AND T1.time LIKE '_:%:__.___'",
+    "expected": "Formula1Results",
+    "source": "bird_formula_1",
+    "has_join": true
+  },
+  {
+    "question": "What is the number of cards are there in the set of \"Rinascita di Alara\"?",
+    "db_id": "card_games",
+    "sql": "SELECT T1.baseSetSize FROM sets AS T1 INNER JOIN set_translations AS T2 ON T2.setCode = T1.code WHERE T2.translation = 'Rinascita di Alara'",
+    "expected": "CardGamesSets",
+    "source": "bird_card_games",
+    "has_join": true
+  },
+  {
+    "question": "In superheroes with weight less than 100, list the full name of the superheroes with brown eyes.",
+    "db_id": "superhero",
+    "sql": "SELECT T1.full_name FROM superhero AS T1 INNER JOIN colour AS T2 ON T1.eye_colour_id = T2.id WHERE T1.weight_kg < 100 AND T2.colour = 'Brown'",
+    "expected": "SuperheroSuperhero",
+    "source": "bird_superhero",
+    "has_join": true
+  },
+  {
+    "question": "How many tags have post count between 5,000 to 7,000?",
+    "db_id": "codebase_community",
+    "sql": "SELECT COUNT(Id) FROM tags WHERE Count BETWEEN 5000 AND 7000",
+    "expected": "CodebaseCommunityTags",
+    "source": "bird_codebase_community",
+    "has_join": false
+  },
+  {
+    "question": "What is the most common sign of patients with SLE disease?",
+    "db_id": "thrombosis_prediction",
+    "sql": "SELECT Symptoms FROM Examination WHERE Diagnosis = 'SLE' GROUP BY Symptoms ORDER BY COUNT(Symptoms) DESC LIMIT 1",
+    "expected": "ThrombosisPredictionExamination",
+    "source": "bird_thrombosis_prediction",
+    "has_join": false
+  },
+  {
+    "question": "State the name of major that Vice President has joined.",
+    "db_id": "student_club",
+    "sql": "SELECT T1.major_name FROM major AS T1 INNER JOIN member AS T2 ON T1.major_id = T2.link_to_major WHERE T2.position = 'Vice President'",
+    "expected": "StudentClubMajor",
+    "source": "bird_student_club",
+    "has_join": true
+  },
+  {
+    "question": "Which toxic element can be found in the molecule TR151?",
+    "db_id": "toxicology",
+    "sql": "SELECT DISTINCT T.element FROM atom AS T WHERE T.molecule_id = 'TR151'",
+    "expected": "ToxicologyAtom",
+    "source": "bird_toxicology",
+    "has_join": false
+  },
+  {
+    "question": "Which superhero has the same eyes, hair and skin colour? Indicate the publisher of the superhero.",
+    "db_id": "superhero",
+    "sql": "SELECT T1.superhero_name, T2.publisher_name FROM superhero AS T1 INNER JOIN publisher AS T2 ON T1.publisher_id = T2.id WHERE T1.eye_colour_id = T1.hair_colour_id AND T1.eye_colour_id = T1.skin_colour_id",
+    "expected": "SuperheroSuperhero",
+    "source": "bird_superhero",
+    "has_join": true
+  },
+  {
+    "question": "Which circuit did the 2009 Spanish Grand Prix use?",
+    "db_id": "formula_1",
+    "sql": "SELECT T1.name FROM circuits AS T1 INNER JOIN races AS T2 ON T2.circuitID = T1.circuitId WHERE T2.year = 2009 AND T2.name = 'Spanish Grand Prix'",
+    "expected": "Formula1Circuits",
+    "source": "bird_formula_1",
+    "has_join": true
+  },
+  {
+    "question": "How many races were there in 2005? Name all the races in descending order.",
+    "db_id": "formula_1",
+    "sql": "SELECT name FROM races WHERE year = 2005 ORDER BY name DESC",
+    "expected": "Formula1Races",
+    "source": "bird_formula_1",
+    "has_join": false
+  },
+  {
+    "question": "Provide the hair colour of the human superhero who is 185 cm tall.",
+    "db_id": "superhero",
+    "sql": "SELECT DISTINCT T3.colour FROM superhero AS T1 INNER JOIN race AS T2 ON T1.race_id = T2.id INNER JOIN colour AS T3 ON T1.hair_colour_id = T3.id WHERE T1.height_cm = 185 AND T2.race = 'Human'",
+    "expected": "SuperheroSuperhero",
+    "source": "bird_superhero",
+    "has_join": true
+  },
+  {
+    "question": "Please list top three elements of the toxicology of the molecule TR000 in alphabetical order.",
+    "db_id": "toxicology",
+    "sql": "SELECT DISTINCT T.element FROM atom AS T WHERE T.molecule_id = 'TR000' ORDER BY T.element LIMIT 3",
+    "expected": "ToxicologyAtom",
+    "source": "bird_toxicology",
+    "has_join": false
+  },
+  {
+    "question": "What is the name of the superhero that has the most powers?",
+    "db_id": "superhero",
+    "sql": "SELECT T1.superhero_name FROM superhero AS T1 INNER JOIN hero_power AS T2 ON T1.id = T2.hero_id GROUP BY T1.superhero_name ORDER BY COUNT(T2.hero_id) DESC LIMIT 1",
+    "expected": "SuperheroSuperhero",
+    "source": "bird_superhero",
+    "has_join": true
+  },
+  {
+    "question": "Mention the category of events which were held at MU 215.",
+    "db_id": "student_club",
+    "sql": "SELECT T2.category FROM event AS T1 INNER JOIN budget AS T2 ON T1.event_id = T2.link_to_event WHERE T1.location = 'MU 215'",
+    "expected": "StudentClubEvent",
+    "source": "bird_student_club",
+    "has_join": true
+  },
+  {
+    "question": "Lists by ID all Creature-type cards with legal status.",
+    "db_id": "card_games",
+    "sql": "SELECT T1.id FROM cards AS T1 INNER JOIN rulings AS T2 ON T1.uuid = T2.uuid INNER JOIN legalities AS T3 ON T1.uuid = T3.uuid WHERE T3.status = 'Legal' AND T1.types = 'Creature'",
+    "expected": "CardGamesCards",
+    "source": "bird_card_games",
+    "has_join": true
+  },
+  {
+    "question": "Calculate the average height of all neutral superheroes.",
+    "db_id": "superhero",
+    "sql": "SELECT AVG(T1.height_cm) FROM superhero AS T1 INNER JOIN alignment AS T2 ON T1.alignment_id = T2.id WHERE T2.alignment = 'Neutral'",
+    "expected": "SuperheroSuperhero",
+    "source": "bird_superhero",
+    "has_join": true
+  },
+  {
+    "question": "Among the posts owned by an elder user, how many of them have a score of over 19?",
+    "db_id": "codebase_community",
+    "sql": "SELECT COUNT(T1.Id) FROM posts AS T1 INNER JOIN users AS T2 ON T1.OwnerUserId = T2.Id WHERE T1.Score >= 20 AND T2.Age > 65",
+    "expected": "CodebaseCommunityPosts",
+    "source": "bird_codebase_community",
+    "has_join": true
+  },
+  {
+    "question": "Please list the names of the badges obtained by csgillespie.",
+    "db_id": "codebase_community",
+    "sql": "SELECT T1.`Name` FROM badges AS T1 INNER JOIN users AS T2 ON T1.UserId = T2.Id WHERE T2.DisplayName = 'csgillespie'",
+    "expected": "CodebaseCommunityBadges",
+    "source": "bird_codebase_community",
+    "has_join": true
+  },
+  {
+    "question": "What are the bond type for atoms with element Tin?",
+    "db_id": "toxicology",
+    "sql": "SELECT DISTINCT T3.bond_type FROM atom AS T1 INNER JOIN connected AS T2 ON T1.atom_id = T2.atom_id INNER JOIN bond AS T3 ON T3.bond_id = T2.bond_id WHERE T1.element = 'sn'",
+    "expected": "ToxicologyAtom",
+    "source": "bird_toxicology",
+    "has_join": true
+  },
+  {
+    "question": "Rank superheroes from Marvel Comics by their eye color popularity, starting with the most common color.",
+    "db_id": "superhero",
+    "sql": "SELECT colour.colour AS EyeColor, COUNT(superhero.id) AS Count, RANK() OVER (ORDER BY COUNT(superhero.id) DESC) AS PopularityRank FROM superhero INNER JOIN colour ON superhero.eye_colour_id = colour.id INNER JOIN publisher ON superhero.publisher_id = publisher.id WHERE publisher.publisher_name = 'Marvel Comics' GROUP BY colour.colour",
+    "expected": "SuperheroSuperhero",
+    "source": "bird_superhero",
+    "has_join": true
+  },
+  {
+    "question": "Locate players with vision scores of 90 and above, state the country of these players.",
+    "db_id": "european_football_2",
+    "sql": "SELECT DISTINCT t4.name FROM Player_Attributes AS t1 INNER JOIN Player AS t2 ON t1.player_api_id = t2.player_api_id INNER JOIN Match AS t3 ON t2.player_api_id = t3.home_player_8 INNER JOIN Country AS t4 ON t3.country_id = t4.id WHERE t1.vision > 89",
+    "expected": "EuropeanFootball2PlayerAttributes",
+    "source": "bird_european_football_2",
+    "has_join": true
+  },
+  {
+    "question": "List the atom ID of the carcinogenic molecule that contains oxygen?",
+    "db_id": "toxicology",
+    "sql": "SELECT T1.atom_id FROM atom AS T1 INNER JOIN molecule AS T2 ON T1.molecule_id = T2.molecule_id WHERE T1.element = 'o' AND T2.label = '+'",
+    "expected": "ToxicologyAtom",
+    "source": "bird_toxicology",
+    "has_join": true
+  },
+  {
+    "question": "What is the rule of playing card \"Benalish Knight\"?",
+    "db_id": "card_games",
+    "sql": "SELECT T2.format FROM cards AS T1 INNER JOIN legalities AS T2 ON T1.uuid = T2.uuid WHERE T1.name = 'Benalish Knight'",
+    "expected": "CardGamesCards",
+    "source": "bird_card_games",
+    "has_join": true
+  },
+  {
+    "question": "Among the molecules which contain \"cl\" element, which of them are carcinogenic?",
+    "db_id": "toxicology",
+    "sql": "SELECT DISTINCT T1.molecule_id FROM atom AS T1 INNER JOIN molecule AS T2 ON T1.molecule_id = T2.molecule_id WHERE T1.element = 'cl' AND T2.label = '+'",
+    "expected": "ToxicologyAtom",
+    "source": "bird_toxicology",
+    "has_join": true
+  },
+  {
+    "question": "Which patient is the first patient with an abnormal anti-SSA to come to the hospital? Please give his or her ID.",
+    "db_id": "thrombosis_prediction",
+    "sql": "SELECT T1.ID FROM Patient AS T1 INNER JOIN Laboratory AS T2 ON T1.ID = T2.ID WHERE T1.`First Date` IS NOT NULL AND T2.SSA NOT IN ('negative', '0') ORDER BY T1.`First Date` ASC LIMIT 1",
+    "expected": "ThrombosisPredictionPatient",
+    "source": "bird_thrombosis_prediction",
+    "has_join": true
+  },
+  {
+    "question": "What type of promotion is of card 'Duress'?",
+    "db_id": "card_games",
+    "sql": "SELECT promoTypes FROM cards WHERE name = 'Duress' AND promoTypes IS NOT NULL",
+    "expected": "CardGamesCards",
+    "source": "bird_card_games",
+    "has_join": false
+  },
+  {
+    "question": "Which client segment consumed the least in September 2013?",
+    "db_id": "debit_card_specializing",
+    "sql": "SELECT T1.Segment FROM customers AS T1 INNER JOIN yearmonth AS T2 ON T1.CustomerID = T2.CustomerID WHERE T2.Date = '201309' GROUP BY T1.CustomerID ORDER BY SUM(T2.Consumption) ASC LIMIT 1",
+    "expected": "DebitCardSpecializingCustomers",
+    "source": "bird_debit_card_specializing",
+    "has_join": true
+  },
+  {
+    "question": "What are the elements of the toxicology and label of molecule TR060?",
+    "db_id": "toxicology",
+    "sql": "SELECT DISTINCT T1.element, T2.label FROM atom AS T1 INNER JOIN molecule AS T2 ON T1.molecule_id = T2.molecule_id WHERE T2.molecule_id = 'TR060'",
+    "expected": "ToxicologyAtom",
+    "source": "bird_toxicology",
+    "has_join": true
+  },
+  {
+    "question": "Please provide the ids of top three powerful pairs of Kingdom Foil and Kingdom Cards sorted by Kingdom Foil id in alphabetical order.",
+    "db_id": "card_games",
+    "sql": "SELECT cardKingdomFoilId, cardKingdomId FROM cards WHERE cardKingdomFoilId IS NOT NULL AND cardKingdomId IS NOT NULL ORDER BY cardKingdomFoilId LIMIT 3",
+    "expected": "CardGamesCards",
+    "source": "bird_card_games",
+    "has_join": false
+  },
+  {
+    "question": "List the eyes, hair and skin colour of all female superheroes published by Dark Horse Comics.",
+    "db_id": "superhero",
+    "sql": "SELECT T1.eye_colour_id, T1.hair_colour_id, T1.skin_colour_id FROM superhero AS T1 INNER JOIN publisher AS T2 ON T2.id = T1.publisher_id INNER JOIN gender AS T3 ON T3.id = T1.gender_id WHERE T2.publisher_name = 'Dark Horse Comics' AND T3.gender = 'Female'",
+    "expected": "SuperheroSuperhero",
+    "source": "bird_superhero",
+    "has_join": true
+  },
+  {
+    "question": "As of the present, what is the full name of the youngest racer? Indicate her nationality and the name of the race to which he/she first joined.",
+    "db_id": "formula_1",
+    "sql": "SELECT T1.forename, T1.surname, T1.nationality, T3.name FROM drivers AS T1 INNER JOIN driverStandings AS T2 on T1.driverId = T2.driverId INNER JOIN races AS T3 on T2.raceId = T3.raceId ORDER BY JULIANDAY(T1.dob) DESC LIMIT 1",
+    "expected": "Formula1Drivers",
+    "source": "bird_formula_1",
+    "has_join": true
+  },
+  {
+    "question": "List the title of posts which were edited by Vebjorn Ljosa.",
+    "db_id": "codebase_community",
+    "sql": "SELECT T1.Title FROM posts AS T1 INNER JOIN users AS T2 ON T1.OwnerUserId = T2.Id WHERE T2.DisplayName = 'Vebjorn Ljosa'",
+    "expected": "CodebaseCommunityPosts",
+    "source": "bird_codebase_community",
+    "has_join": true
+  },
+  {
+    "question": "Which country had the gas station that sold the most expensive product id No.2 for one unit?",
+    "db_id": "debit_card_specializing",
+    "sql": "SELECT T2.Country FROM transactions_1k AS T1 INNER JOIN gasstations AS T2 ON T1.GasStationID = T2.GasStationID WHERE T1.ProductID = 2 ORDER BY T1.Price DESC LIMIT 1",
+    "expected": "DebitCardSpecializingTransactions1k",
+    "source": "bird_debit_card_specializing",
+    "has_join": true
+  },
+  {
+    "question": "Among the weekly issuance accounts, how many have a loan of under 200000?",
+    "db_id": "financial",
+    "sql": "SELECT COUNT(T1.account_id) FROM loan AS T1 INNER JOIN account AS T2 ON T1.account_id = T2.account_id WHERE T2.frequency = 'POPLATEK TYDNE' AND T1.amount < 200000",
+    "expected": "FinancialLoan",
+    "source": "bird_financial",
+    "has_join": true
+  },
+  {
+    "question": "How many bad superheroes are there?",
+    "db_id": "superhero",
+    "sql": "SELECT COUNT(T1.id) FROM superhero AS T1 INNER JOIN alignment AS T2 ON T1.alignment_id = T2.id WHERE T2.alignment = 'Bad'",
+    "expected": "SuperheroSuperhero",
+    "source": "bird_superhero",
+    "has_join": true
+  },
+  {
+    "question": "Which was the fastest lap for Lewis Hamilton in the 2008 Australian Grand Prix?",
+    "db_id": "formula_1",
+    "sql": "SELECT T1.fastestLap FROM results AS T1 INNER JOIN races AS T2 on T1.raceId = T2.raceId INNER JOIN drivers AS T3 on T1.driverId = T3.driverId WHERE T2.name = 'Australian Grand Prix' AND T2.year = 2008 AND T3.forename = 'Lewis' AND T3.surname = 'Hamilton'",
+    "expected": "Formula1Results",
+    "source": "bird_formula_1",
+    "has_join": true
+  },
+  {
+    "question": "What's Christof Nielson's zip code type?",
+    "db_id": "student_club",
+    "sql": "SELECT T2.type FROM member AS T1 INNER JOIN zip_code AS T2 ON T1.zip = T2.zip_code WHERE T1.first_name = 'Christof' AND T1.last_name = 'Nielson'",
+    "expected": "StudentClubMember",
+    "source": "bird_student_club",
+    "has_join": true
+  },
+  {
+    "question": "How many carcinogenic molecules that consisted of Nitrogen?",
+    "db_id": "toxicology",
+    "sql": "SELECT COUNT(DISTINCT T1.molecule_id) FROM molecule AS T1 INNER JOIN atom AS T2 ON T1.molecule_id = T2.molecule_id WHERE T2.element = 'n' AND T1.label = '+'",
+    "expected": "ToxicologyMolecule",
+    "source": "bird_toxicology",
+    "has_join": true
+  },
+  {
+    "question": "How many Brazilian Portuguese translated sets are inside the Commander block?",
+    "db_id": "card_games",
+    "sql": "SELECT COUNT(T1.id) FROM sets AS T1 INNER JOIN set_translations AS T2 ON T1.code = T2.setCode WHERE T2.language = 'Portuguese (Brazil)' AND T1.block = 'Commander'",
+    "expected": "CardGamesSets",
+    "source": "bird_card_games",
+    "has_join": true
+  },
+  {
+    "question": "Which budget allowed the most money for water, chips, and cookies?",
+    "db_id": "student_club",
+    "sql": "SELECT T2.budget_id FROM expense AS T1 INNER JOIN budget AS T2 ON T1.link_to_budget = T2.budget_id WHERE T1.expense_description = 'Water, chips, cookies' ORDER BY T1.cost DESC LIMIT 1",
+    "expected": "StudentClubExpense",
+    "source": "bird_student_club",
+    "has_join": true
+  },
+  {
+    "question": "Sort in descending order all patients by birthday for male patient with albumin not within range.",
+    "db_id": "thrombosis_prediction",
+    "sql": "SELECT DISTINCT T1.ID FROM Patient AS T1 INNER JOIN Laboratory AS T2 ON T1.ID = T2.ID WHERE T1.SEX = 'M' AND (T2.ALB <= 3.5 OR T2.ALB >= 5.5) ORDER BY T1.Birthday DESC",
+    "expected": "ThrombosisPredictionPatient",
+    "source": "bird_thrombosis_prediction",
+    "has_join": true
+  },
+  {
+    "question": "Name the foreign name of the card that has abzan watermark? List out the type of this card.",
+    "db_id": "card_games",
+    "sql": "SELECT DISTINCT T1.name, T1.type FROM cards AS T1 INNER JOIN foreign_data AS T2 ON T2.uuid = T1.uuid WHERE T1.watermark = 'abzan'",
+    "expected": "CardGamesCards",
+    "source": "bird_card_games",
+    "has_join": true
+  },
+  {
+    "question": "In which location does the Hungaroring circuit located? Also, find the country and coordinates of this circuit?",
+    "db_id": "formula_1",
+    "sql": "SELECT country, lat, lng FROM circuits WHERE name = 'Hungaroring'",
+    "expected": "Formula1Circuits",
+    "source": "bird_formula_1",
+    "has_join": false
+  },
+  {
+    "question": "What is the atom ID of double bonded carbon in TR012 molecule?",
+    "db_id": "toxicology",
+    "sql": "SELECT T1.atom_id FROM atom AS T1 INNER JOIN molecule AS T2 ON T1.molecule_id = T2.molecule_id INNER JOIN bond AS T3 ON T2.molecule_id = T3.molecule_id WHERE T2.molecule_id = 'TR012' AND T3.bond_type = '=' AND T1.element = 'c'",
+    "expected": "ToxicologyAtom",
+    "source": "bird_toxicology",
+    "has_join": true
+  },
+  {
+    "question": "What is the eye clolour of the heaviest superhero?",
+    "db_id": "superhero",
+    "sql": "SELECT T2.colour FROM superhero AS T1 INNER JOIN colour AS T2 ON T1.eye_colour_id = T2.id ORDER BY T1.weight_kg DESC LIMIT 1",
+    "expected": "SuperheroSuperhero",
+    "source": "bird_superhero",
+    "has_join": true
+  },
+  {
+    "question": "How many active and closed District Community Day Schools are there in the county of Alpine?",
+    "db_id": "california_schools",
+    "sql": "SELECT COUNT(School) FROM schools WHERE (StatusType = 'Closed' OR StatusType = 'Active') AND SOC = 69 AND County = 'Alpine'",
+    "expected": "CaliforniaSchoolsSchools",
+    "source": "bird_california_schools",
+    "has_join": false
+  },
+  {
+    "question": "Give the alignment and superpowers of the superhero named Atom IV.",
+    "db_id": "superhero",
+    "sql": "SELECT T4.alignment, T3.power_name FROM superhero AS T1 INNER JOIN hero_power AS T2 ON T1.id = T2.hero_id INNER JOIN superpower AS T3 ON T3.id = T2.power_id INNER JOIN alignment AS T4 ON T1.alignment_id = T4.id WHERE T1.superhero_name = 'Atom IV'",
+    "expected": "SuperheroSuperhero",
+    "source": "bird_superhero",
+    "has_join": true
+  },
+  {
+    "question": "What is the language and flavor text of the card that has colorpie watermark? List out the type of this card.",
+    "db_id": "card_games",
+    "sql": "SELECT DISTINCT T2.language, T2.flavorText FROM cards AS T1 INNER JOIN foreign_data AS T2 ON T2.uuid = T1.uuid WHERE T1.watermark = 'colorpie'",
+    "expected": "CardGamesCards",
+    "source": "bird_card_games",
+    "has_join": true
+  },
+  {
+    "question": "Provide the total number of the budget amount for \"September Speaker\" event.",
+    "db_id": "student_club",
+    "sql": "SELECT SUM(T1.amount) FROM budget AS T1 INNER JOIN event AS T2 ON T1.link_to_event = T2.event_id WHERE T2.event_name = 'September Speaker'",
+    "expected": "StudentClubBudget",
+    "source": "bird_student_club",
+    "has_join": true
+  },
+  {
+    "question": "How many student have the position of president?",
+    "db_id": "student_club",
+    "sql": "SELECT COUNT(member_id) FROM member WHERE position = 'President'",
+    "expected": "StudentClubMember",
+    "source": "bird_student_club",
+    "has_join": false
+  },
+  {
+    "question": "Please list the Formula_1 races that Lewis Hamilton participated.",
+    "db_id": "formula_1",
+    "sql": "SELECT T1.name FROM races AS T1 INNER JOIN results AS T2 ON T2.raceId = T1.raceId INNER JOIN drivers AS T3 ON T3.driverId = T2.driverId WHERE T3.forename = 'Lewis' AND T3.surname = 'Hamilton'",
+    "expected": "Formula1Races",
+    "source": "bird_formula_1",
+    "has_join": true
+  },
+  {
+    "question": "Please provide top five football players' IDs who are among the lowest potential players and prefer to use the right foot when attacking.",
+    "db_id": "european_football_2",
+    "sql": "SELECT id FROM Player_Attributes WHERE preferred_foot = 'right' ORDER BY potential DESC LIMIT 5",
+    "expected": "EuropeanFootball2PlayerAttributes",
+    "source": "bird_european_football_2",
+    "has_join": false
+  },
+  {
+    "question": "What is the highest amount of budget spend for an event?",
+    "db_id": "student_club",
+    "sql": "SELECT MAX(spent) FROM budget",
+    "expected": "StudentClubBudget",
+    "source": "bird_student_club",
+    "has_join": false
+  },
+  {
+    "question": "What is the lap record set by Lewis Hamilton in a Formula_1 race?",
+    "db_id": "formula_1",
+    "sql": "SELECT T1.time FROM lapTimes AS T1 INNER JOIN drivers AS T2 on T1.driverId = T2.driverId WHERE T2.forename = 'Lewis' AND T2.surname = 'Hamilton'",
+    "expected": "Formula1Laptimes",
+    "source": "bird_formula_1",
+    "has_join": true
+  },
+  {
+    "question": "How many members attended the \"Women's Soccer\" event?",
+    "db_id": "student_club",
+    "sql": "SELECT COUNT(T2.link_to_member) FROM event AS T1 INNER JOIN attendance AS T2 ON T1.event_id = T2.link_to_event WHERE T1.event_name = 'Women''s Soccer'",
+    "expected": "StudentClubEvent",
+    "source": "bird_student_club",
+    "has_join": true
+  },
+  {
+    "question": "What is the excerpt post ID and wiki post ID of the tag named sample?",
+    "db_id": "codebase_community",
+    "sql": "SELECT ExcerptPostId, WikiPostId FROM tags WHERE TagName = 'sample'",
+    "expected": "CodebaseCommunityTags",
+    "source": "bird_codebase_community",
+    "has_join": false
+  },
+  {
+    "question": "For the post that got the most number of answers owned by csgillespie, how many answers did it get?",
+    "db_id": "codebase_community",
+    "sql": "SELECT MAX(T1.AnswerCount) FROM posts AS T1 INNER JOIN users AS T2 ON T1.OwnerUserId = T2.Id WHERE T2.DisplayName = 'csgillespie'",
+    "expected": "CodebaseCommunityPosts",
+    "source": "bird_codebase_community",
+    "has_join": true
+  },
+  {
+    "question": "What is the total number of molecules with double bonded oxygen?",
+    "db_id": "toxicology",
+    "sql": "SELECT COUNT(DISTINCT T1.molecule_id) FROM atom AS T1 INNER JOIN bond AS T2 ON T1.molecule_id = T2.molecule_id WHERE T2.bond_type = '=' AND T1.element = 'o'",
+    "expected": "ToxicologyAtom",
+    "source": "bird_toxicology",
+    "has_join": true
+  },
+  {
+    "question": "Provide the ID, sex, birthday of all patients diagnosed with 'RA' that are within the UN normal index.",
+    "db_id": "thrombosis_prediction",
+    "sql": "SELECT DISTINCT T1.ID, T1.SEX, T1.Birthday FROM Patient AS T1 INNER JOIN Laboratory AS T2 ON T1.ID = T2.ID WHERE T2.UN < 30 AND T1.Diagnosis = 'RA'",
+    "expected": "ThrombosisPredictionPatient",
+    "source": "bird_thrombosis_prediction",
+    "has_join": true
+  },
+  {
+    "question": "How many accidents did the driver who had the highest number accidents in the Canadian Grand Prix have?",
+    "db_id": "formula_1",
+    "sql": "SELECT COUNT(T1.driverId) FROM results AS T1 INNER JOIN races AS T2 on T1.raceId = T2.raceId INNER JOIN status AS T3 on T1.statusId = T3.statusId WHERE T3.statusId = 3 AND T2.name = 'Canadian Grand Prix' GROUP BY T1.driverId ORDER BY COUNT(T1.driverId) DESC LIMIT 1",
+    "expected": "Formula1Results",
+    "source": "bird_formula_1",
+    "has_join": true
+  },
+  {
+    "question": "What is the type of card \"Benalish Knight\"?",
+    "db_id": "card_games",
+    "sql": "SELECT DISTINCT T1.type FROM cards AS T1 INNER JOIN foreign_data AS T2 ON T1.uuid = T2.uuid WHERE T1.name = 'Benalish Knight'",
+    "expected": "CardGamesCards",
+    "source": "bird_card_games",
+    "has_join": true
+  },
+  {
+    "question": "List down two molecule id of triple bond non carcinogenic molecules with element carbon.",
+    "db_id": "toxicology",
+    "sql": "SELECT DISTINCT T2.molecule_id FROM atom AS T1 INNER JOIN molecule AS T2 ON T1.molecule_id = T2.molecule_id INNER JOIN bond AS T3 ON T2.molecule_id = T3.molecule_id WHERE T3.bond_type = '#' AND T1.element = 'c' AND T2.label = '-'",
+    "expected": "ToxicologyAtom",
+    "source": "bird_toxicology",
+    "has_join": true
+  },
+  {
+    "question": "What are the colors of cards from ID 1-20? What are the format of these cards?",
+    "db_id": "card_games",
+    "sql": "SELECT T1.colors, T2.format FROM cards AS T1 INNER JOIN legalities AS T2 ON T1.uuid = T2.uuid WHERE T1.id BETWEEN 1 AND 20",
+    "expected": "CardGamesCards",
+    "source": "bird_card_games",
+    "has_join": true
+  },
+  {
+    "question": "How many double bonds does TR006 have and is it carcinogenic?",
+    "db_id": "toxicology",
+    "sql": "SELECT COUNT(T1.bond_id), T2.label FROM bond AS T1 INNER JOIN molecule AS T2 ON T1.molecule_id = T2.molecule_id WHERE T1.bond_type = '=' AND T2.molecule_id = 'TR006' GROUP BY T2.label",
+    "expected": "ToxicologyBond",
+    "source": "bird_toxicology",
+    "has_join": true
+  },
+  {
+    "question": "During which lap did Lewis Hamilton take a pit stop during the 2011 Australian Grand Prix?",
+    "db_id": "formula_1",
+    "sql": "SELECT T1.lap FROM pitStops AS T1 INNER JOIN drivers AS T2 on T1.driverId = T2.driverId INNER JOIN races AS T3 on T1.raceId = T3.raceId WHERE T2.forename = 'Lewis' AND T2.surname = 'Hamilton' AND T3.year = 2011 AND T3.name = 'Australian Grand Prix'",
+    "expected": "Formula1Pitstops",
+    "source": "bird_formula_1",
+    "has_join": true
+  },
+  {
+    "question": "Among the superheroes with the race of god/eternal, how many of them are male",
+    "db_id": "superhero",
+    "sql": "SELECT COUNT(*) FROM superhero AS T1 INNER JOIN race AS T2 ON T1.race_id = T2.id INNER JOIN gender AS T3 ON T3.id = T1.gender_id WHERE T1.race_id = 21 AND T1.gender_id = 1",
+    "expected": "SuperheroSuperhero",
+    "source": "bird_superhero",
+    "has_join": true
+  },
+  {
+    "question": "How many schools with an average score in Math greater than 400 in the SAT test are exclusively virtual?",
+    "db_id": "california_schools",
+    "sql": "SELECT COUNT(DISTINCT T2.School) FROM satscores AS T1 INNER JOIN schools AS T2 ON T1.cds = T2.CDSCode WHERE T2.Virtual = 'F' AND T1.AvgScrMath > 400",
+    "expected": "CaliforniaSchoolsSatscores",
+    "source": "bird_california_schools",
+    "has_join": true
+  },
+  {
+    "question": "What's Bruno Senna's Q1 result in the qualifying race No. 354?",
+    "db_id": "formula_1",
+    "sql": "SELECT T1.q1 FROM qualifying AS T1 INNER JOIN drivers AS T2 ON T2.driverId = T1.driverId WHERE T1.raceId = 354 AND T2.forename = 'Bruno' AND T2.surname = 'Senna'",
+    "expected": "Formula1Qualifying",
+    "source": "bird_formula_1",
+    "has_join": true
+  },
+  {
+    "question": "How many 'classic' cards are eligible for loan?",
+    "db_id": "financial",
+    "sql": "SELECT COUNT(T1.card_id) FROM card AS T1 INNER JOIN disp AS T2 ON T1.disp_id = T2.disp_id WHERE T1.type = 'classic' AND T2.type = 'OWNER'",
+    "expected": "FinancialCard",
+    "source": "bird_financial",
+    "has_join": true
+  },
+  {
+    "question": "Which user has the website URL listed at 'http://stackoverflow.com'",
+    "db_id": "codebase_community",
+    "sql": "SELECT DisplayName FROM users WHERE WebsiteUrl = 'http://stackoverflow.com'",
+    "expected": "CodebaseCommunityUsers",
+    "source": "bird_codebase_community",
+    "has_join": false
+  },
+  {
+    "question": "How many heroes have stealth power?",
+    "db_id": "superhero",
+    "sql": "SELECT COUNT(T1.hero_id) FROM hero_power AS T1 INNER JOIN superpower AS T2 ON T1.power_id = T2.id WHERE T2.power_name = 'Stealth'",
+    "expected": "SuperheroHeroPower",
+    "source": "bird_superhero",
+    "has_join": true
+  },
+  {
+    "question": "In the molecule TR008, how many carbons are present?",
+    "db_id": "toxicology",
+    "sql": "SELECT COUNT(T.atom_id) FROM atom AS T WHERE T.molecule_id = 'TR008' AND T.element = 'c'",
+    "expected": "ToxicologyAtom",
+    "source": "bird_toxicology",
+    "has_join": false
+  },
+  {
+    "question": "Among the players whose height is over 180, how many of them have a volley score of over 70?",
+    "db_id": "european_football_2",
+    "sql": "SELECT COUNT(DISTINCT t1.id) FROM Player AS t1 INNER JOIN Player_Attributes AS t2 ON t1.player_api_id = t2.player_api_id WHERE t1.height > 180 AND t2.volleys > 70",
+    "expected": "EuropeanFootball2Player",
+    "source": "bird_european_football_2",
+    "has_join": true
+  },
+  {
+    "question": "How many votes were made by Harlan?",
+    "db_id": "codebase_community",
+    "sql": "SELECT COUNT(T1.Id) FROM users AS T1 INNER JOIN postHistory AS T2 ON T1.Id = T2.UserId INNER JOIN votes AS T3 ON T3.PostId = T2.PostId WHERE T1.DisplayName = 'Harlan'",
+    "expected": "CodebaseCommunityUsers",
+    "source": "bird_codebase_community",
+    "has_join": true
+  },
+  {
+    "question": "Name all the cards which have alternative language in Japanese.",
+    "db_id": "card_games",
+    "sql": "SELECT T1.name FROM cards AS T1 INNER JOIN foreign_data AS T2 ON T1.uuid = T2.uuid WHERE T2.language = 'Japanese'",
+    "expected": "CardGamesCards",
+    "source": "bird_card_games",
+    "has_join": true
+  },
+  {
+    "question": "What's the finish time for the driver who ranked second in 2008's AustChineseralian Grand Prix?",
+    "db_id": "formula_1",
+    "sql": "SELECT T1.time FROM results AS T1 INNER JOIN races AS T2 on T1.raceId = T2.raceId WHERE T1.rank = 2 AND T2.name = 'Chinese Grand Prix' AND T2.year = 2008",
+    "expected": "Formula1Results",
+    "source": "bird_formula_1",
+    "has_join": true
+  },
+  {
+    "question": "How many atoms belong to the molecule that element is hydrogen and labeled with carcinogenic compound?",
+    "db_id": "toxicology",
+    "sql": "SELECT COUNT(T1.atom_id) AS atomnums_h FROM atom AS T1 INNER JOIN molecule AS T2 ON T1.molecule_id = T2.molecule_id WHERE T2.label = '+' AND T1.element = 'h'",
+    "expected": "ToxicologyAtom",
+    "source": "bird_toxicology",
+    "has_join": true
+  },
+  {
+    "question": "Identify the number of posts that offer a bounty amount over 30.",
+    "db_id": "codebase_community",
+    "sql": "SELECT COUNT(id) FROM votes WHERE BountyAmount >= 30",
+    "expected": "CodebaseCommunityVotes",
+    "source": "bird_codebase_community",
+    "has_join": false
+  },
+  {
+    "question": "Indicate the creation date of the maximum number of votes.",
+    "db_id": "codebase_community",
+    "sql": "SELECT CreationDate FROM votes GROUP BY CreationDate ORDER BY COUNT(Id) DESC LIMIT 1",
+    "expected": "CodebaseCommunityVotes",
+    "source": "bird_codebase_community",
+    "has_join": false
+  },
+  {
+    "question": "Which segment had the least consumption?",
+    "db_id": "debit_card_specializing",
+    "sql": "SELECT T1.Segment FROM customers AS T1 INNER JOIN yearmonth AS T2 ON T1.CustomerID = T2.CustomerID GROUP BY T1.Segment ORDER BY SUM(T2.Consumption) ASC LIMIT 1",
+    "expected": "DebitCardSpecializingCustomers",
+    "source": "bird_debit_card_specializing",
+    "has_join": true
+  },
+  {
+    "question": "List down the molecule id for non carcinogenic molecules.",
+    "db_id": "toxicology",
+    "sql": "SELECT T.molecule_id FROM molecule AS T WHERE T.label = '-'",
+    "expected": "ToxicologyMolecule",
+    "source": "bird_toxicology",
+    "has_join": false
+  },
+  {
+    "question": "How many schools in Amador which the Low Grade is 9 and the High Grade is 12?",
+    "db_id": "california_schools",
+    "sql": "SELECT COUNT(T1.`School Name`) FROM frpm AS T1 INNER JOIN schools AS T2 ON T1.CDSCode = T2.CDSCode WHERE T2.County = 'Amador' AND T1.`Low Grade` = 9 AND T1.`High Grade` = 12",
+    "expected": "CaliforniaSchoolsFrpm",
+    "source": "bird_california_schools",
+    "has_join": true
+  },
+  {
+    "question": "Which gas station has the highest amount of revenue?",
+    "db_id": "debit_card_specializing",
+    "sql": "SELECT GasStationID FROM transactions_1k GROUP BY GasStationID ORDER BY SUM(Price) DESC LIMIT 1",
+    "expected": "DebitCardSpecializingTransactions1k",
+    "source": "bird_debit_card_specializing",
+    "has_join": false
+  },
+  {
+    "question": "How many cards are having future frame version and what are the legality status of these cards?",
+    "db_id": "card_games",
+    "sql": "SELECT COUNT(T1.id) FROM cards AS T1 INNER JOIN legalities AS T2 ON T1.uuid = T2.uuid WHERE T1.frameVersion = 'future'",
+    "expected": "CardGamesCards",
+    "source": "bird_card_games",
+    "has_join": true
+  },
+  {
+    "question": "What are the expenses of the budget with the lowest remaining?",
+    "db_id": "student_club",
+    "sql": "SELECT T2.expense_description FROM budget AS T1 INNER JOIN expense AS T2 ON T1.budget_id = T2.link_to_budget ORDER BY T1.remaining LIMIT 1",
+    "expected": "StudentClubBudget",
+    "source": "bird_student_club",
+    "has_join": true
+  },
+  {
+    "question": "Pick 3 cards with rarity of uncommon, list down name these cards according to ascending order of it's ruling date.",
+    "db_id": "card_games",
+    "sql": "SELECT DISTINCT T1.name FROM cards AS T1 INNER JOIN rulings AS T2 ON T1.uuid = T2.uuid WHERE T1.rarity = 'uncommon' ORDER BY T2.date ASC LIMIT 3",
+    "expected": "CardGamesCards",
+    "source": "bird_card_games",
+    "has_join": true
+  },
+  {
+    "question": "Count the good female superheroes.",
+    "db_id": "superhero",
+    "sql": "SELECT COUNT(T1.id) FROM superhero AS T1 INNER JOIN alignment AS T2 ON T1.alignment_id = T2.id INNER JOIN gender AS T3 ON T1.gender_id = T3.id WHERE T2.alignment = 'Good' AND T3.gender = 'Female'",
+    "expected": "SuperheroSuperhero",
+    "source": "bird_superhero",
+    "has_join": true
+  },
+  {
+    "question": "Among the atoms that contain element carbon, which one does not contain compound carcinogenic?",
+    "db_id": "toxicology",
+    "sql": "SELECT T1.atom_id FROM atom AS T1 INNER JOIN molecule AS T2 ON T1.molecule_id = T2.molecule_id WHERE T1.element = 'c' AND T2.label = '-'",
+    "expected": "ToxicologyAtom",
+    "source": "bird_toxicology",
+    "has_join": true
+  },
+  {
+    "question": "Which student has the hometown of Lincolnton, North Carolina with the zip code of 28092? List their full name and position.",
+    "db_id": "student_club",
+    "sql": "SELECT T1.first_name, T1.last_name, T1.position FROM member AS T1 INNER JOIN zip_code AS T2 ON T2.zip_code = T1.zip WHERE T2.city = 'Lincolnton' AND T2.state = 'North Carolina' AND T2.zip_code = 28092",
+    "expected": "StudentClubMember",
+    "source": "bird_student_club",
+    "has_join": true
+  },
+  {
+    "question": "How many of the molecules are not carcinogenic?",
+    "db_id": "toxicology",
+    "sql": "SELECT COUNT(T.molecule_id) FROM molecule AS T WHERE T.label = '-'",
+    "expected": "ToxicologyMolecule",
+    "source": "bird_toxicology",
+    "has_join": false
+  },
+  {
+    "question": "In how many atoms is there no bromine?",
+    "db_id": "toxicology",
+    "sql": "SELECT COUNT(DISTINCT T.atom_id) FROM atom AS T WHERE T.element <> 'br'",
+    "expected": "ToxicologyAtom",
+    "source": "bird_toxicology",
+    "has_join": false
+  },
+  {
+    "question": "Calculate the total atoms consisting of the element carbon and hydrogen.",
+    "db_id": "toxicology",
+    "sql": "SELECT COUNT(T.atom_id) FROM atom AS T WHERE T.element = 'c' OR T.element = 'h'",
+    "expected": "ToxicologyAtom",
+    "source": "bird_toxicology",
+    "has_join": false
+  },
+  {
+    "question": "Give me the molecule ID of the double bond type.",
+    "db_id": "toxicology",
+    "sql": "SELECT DISTINCT T.molecule_id FROM bond AS T WHERE T.bond_type = '='",
+    "expected": "ToxicologyBond",
+    "source": "bird_toxicology",
+    "has_join": false
+  },
+  {
+    "question": "What are the rulings for the card named and designed by Kev Walker? List them in descending order of dates.",
+    "db_id": "card_games",
+    "sql": "SELECT T2.text FROM cards AS T1 INNER JOIN rulings AS T2 ON T2.uuid = T1.uuid WHERE T1.artist = 'Kev Walker' ORDER BY T2.date DESC",
+    "expected": "CardGamesCards",
+    "source": "bird_card_games",
+    "has_join": true
+  },
+  {
+    "question": "How many income are received with an amount of 50?",
+    "db_id": "student_club",
+    "sql": "SELECT COUNT(income_id) FROM income WHERE amount = 50",
+    "expected": "StudentClubIncome",
+    "source": "bird_student_club",
+    "has_join": false
+  }
+]

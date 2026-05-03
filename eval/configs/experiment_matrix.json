@@ -1,0 +1,38 @@
+{
+  "experiments": {
+    "full_pipeline": {
+      "description": "Full pipeline (N=1584) with each backbone",
+      "flags": "--all --split test --relaxed-match",
+      "delay": 1.0,
+      "output_dir": "results/multi_model"
+    },
+    "scale_experiment": {
+      "description": "Figure 1(a): Performance vs dataset scale",
+      "db_counts": [2, 4, 6, 8, 12],
+      "configs": ["full", "embed_only"],
+      "flags_full": "--all --split test --relaxed-match",
+      "flags_embed_only": "--all --split test --relaxed-match --no-kg --no-rerank --no-values --no-adaptive",
+      "delay": 2.0,
+      "output_dir": "results/scale_exp"
+    },
+    "ablation_matrix": {
+      "description": "Cross-model ablation study",
+      "n": 200,
+      "configs": {
+        "full": "",
+        "no_kg": "--no-kg",
+        "no_embedding": "--no-embedding",
+        "no_correction": "--no-correction",
+        "no_adaptive": "--no-adaptive"
+      },
+      "delay": 2.0,
+      "output_dir": "results/ablation_models"
+    },
+    "blind_baseline": {
+      "description": "Blind LLM evaluation (all schemas, no pipeline)",
+      "flags": "--all --split test",
+      "delay": 1.0,
+      "output_dir": "results/baselines"
+    }
+  }
+}

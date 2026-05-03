@@ -1,0 +1,399 @@
+{
+  "provider": "bedrock",
+  "model": "anthropic.claude-sonnet-4-6",
+  "oracle_collection": true,
+  "n": 20,
+  "n_scored": 20,
+  "metrics": {
+    "se": 0.6,
+    "cof": 0.5,
+    "neo": 0.6,
+    "ro": 0.6,
+    "ops": 0.54
+  },
+  "strict_accuracy": 1.0,
+  "discovery_rate": 1.0,
+  "elapsed_seconds": 138.50186252593994,
+  "results": [
+    {
+      "question": "Show me the 5 accounts with the most transactions from 2014 to 2016.",
+      "expected_collection": "sample_analytics.transactions",
+      "chosen_collection": "sample_analytics.transactions",
+      "strict_match": true,
+      "discovery_hit": true,
+      "complexity": "moderate",
+      "db_name": "sample_analytics",
+      "pred_mql": "db.transactions.aggregate([\n  { $unwind: \"$transactions\" },\n  {\n    $match: {\n      \"transactions.date\": {\n        $gte: ISODate(\"2014-01-01\"),\n        $lte: ISODate(\"2016-12-31\")\n      }\n    }\n  },\n  {\n    $group: {\n      _id: \"$account_id\",\n      total_transactions: { $sum: 1 }\n    }\n  },\n  { $sort: { total_transactions: -1 } },\n  { $limit: 5 },\n  {\n    $project: {\n      _id: 0,\n      account_id: \"$_id\",\n      total_transactions: 1\n    }\n  }\n])",
+      "expected_mql": "db.transactions.aggregate([\n  { $unwind: \"$transactions\" },\n  { $match: {\n      \"transactions.date\": { $gte: new Date(\"2014-01-01\"), $lte: new Date(\"2016-12-31\") }\n  }},\n  { $group: {\n      _id: \"$account_id\",\n      transaction_count: { $sum: 1 }\n  }},\n  { $sort: { transaction_count: -1 } },\n  { $limit: 5 },\n  { $project: {\n      _id: 0,\n      account_id: \"$_id\",\n      transaction_count: 1\n  }}\n])",
+      "pred_error": null,
+      "metrics": {
+        "se": 1.0,
+        "cof": 0.0,
+        "neo": 1.0,
+        "ro": 1.0,
+        "ops": 0.4
+      }
+    },
+    {
+      "question": "Please list 6 top-rated listings with a review score of at least 9.7 and over 100 reviews.",
+      "expected_collection": "sample_airbnb.listingsAndReviews",
+      "chosen_collection": "sample_airbnb.listingsAndReviews",
+      "strict_match": true,
+      "discovery_hit": true,
+      "complexity": "moderate",
+      "db_name": "sample_airbnb",
+      "pred_mql": "db.listingsAndReviews.find(\n  {\n    \"review_scores.review_scores_rating\": { $gte: 97 },\n    \"number_of_reviews\": { $gt: 100 }\n  },\n  {\n    \"_id\": 1,\n    \"name\": 1,\n    \"review_scores.review_scores_rating\": 1,\n    \"number_of_reviews\": 1,\n    \"property_type\": 1,\n    \"room_type\": 1,\n    \"price\": 1,\n    \"address.country\": 1\n  }\n).sort({ \"review_scores.review_scores_rating\": -1 }).limit(6)",
+      "expected_mql": "db.listingsAndReviews.find({ \"review_scores.review_scores_rating\": { $gte: 9.7 }, \"number_of_reviews\": { $gt: 100 } }, { _id: 1, name: 1, \"review_scores.review_scores_rating\": 1, number_of_reviews: 1 }).sort({ \"review_scores.review_scores_rating\": -1 }).limit(6)",
+      "pred_error": null,
+      "metrics": {
+        "se": 1.0,
+        "cof": 1.0,
+        "neo": 1.0,
+        "ro": 1.0,
+        "ops": 1.0
+      }
+    },
+    {
+      "question": "What were the customer satisfaction ratings for online purchases at the Austin store in September 2017?",
+      "expected_collection": "sample_supplies.sales",
+      "chosen_collection": "sample_supplies.sales",
+      "strict_match": true,
+      "discovery_hit": true,
+      "complexity": "simple",
+      "db_name": "sample_supplies",
+      "pred_mql": "db.sales.find(\n  {\n    storeLocation: \"Austin\",\n    purchaseMethod: \"Online\",\n    saleDate: {\n      $gte: ISODate(\"2017-09-01\"),\n      $lt: ISODate(\"2017-10-01\")\n    }\n  },\n  {\n    _id: 0,\n    saleDate: 1,\n    \"customer.satisfaction\": 1,\n    storeLocation: 1,\n    purchaseMethod: 1\n  }\n)",
+      "expected_mql": "db.sales.find({\n  purchaseMethod: 'Online',\n  storeLocation: 'Austin',\n  saleDate: {\n    $gte: new Date('2017-09-01T00:00:00Z'),\n    $lt: new Date('2017-10-01T00:00:00Z')\n  }\n}, {\n  'customer.satisfaction': 1,\n  _id: 0\n})",
+      "pred_error": null,
+      "metrics": {
+        "se": 1.0,
+        "cof": 1.0,
+        "neo": 1.0,
+        "ro": 1.0,
+        "ops": 1.0
+      }
+    },
+    {
+      "question": "List 5 Airbnb listings with exact coordinates in New York City.",
+      "expected_collection": "sample_airbnb.listingsAndReviews",
+      "chosen_collection": "sample_airbnb.listingsAndReviews",
+      "strict_match": true,
+      "discovery_hit": true,
+      "complexity": "moderate",
+      "db_name": "sample_airbnb",
+      "pred_mql": "db.listingsAndReviews.find(\n  {\n    \"address.market\": \"New York\",\n    \"address.location.is_location_exact\": true\n  },\n  {\n    \"_id\": 1,\n    \"name\": 1,\n    \"address.street\": 1,\n    \"address.market\": 1,\n    \"address.location.coordinates\": 1,\n    \"address.location.is_location_exact\": 1\n  }\n).limit(5)",
+      "expected_mql": "db.listingsAndReviews.find({\"address.location.is_location_exact\": true, \"address.country\": \"United States\", \"address.market\": \"New York\"}, {\"name\": 1, \"address.location.coordinates\": 1, \"address.location.is_location_exact\": 1}).limit(5)",
+      "pred_error": null,
+      "metrics": {
+        "se": 1.0,
+        "cof": 1.0,
+        "neo": 1.0,
+        "ro": 1.0,
+        "ops": 1.0
+      }
+    },
+    {
+      "question": "What was the average customer satisfaction at the Denver store from January to March 2017?",
+      "expected_collection": "sample_supplies.sales",
+      "chosen_collection": "sample_supplies.sales",
+      "strict_match": true,
+      "discovery_hit": true,
+      "complexity": "moderate",
+      "db_name": "sample_supplies",
+      "pred_mql": "db.sales.aggregate([\n  {\n    $match: {\n      storeLocation: \"Denver\",\n      saleDate: {\n        $gte: ISODate(\"2017-01-01\"),\n        $lt: ISODate(\"2017-04-01\")\n      }\n    }\n  },\n  {\n    $group: {\n      _id: null,\n      averageSatisfaction: { $avg: \"$customer.satisfaction\" }\n    }\n  },\n  {\n    $project: {\n      _id: 0,\n      averageSatisfaction: 1\n    }\n  }\n])",
+      "expected_mql": "db.sales.aggregate([\n  {\n    $match: {\n      storeLocation: 'Denver',\n      saleDate: {\n        $gte: new Date('2017-01-01T00:00:00Z'),\n        $lte: new Date('2017-03-31T23:59:59Z')\n      }\n    }\n  },\n  {\n    $group: {\n      _id: null,\n      averageSatisfaction: { $avg: '$customer.satisfaction' }\n    }\n  },\n  {\n    $project: {\n      _id: 0,\n      averageSatisfaction: 1\n    }\n  }\n])",
+      "pred_error": null,
+      "metrics": {
+        "se": 1.0,
+        "cof": 1.0,
+        "neo": 1.0,
+        "ro": 1.0,
+        "ops": 1.0
+      }
+    },
+    {
+      "question": "What are the top 10 items sold in the store location with the highest sales in December 2017?",
+      "expected_collection": "sample_supplies.sales",
+      "chosen_collection": "sample_supplies.sales",
+      "strict_match": true,
+      "discovery_hit": true,
+      "complexity": "complex",
+      "db_name": "sample_supplies",
+      "pred_mql": "db.sales.aggregate([\n  {\n    $match: {\n      saleDate: {\n        $gte: ISODate(\"2017-12-01\"),\n        $lt: ISODate(\"2018-01-01\")\n      }\n    }\n  },\n  {\n    $group: {\n      _id: \"$storeLocation\",\n      totalSales: { $sum: 1 }\n    }\n  },\n  {\n    $sort: { totalSales: -1 }\n  },\n  {\n    $limit: 1\n  },\n  {\n    $lookup: {\n      from: \"sales\",\n      let: { topLocation: \"$_id\" },\n      pipeline: [\n        {\n          $match: {\n            $expr: { $eq: [\"$storeLocation\", \"$$topLocation\"] },\n            saleDate: {\n              $gte: ISODate(\"2017-12-01\"),\n              $lt: ISODate(\"2018-01-01\")\n            }\n          }\n        },\n        { $unwind: \"$items\" },\n        {\n          $group: {\n            _id: \"$items.name\",\n            totalQuantitySold: { $sum: \"$items.quantity\" }\n          }\n        },\n        { $sort: { totalQuantitySold: -1 } },\n        { $limit: 10 }\n      ],\n      as: \"topItems\"\n    }\n  },\n  {\n    $project: {\n      _id: 0,\n      storeLocation: \"$_id\",\n      topItems: 1\n    }\n  }\n])",
+      "expected_mql": "db.sales.aggregate([\n  {\n    $match: {\n      saleDate: {\n        $gte: new Date('2017-12-01'),\n        $lt: new Date('2018-01-01')\n      }\n    }\n  },\n  {\n    $group: {\n      _id: \"$storeLocation\",\n      totalSales: { $sum: 1 }\n    }\n  },\n  {\n    $sort: { totalSales: -1 }\n  },\n  {\n    $limit: 1\n  },\n  {\n    $project: { _id: 1 }\n  },\n  {\n    $lookup: {\n      from: \"sales\",\n      let: { location: \"$_id\" },\n      pipeline: [\n        {\n          $match: {\n            saleDate: {\n              $gte: new Date('2017-12-01'),\n              $lt: new Date('2018-01-01')\n            }\n          }\n        },\n        {\n          $match: {\n            $expr: { $eq: [\"$storeLocation\", \"$$location\"] }\n          }\n        },\n        {\n          $unwind: \"$items\"\n        },\n        {\n          $group: {\n            _id: \"$items.name\",\n            quantitySold: { $sum: \"$items.quantity\" }\n          }\n        },\n        {\n          $sort: { quantitySold: -1 }\n        },\n        {\n          $limit: 10\n        },\n        {\n          $project: {\n            _id: 0,\n            itemName: \"$_id\",\n            quantitySold: 1\n          }\n        }\n      ],\n      as: \"topItems\"\n    }\n  },\n  {\n    $unwind: \"$topItems\"\n  },\n  {\n    $replaceRoot: { newRoot: \"$topItems\" }\n  }\n]);",
+      "pred_error": "Although 'let' is a valid lookup operator for the aggregation pipeline, it is currently not implemented in Mongomock.",
+      "metrics": {
+        "se": 0.0,
+        "cof": 0.0,
+        "neo": 0.0,
+        "ro": 0.0,
+        "ops": 0.0
+      }
+    },
+    {
+      "question": "Which customers in New York and San Francisco have made purchases of items priced over $900 in December 2017?",
+      "expected_collection": "sample_supplies.sales",
+      "chosen_collection": "sample_supplies.sales",
+      "strict_match": true,
+      "discovery_hit": true,
+      "complexity": "complex",
+      "db_name": "sample_supplies",
+      "pred_mql": "db.sales.aggregate([\n  {\n    $match: {\n      storeLocation: { $in: [\"New York\", \"San Francisco\"] },\n      saleDate: {\n        $gte: ISODate(\"2017-12-01\"),\n        $lt: ISODate(\"2018-01-01\")\n      }\n    }\n  },\n  {\n    $unwind: \"$items\"\n  },\n  {\n    $match: {\n      \"items.price\": { $gt: 900 }\n    }\n  },\n  {\n    $group: {\n      _id: \"$_id\",\n      customer: { $first: \"$customer\" },\n      storeLocation: { $first: \"$storeLocation\" },\n      saleDate: { $first: \"$saleDate\" },\n      purchaseMethod: { $first: \"$purchaseMethod\" },\n      expensiveItems: {\n        $push: {\n          name: \"$items.name\",\n          price: \"$items.price\",\n          quantity: \"$items.quantity\"\n        }\n      }\n    }\n  },\n  {\n    $project: {\n      _id: 1,\n      customer: 1,\n      storeLocation: 1,\n      saleDate: 1,\n      purchaseMethod: 1,\n      expensiveItems: 1\n    }\n  }\n])",
+      "expected_mql": "db.sales.aggregate([\n  {\n    $match: {\n      storeLocation: { $in: ['New York', 'San Francisco'] },\n      saleDate: { $gte: new Date('2017-12-01'), $lte: new Date('2017-12-31') }\n    }\n  },\n  {\n    $unwind: '$items'\n  },\n  {\n    $match: {\n      'items.price': { $gt: 900 }\n    }\n  },\n  {\n    $group: {\n      _id: '$customer.email'\n    }\n  },\n  {\n    $project: {\n      email: '$_id',\n      _id: 0\n    }\n  }\n])",
+      "pred_error": "Mongomock does not know how to sort '5.68' of type '<class 'bson.decimal128.Decimal128'>'",
+      "metrics": {
+        "se": 0.0,
+        "cof": 0.0,
+        "neo": 0.0,
+        "ro": 0.0,
+        "ops": 0.0
+      }
+    },
+    {
+      "question": "What is the average customer satisfaction rating for online purchases compared to in-store purchases in Austin during November 2017?",
+      "expected_collection": "sample_supplies.sales",
+      "chosen_collection": "sample_supplies.sales",
+      "strict_match": true,
+      "discovery_hit": true,
+      "complexity": "complex",
+      "db_name": "sample_supplies",
+      "pred_mql": "db.sales.aggregate([\n  {\n    $match: {\n      storeLocation: \"Austin\",\n      saleDate: {\n        $gte: ISODate(\"2017-11-01\"),\n        $lt: ISODate(\"2017-12-01\")\n      },\n      purchaseMethod: { $in: [\"Online\", \"In store\"] }\n    }\n  },\n  {\n    $group: {\n      _id: \"$purchaseMethod\",\n      avgSatisfaction: { $avg: \"$customer.satisfaction\" },\n      totalSales: { $sum: 1 }\n    }\n  },\n  {\n    $project: {\n      _id: 1,\n      purchaseMethod: \"$_id\",\n      avgSatisfaction: { $round: [\"$avgSatisfaction\", 2] },\n      totalSales: 1\n    }\n  },\n  {\n    $sort: { _id: 1 }\n  }\n])",
+      "expected_mql": "db.sales.aggregate([\n  {\n    $match: {\n      storeLocation: \"Austin\",\n      saleDate: {\n        $gte: new Date(\"2017-11-01T00:00:00.000Z\"),\n        $lt: new Date(\"2017-12-01T00:00:00.000Z\")\n      },\n      purchaseMethod: { $in: [\"Online\", \"In store\"] }\n    }\n  },\n  {\n    $group: {\n      _id: \"$purchaseMethod\",\n      averageSatisfaction: { $avg: \"$customer.satisfaction\" }\n    }\n  },\n  {\n    $project: {\n      _id: 0,\n      purchaseMethod: \"$_id\",\n      averageSatisfaction: 1\n    }\n  }\n])",
+      "pred_error": "Unrecognized expression '$round'",
+      "metrics": {
+        "se": 0.0,
+        "cof": 0.0,
+        "neo": 0.0,
+        "ro": 0.0,
+        "ops": 0.0
+      }
+    },
+    {
+      "question": "What was the average customer satisfaction for online purchases made during the last quarter of 2017?",
+      "expected_collection": "sample_supplies.sales",
+      "chosen_collection": "sample_supplies.sales",
+      "strict_match": true,
+      "discovery_hit": true,
+      "complexity": "moderate",
+      "db_name": "sample_supplies",
+      "pred_mql": "db.sales.aggregate([\n  {\n    $match: {\n      purchaseMethod: \"Online\",\n      saleDate: {\n        $gte: ISODate(\"2017-10-01\"),\n        $lt: ISODate(\"2018-01-01\")\n      }\n    }\n  },\n  {\n    $group: {\n      _id: null,\n      averageSatisfaction: { $avg: \"$customer.satisfaction\" }\n    }\n  },\n  {\n    $project: {\n      _id: 0,\n      averageSatisfaction: 1\n    }\n  }\n])",
+      "expected_mql": "db.sales.aggregate([\n  {\n    $match: {\n      purchaseMethod: \"Online\",\n      saleDate: {\n        $gte: new Date(\"2017-10-01T00:00:00.000Z\"),\n        $lte: new Date(\"2017-12-31T23:59:59.999Z\")\n      }\n    }\n  },\n  {\n    $group: {\n      _id: null,\n      averageSatisfaction: { $avg: \"$customer.satisfaction\" }\n    }\n  },\n  {\n    $project: {\n      _id: 0,\n      averageSatisfaction: 1\n    }\n  }\n])",
+      "pred_error": null,
+      "metrics": {
+        "se": 1.0,
+        "cof": 1.0,
+        "neo": 1.0,
+        "ro": 1.0,
+        "ops": 1.0
+      }
+    },
+    {
+      "question": "Show me the top 5 highest customer satisfaction ratings for sales at the Austin store in August 2017.",
+      "expected_collection": "sample_supplies.sales",
+      "chosen_collection": "sample_supplies.sales",
+      "strict_match": true,
+      "discovery_hit": true,
+      "complexity": "moderate",
+      "db_name": "sample_supplies",
+      "pred_mql": "db.sales.aggregate([\n  {\n    $match: {\n      storeLocation: \"Austin\",\n      saleDate: {\n        $gte: ISODate(\"2017-08-01\"),\n        $lt: ISODate(\"2017-09-01\")\n      }\n    }\n  },\n  {\n    $project: {\n      _id: 1,\n      saleDate: 1,\n      storeLocation: 1,\n      \"customer.satisfaction\": 1,\n      \"customer.age\": 1,\n      \"customer.email\": 1\n    }\n  },\n  {\n    $sort: {\n      \"customer.satisfaction\": -1\n    }\n  },\n  {\n    $limit: 5\n  }\n])",
+      "expected_mql": "db.sales.find({ \"storeLocation\": \"Austin\", \"saleDate\": { \"$gte\": new Date(\"2017-08-01T00:00:00.000Z\"), \"$lt\": new Date(\"2017-09-01T00:00:00.000Z\") } }, { \"customer.satisfaction\": 1, _id: 0 }).sort({ \"customer.satisfaction\": -1 }).limit(5)",
+      "pred_error": null,
+      "metrics": {
+        "se": 1.0,
+        "cof": 1.0,
+        "neo": 1.0,
+        "ro": 1.0,
+        "ops": 1.0
+      }
+    },
+    {
+      "question": "Which top 3 store locations have the highest average satisfaction ratings for purchases that included school supplies?",
+      "expected_collection": "sample_supplies.sales",
+      "chosen_collection": "sample_supplies.sales",
+      "strict_match": true,
+      "discovery_hit": true,
+      "complexity": "complex",
+      "db_name": "sample_supplies",
+      "pred_mql": "db.sales.aggregate([\n  { $unwind: \"$items\" },\n  { $match: { \"items.tags\": \"school\" } },\n  { $group: {\n      _id: \"$storeLocation\",\n      avgSatisfaction: { $avg: \"$customer.satisfaction\" }\n  }},\n  { $sort: { avgSatisfaction: -1 } },\n  { $limit: 3 },\n  { $project: {\n      _id: 0,\n      storeLocation: \"$_id\",\n      avgSatisfaction: { $round: [\"$avgSatisfaction\", 2] }\n  }}\n])",
+      "expected_mql": "db.sales.aggregate([\n  { $match: {\n    'items.tags': 'school'\n  }},\n  { $group: {\n    _id: '$storeLocation',\n    averageSatisfaction: { $avg: '$customer.satisfaction' }\n  }},\n  { $sort: { averageSatisfaction: -1 }},\n  { $limit: 3 },\n  { $project: { _id: 0, storeLocation: '$_id', averageSatisfaction: 1 }}\n])",
+      "pred_error": "Unrecognized expression '$round'",
+      "metrics": {
+        "se": 0.0,
+        "cof": 0.0,
+        "neo": 0.0,
+        "ro": 0.0,
+        "ops": 0.0
+      }
+    },
+    {
+      "question": "What's the average customer satisfaction rating for sales at the Denver store throughout 2017?",
+      "expected_collection": "sample_supplies.sales",
+      "chosen_collection": "sample_supplies.sales",
+      "strict_match": true,
+      "discovery_hit": true,
+      "complexity": "complex",
+      "db_name": "sample_supplies",
+      "pred_mql": "db.sales.aggregate([\n  {\n    $match: {\n      storeLocation: \"Denver\",\n      saleDate: {\n        $gte: ISODate(\"2017-01-01\"),\n        $lt: ISODate(\"2018-01-01\")\n      }\n    }\n  },\n  {\n    $group: {\n      _id: null,\n      averageSatisfaction: { $avg: \"$customer.satisfaction\" }\n    }\n  },\n  {\n    $project: {\n      _id: 0,\n      averageSatisfaction: { $round: [\"$averageSatisfaction\", 2] }\n    }\n  }\n])",
+      "expected_mql": "db.sales.aggregate([\n  {\n    $match: {\n      storeLocation: 'Denver',\n      saleDate: {\n        $gte: new Date('2017-01-01T00:00:00.000Z'),\n        $lt: new Date('2018-01-01T00:00:00.000Z')\n      }\n    }\n  },\n  {\n    $group: {\n      _id: null,\n      averageSatisfaction: { $avg: \"$customer.satisfaction\" }\n    }\n  },\n  {\n    $project: {\n      _id: 0,\n      averageSatisfaction: 1\n    }\n  }\n])",
+      "pred_error": "Unrecognized expression '$round'",
+      "metrics": {
+        "se": 0.0,
+        "cof": 0.0,
+        "neo": 0.0,
+        "ro": 0.0,
+        "ops": 0.0
+      }
+    },
+    {
+      "question": "What's the average customer satisfaction rating for the store in Denver?",
+      "expected_collection": "sample_supplies.sales",
+      "chosen_collection": "sample_supplies.sales",
+      "strict_match": true,
+      "discovery_hit": true,
+      "complexity": "moderate",
+      "db_name": "sample_supplies",
+      "pred_mql": "db.sales.aggregate([\n  { $match: { storeLocation: \"Denver\" } },\n  {\n    $group: {\n      _id: \"$storeLocation\",\n      avgSatisfaction: { $avg: \"$customer.satisfaction\" }\n    }\n  },\n  {\n    $project: {\n      _id: 0,\n      storeLocation: \"$_id\",\n      avgSatisfaction: { $round: [\"$avgSatisfaction\", 2] }\n    }\n  }\n])",
+      "expected_mql": "db.sales.aggregate([\n  { $match: { storeLocation: 'Denver' } },\n  { $group: { _id: null, averageSatisfaction: { $avg: '$customer.satisfaction' } } },\n  { $project: { _id: 0, averageSatisfaction: 1 } }\n])",
+      "pred_error": "Unrecognized expression '$round'",
+      "metrics": {
+        "se": 0.0,
+        "cof": 0.0,
+        "neo": 0.0,
+        "ro": 0.0,
+        "ops": 0.0
+      }
+    },
+    {
+      "question": "Which were the top 5 popular items sold in December 2017?",
+      "expected_collection": "sample_supplies.sales",
+      "chosen_collection": "sample_supplies.sales",
+      "strict_match": true,
+      "discovery_hit": true,
+      "complexity": "moderate",
+      "db_name": "sample_supplies",
+      "pred_mql": "db.sales.aggregate([\n  {\n    $match: {\n      saleDate: {\n        $gte: ISODate(\"2017-12-01\"),\n        $lt: ISODate(\"2018-01-01\")\n      }\n    }\n  },\n  {\n    $unwind: \"$items\"\n  },\n  {\n    $group: {\n      _id: \"$items.name\",\n      totalQuantitySold: { $sum: \"$items.quantity\" }\n    }\n  },\n  {\n    $sort: { totalQuantitySold: -1 }\n  },\n  {\n    $limit: 5\n  },\n  {\n    $project: {\n      _id: 0,\n      itemName: \"$_id\",\n      totalQuantitySold: 1\n    }\n  }\n])",
+      "expected_mql": "db.sales.aggregate([\n  {\n    $match: {\n      saleDate: {\n        $gte: new Date(\"2017-12-01T00:00:00Z\"),\n        $lt: new Date(\"2018-01-01T00:00:00Z\")\n      }\n    }\n  },\n  {\n    $unwind: \"$items\"\n  },\n  {\n    $group: {\n      _id: \"$items.name\",\n      totalQuantitySold: { $sum: \"$items.quantity\" }\n    }\n  },\n  {\n    $sort: { totalQuantitySold: -1 }\n  },\n  {\n    $limit: 5\n  },\n  {\n    $project: {\n      _id: 0,\n      itemName: \"$_id\",\n      totalQuantitySold: 1\n    }\n  }\n])",
+      "pred_error": null,
+      "metrics": {
+        "se": 1.0,
+        "cof": 1.0,
+        "neo": 1.0,
+        "ro": 1.0,
+        "ops": 1.0
+      }
+    },
+    {
+      "question": "How many sales transactions in New York had a total sale amount over $1000?",
+      "expected_collection": "sample_supplies.sales",
+      "chosen_collection": "sample_supplies.sales",
+      "strict_match": true,
+      "discovery_hit": true,
+      "complexity": "complex",
+      "db_name": "sample_supplies",
+      "pred_mql": "db.sales.aggregate([\n  { $match: { storeLocation: \"New York\" } },\n  {\n    $addFields: {\n      totalSaleAmount: {\n        $sum: {\n          $map: {\n            input: \"$items\",\n            as: \"item\",\n            in: { $multiply: [\"$$item.price\", \"$$item.quantity\"] }\n          }\n        }\n      }\n    }\n  },\n  { $match: { totalSaleAmount: { $gt: 1000 } } },\n  { $count: \"salesOver1000InNewYork\" }\n])",
+      "expected_mql": "db.sales.aggregate([\n  {\n    $match: {\n      storeLocation: 'New York'\n    }\n  },\n  {\n    $addFields: {\n      totalAmount: {\n        $sum: {\n          $map: {\n            input: '$items',\n            as: 'item',\n            in: {\n              $multiply: ['$$item.price', '$$item.quantity']\n            }\n          }\n        }\n      }\n    }\n  },\n  {\n    $match: {\n      totalAmount: { $gt: 1000 }\n    }\n  },\n  {\n    $count: 'totalTransactions'\n  }\n])",
+      "pred_error": null,
+      "metrics": {
+        "se": 1.0,
+        "cof": 0.0,
+        "neo": 1.0,
+        "ro": 1.0,
+        "ops": 0.4
+      }
+    },
+    {
+      "question": "How many items were sold with coupons at the Denver store over the last quarter of 2017?",
+      "expected_collection": "sample_supplies.sales",
+      "chosen_collection": "sample_supplies.sales",
+      "strict_match": true,
+      "discovery_hit": true,
+      "complexity": "moderate",
+      "db_name": "sample_supplies",
+      "pred_mql": "db.sales.aggregate([\n  {\n    $match: {\n      storeLocation: \"Denver\",\n      couponUsed: true,\n      saleDate: {\n        $gte: ISODate(\"2017-10-01\"),\n        $lt: ISODate(\"2018-01-01\")\n      }\n    }\n  },\n  {\n    $unwind: \"$items\"\n  },\n  {\n    $group: {\n      _id: null,\n      totalItemsSold: { $sum: \"$items.quantity\" }\n    }\n  },\n  {\n    $project: {\n      _id: 0,\n      totalItemsSold: 1\n    }\n  }\n])",
+      "expected_mql": "db.sales.aggregate([\n  {\n    $match: {\n      couponUsed: true,\n      storeLocation: 'Denver',\n      saleDate: {\n        $gte: new Date('2017-10-01'),\n        $lte: new Date('2017-12-31')\n      }\n    }\n  },\n  {\n    $unwind: '$items'\n  },\n  {\n    $group: {\n      _id: null,\n      totalItemsSold: { $sum: '$items.quantity' }\n    }\n  },\n  {\n    $project: { _id: 0, totalItemsSold: 1 }\n  }\n])",
+      "pred_error": null,
+      "metrics": {
+        "se": 1.0,
+        "cof": 1.0,
+        "neo": 1.0,
+        "ro": 1.0,
+        "ops": 1.0
+      }
+    },
+    {
+      "question": "What purchase methods were used for sales with coupons in the last quarter of 2017?",
+      "expected_collection": "sample_supplies.sales",
+      "chosen_collection": "sample_supplies.sales",
+      "strict_match": true,
+      "discovery_hit": true,
+      "complexity": "moderate",
+      "db_name": "sample_supplies",
+      "pred_mql": "db.sales.aggregate([\n  {\n    $match: {\n      couponUsed: true,\n      saleDate: {\n        $gte: ISODate(\"2017-10-01\"),\n        $lt: ISODate(\"2018-01-01\")\n      }\n    }\n  },\n  {\n    $group: {\n      _id: \"$purchaseMethod\",\n      count: { $sum: 1 }\n    }\n  },\n  {\n    $project: {\n      _id: 0,\n      purchaseMethod: \"$_id\",\n      count: 1\n    }\n  }\n])",
+      "expected_mql": "db.sales.aggregate([\n  {\n    $match: {\n      couponUsed: true,\n      saleDate: {\n        $gte: new Date('2017-10-01T00:00:00Z'),\n        $lte: new Date('2017-12-31T23:59:59Z')\n      }\n    }\n  },\n  {\n    $group: {\n      _id: '$purchaseMethod'\n    }\n  },\n  {\n    $project: {\n      _id: 0,\n      purchaseMethod: '$_id'\n    }\n  }\n])",
+      "pred_error": null,
+      "metrics": {
+        "se": 1.0,
+        "cof": 1.0,
+        "neo": 1.0,
+        "ro": 1.0,
+        "ops": 1.0
+      }
+    },
+    {
+      "question": "Compare the average customer satisfaction for sales of 'backpacks' using coupons versus those without, from January to June 2017.",
+      "expected_collection": "sample_supplies.sales",
+      "chosen_collection": "sample_supplies.sales",
+      "strict_match": true,
+      "discovery_hit": true,
+      "complexity": "moderate",
+      "db_name": "sample_supplies",
+      "pred_mql": "db.sales.aggregate([\n  {\n    $match: {\n      saleDate: {\n        $gte: ISODate(\"2017-01-01\"),\n        $lt: ISODate(\"2017-07-01\")\n      },\n      \"items.name\": \"backpack\"\n    }\n  },\n  {\n    $unwind: \"$items\"\n  },\n  {\n    $match: {\n      \"items.name\": \"backpack\"\n    }\n  },\n  {\n    $group: {\n      _id: \"$couponUsed\",\n      avgSatisfaction: { $avg: \"$customer.satisfaction\" },\n      totalSales: { $sum: 1 }\n    }\n  },\n  {\n    $project: {\n      _id: 0,\n      couponUsed: \"$_id\",\n      avgSatisfaction: { $round: [\"$avgSatisfaction\", 2] },\n      totalSales: 1\n    }\n  },\n  {\n    $sort: { couponUsed: -1 }\n  }\n])",
+      "expected_mql": "db.sales.aggregate([\n  {\n    $match: {\n      saleDate: {\n        $gte: new Date('2017-01-01'),\n        $lt: new Date('2017-07-01')\n      },\n      'items.name': 'backpack'\n    }\n  },\n  {\n    $group: {\n      _id: '$couponUsed',\n      averageSatisfaction: { $avg: '$customer.satisfaction' }\n    }\n  },\n  {\n    $project: {\n      _id: 0,\n      couponUsed: '$_id',\n      averageSatisfaction: 1\n    }\n  }\n])",
+      "pred_error": "Unrecognized expression '$round'",
+      "metrics": {
+        "se": 0.0,
+        "cof": 0.0,
+        "neo": 0.0,
+        "ro": 0.0,
+        "ops": 0.0
+      }
+    },
+    {
+      "question": "What's the average quantity of 'pens' sold with and without coupons during 2017?",
+      "expected_collection": "sample_supplies.sales",
+      "chosen_collection": "sample_supplies.sales",
+      "strict_match": true,
+      "discovery_hit": true,
+      "complexity": "moderate",
+      "db_name": "sample_supplies",
+      "pred_mql": "db.sales.aggregate([\n  {\n    $match: {\n      saleDate: {\n        $gte: ISODate(\"2017-01-01\"),\n        $lt: ISODate(\"2018-01-01\")\n      }\n    }\n  },\n  {\n    $unwind: \"$items\"\n  },\n  {\n    $match: {\n      \"items.name\": \"pens\"\n    }\n  },\n  {\n    $group: {\n      _id: \"$couponUsed\",\n      avgQuantity: { $avg: \"$items.quantity\" }\n    }\n  },\n  {\n    $project: {\n      _id: 0,\n      couponUsed: \"$_id\",\n      avgQuantity: { $round: [\"$avgQuantity\", 2] }\n    }\n  }\n])",
+      "expected_mql": "db.sales.aggregate([\n  {\n    $match: {\n      saleDate: {\n        $gte: new Date(\"2017-01-01\"),\n        $lt: new Date(\"2018-01-01\")\n      },\n      items: {\n        $elemMatch: {\n          name: \"pens\"\n        }\n      }\n    }\n  },\n  {\n    $unwind: \"$items\"\n  },\n  {\n    $match: {\n      \"items.name\": \"pens\"\n    }\n  },\n  {\n    $group: {\n      _id: \"$couponUsed\",\n      averageQuantity: {\n        $avg: \"$items.quantity\"\n      }\n    }\n  },\n  {\n    $project: {\n      _id: 0,\n      couponUsed: \"$_id\",\n      averageQuantity: 1\n    }\n  }\n])",
+      "pred_error": "Unrecognized expression '$round'",
+      "metrics": {
+        "se": 0.0,
+        "cof": 0.0,
+        "neo": 0.0,
+        "ro": 0.0,
+        "ops": 0.0
+      }
+    },
+    {
+      "question": "What is the average customer satisfaction rating for online purchases made in December 2017?",
+      "expected_collection": "sample_supplies.sales",
+      "chosen_collection": "sample_supplies.sales",
+      "strict_match": true,
+      "discovery_hit": true,
+      "complexity": "moderate",
+      "db_name": "sample_supplies",
+      "pred_mql": "db.sales.aggregate([\n  {\n    $match: {\n      purchaseMethod: \"Online\",\n      saleDate: {\n        $gte: ISODate(\"2017-12-01\"),\n        $lt: ISODate(\"2018-01-01\")\n      }\n    }\n  },\n  {\n    $group: {\n      _id: null,\n      averageSatisfaction: { $avg: \"$customer.satisfaction\" }\n    }\n  },\n  {\n    $project: {\n      _id: 0,\n      averageSatisfaction: 1\n    }\n  }\n])",
+      "expected_mql": "db.sales.aggregate([\n  {\n    $match: {\n      purchaseMethod: 'Online',\n      saleDate: {\n        $gte: new Date('2017-12-01T00:00:00Z'),\n        $lt: new Date('2018-01-01T00:00:00Z')\n      }\n    }\n  },\n  {\n    $group: {\n      _id: null,\n      averageSatisfaction: { $avg: \"$customer.satisfaction\" }\n    }\n  },\n  {\n    $project: {\n      _id: 0,\n      averageSatisfaction: 1\n    }\n  }\n])",
+      "pred_error": null,
+      "metrics": {
+        "se": 1.0,
+        "cof": 1.0,
+        "neo": 1.0,
+        "ro": 1.0,
+        "ops": 1.0
+      }
+    }
+  ]
+}
