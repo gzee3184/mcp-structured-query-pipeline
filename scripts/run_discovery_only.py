@@ -92,8 +92,14 @@ def main():
     parser.add_argument("--top-k", type=int, default=5,
                         help="How many candidates to export per query (default: 5)")
     parser.add_argument("--seed", type=int, default=42)
-    parser.add_argument("--bird-only", action="store_true",
+    # Discovery always runs against the full collection pool (preserves
+    # distractor pressure across BIRD + Weaviate Gorilla + auxiliary schemas).
+    # These flags filter only at CSV-write time.
+    subset = parser.add_mutually_exclusive_group()
+    subset.add_argument("--bird-only", action="store_true",
                         help="Only export BIRD queries (exclude Weaviate Gorilla)")
+    subset.add_argument("--weaviate-only", action="store_true",
+                        help="Only export Weaviate Gorilla queries (exclude BIRD)")
     parser.add_argument("--no-kg", action="store_true")
     parser.add_argument("--no-embedding", action="store_true")
     parser.add_argument("--no-rerank", action="store_true")
@@ -124,12 +130,13 @@ def main():
     args.split_ratios = tuple(float(x) for x in args.split_ratios.split(","))
     random.seed(args.seed)
 
-    # Load queries (reusing pipeline's loader for consistency)
+    # Load queries (reusing pipeline's loader for consistency).
+    # We do NOT filter by --bird-only / --weaviate-only here so that discovery
+    # runs against the same query pool regardless of the export subset; the
+    # filter is applied just before CSV write.
     all_queries = load_all_queries(include_joins=not args.no_joins)
     all_queries = split_queries(all_queries, seed=args.seed, split=args.split,
                                 ratios=args.split_ratios)
-    if args.bird_only:
-        all_queries = [q for q in all_queries if q["source"].startswith("bird_")]
 
     random.shuffle(all_queries)
     queries = all_queries if args.n is None else all_queries[:args.n]
@@ -175,10 +182,14 @@ def main():
         gold_sql = q.get("sql", "")
         has_join = q.get("has_join", False)
 
-        # Extract gold table from SQL (primary FROM table)
+        # Extract gold table from SQL (primary FROM table).
+        # Handles unquoted, "double-quoted", `back-ticked`, and [bracketed]
+        # identifiers — BIRD uses all three for reserved-word table names
+        # like `order` and "Match".
         gold_table = ""
         if gold_sql:
-            m = re.search(r"FROM\s+(\w+)", gold_sql, re.IGNORECASE)
+            m = re.search(r'FROM\s+["`\[]?(\w+)["`\]]?', gold_sql,
+                          re.IGNORECASE)
             if m:
                 gold_table = m.group(1)
 
@@ -218,6 +229,21 @@ def main():
         if (i + 1) % 50 == 0 or (i + 1) == n:
             print(f"  [{i+1}/{n}] hit_rate={hits/(i+1)*100:.1f}%", flush=True)
 
+    # Overall hit rate across the full discovery pool (before any subset filter)
+    print(f"\nDiscovery hit rate over full pool (correct in top-{args.top_k}): "
+          f"{hits}/{n} = {hits/n*100:.1f}%")
+
+    # Apply export-time subset filter (--bird-only / --weaviate-only)
+    if args.bird_only:
+        export_rows = [r for r in rows if r["source"].startswith("bird_")]
+        subset_label = "bird-only"
+    elif args.weaviate_only:
+        export_rows = [r for r in rows if r["source"] == "weaviate_gorilla"]
+        subset_label = "weaviate-only"
+    else:
+        export_rows = rows
+        subset_label = "all"
+
     # Write CSV
     fieldnames = ["bird_index", "question", "gold_db_id", "gold_table",
                   "gold_collection", "source", "has_join", "discovery_hit"]
@@ -229,11 +255,14 @@ def main():
     with out_path.open("w", newline="", encoding="utf-8") as f:
         writer = csv.DictWriter(f, fieldnames=fieldnames)
         writer.writeheader()
-        writer.writerows(rows)
+        writer.writerows(export_rows)
 
-    print(f"\nWrote {len(rows)} rows to {out_path}")
-    print(f"Discovery hit rate (correct in top-{args.top_k}): "
-          f"{hits}/{n} = {hits/n*100:.1f}%")
+    print(f"\nWrote {len(export_rows)} rows to {out_path} (subset: {subset_label})")
+    if export_rows:
+        subset_hits = sum(r["discovery_hit"] for r in export_rows)
+        print(f"Discovery hit rate on exported subset (top-{args.top_k}): "
+              f"{subset_hits}/{len(export_rows)} = "
+              f"{subset_hits/len(export_rows)*100:.1f}%")
 
 
 if __name__ == "__main__":

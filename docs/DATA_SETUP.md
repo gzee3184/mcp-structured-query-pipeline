@@ -81,14 +81,33 @@ After setup, verify the pipeline can load the data:
 ```bash
 ./venv/bin/python3 -c "
 from src.mcp.server import MCPServer
-server = MCPServer.from_multiple_sources(
-    'data/weaviate-gorilla.json',
-    'data/bird-benchmark/bird-collections.json'
-)
-print(f'Loaded {len(server.schemas)} collections')
-# Expected: ~143 collections
+sources = [
+    'data/weaviate-gorilla.json',              # 15 Weaviate Gorilla collections
+    'data/bird-benchmark/bird-collections.json', # 75 BIRD collections
+    'data/bird-processor/bird-to-weaviate.json', # Alt BIRD conversions
+    'data/retail-world-weaviate.json',         # Extra domain (optional)
+    'data/movie-3-weaviate.json',
+    'data/student-loan-weaviate.json',
+    'data/chicago-crime-weaviate.json',
+    'data/university-weaviate.json',
+]
+# Filter to only files that exist
+from pathlib import Path
+existing = [s for s in sources if Path(s).exists()]
+server = MCPServer.from_multiple_sources(*existing)
+print(f'Loaded {len(server.schemas)} collections from {len(existing)} files')
+# With all 8 files: 143 collections
+# With just WG + BIRD (2 files): 90 collections (enough for most experiments)
 "
 ```
+
+### Minimum vs Full Setup
+
+- **Minimum (90 collections):** Just `weaviate-gorilla.json` + `bird-collections.json`.
+  Sufficient for the BIRD benchmark and Weaviate Gorilla evaluation.
+- **Full (143 collections):** All 8 source files.
+  Adds 5 extra domain schemas (retail, movies, crime, etc.) that help test cross-domain
+  discovery robustness. These are not strictly required — the pipeline runs fine with 90.
 
 For BIRD execution accuracy evaluation, also verify SQLite databases are accessible:
 

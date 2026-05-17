@@ -51,14 +51,20 @@ def convert_name(db: str, table: str) -> str:
 
 
 def extract_sql_tables(sql: str) -> list:
-    """Extract all table names from a SQL statement (FROM and JOIN clauses)."""
+    """Extract all table names from a SQL statement (FROM and JOIN clauses).
+
+    Handles unquoted, "double-quoted", `back-ticked`, and [bracketed]
+    identifiers — BIRD uses all three for reserved-word table names like
+    `order` and "Match".
+    """
     tables = []
     # FROM table [alias]
-    from_match = re.search(r'FROM\s+(\w+)', sql, re.IGNORECASE)
+    from_match = re.search(r'FROM\s+["`\[]?(\w+)["`\]]?', sql, re.IGNORECASE)
     if from_match:
         tables.append(from_match.group(1))
     # JOIN table [alias]
-    join_matches = re.findall(r'JOIN\s+(\w+)', sql, re.IGNORECASE)
+    join_matches = re.findall(r'JOIN\s+["`\[]?(\w+)["`\]]?', sql,
+                              re.IGNORECASE)
     tables.extend(join_matches)
     return tables
 
